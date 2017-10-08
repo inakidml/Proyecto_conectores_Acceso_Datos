@@ -23,6 +23,7 @@ public class Baloncesto {
         // TODO code application logic here
         
         Conector obj_con = new Conector();
+        obj_con.getCon_sql();
       
         
         

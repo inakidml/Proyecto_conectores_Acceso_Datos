@@ -51,7 +51,7 @@ public class Conector {
         
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         
-        this.con_sql = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=AdventureWorks;integratedSecurity=true;");
+        this.con_sql = DriverManager.getConnection("jdbc:sqlserver://192.168.200.159:1433;databaseName=Baloncesto;user=sa;password=");
         
         return con_sql;
         
