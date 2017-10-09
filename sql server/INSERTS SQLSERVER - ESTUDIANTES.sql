@@ -1,7 +1,7 @@
 
 
 
-INSERT INTO EQUIPO values(1, 'Baskonia', '1946', 'Quejeta', 'Araba', 'TauGres');
+INSERT INTO EQUIPO values(1, 'Estudiantes', '1950', 'DonNose', 'Madrid', 'Nike');
 select * from EQUIPO;
 INSERT INTO JUGADOR values(1, 'Vladimir', 'Perasovich', 'Gonzalez', 2.10 , 90, 'Alero', 'Muy bueno en los triples', 1);
 INSERT INTO JUGADOR values(2, 'Jose', 'vichestein', 'Gonzo', 2.15 , 98, 'Pivot', 'Es muy malo', 1);
@@ -26,18 +26,9 @@ INSERT INTO JUGADOR_has_ENTRENAMIENTO values(2, 2, '2016-08-12', '00:40:12');
 INSERT INTO JUGADOR_has_ENTRENAMIENTO values(1, 3, '2017-03-13', '01:30:12');
 INSERT INTO JUGADOR_has_ENTRENAMIENTO values(3, 2, '2015-05-14', '00:40:12');
 INSERT INTO JUGADOR_has_ENTRENAMIENTO values(1, 2, '2014-04-18', '00:59:12');
-DELETE FROM JUGADOR_has_ENTRENAMIENTO WHERE Duracion = '00:00:00';
-DELETE FROM JUGADOR_has_ENTRENAMIENTO WHERE 1 = 1;
 
 
 select * from JUGADOR_has_ENTRENAMIENTO;
 
-select COLUMN_NAME, CONSTRAINT_NAME, REFERENCED_COLUMN_NAME, REFERENCED_TABLE_NAME
-from information_schema.KEY_COLUMN_USAGE
-where TABLE_NAME = 'JUGADOR_has_ENTRENAMIENTO';
-
-    
-    ALTER TABLE JUGADOR_has_ENTRENAMIENTO DROP PRIMARY KEY;
-	ALTER TABLE JUGADOR_has_ENTRENAMIENTO ADD CONSTRAINT PRIMARY KEY (JUGADOR_idJUGADOR, ENTRENAMIENTO_idENTRENAMIENTO, Fecha);
 
 commit;
