@@ -22,7 +22,9 @@ public class Baloncesto extends Conector {
      */
     public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
         // TODO code application logic here
+        Connection con = Conector.getCon_mysql_jdbc();
         
+        con.close();
         
     }
 }
