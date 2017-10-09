@@ -5,6 +5,9 @@
  */
 package baloncesto.modelo.Conector;
 
+import baloncesto.modelo.Entrenamiento;
+import baloncesto.modelo.Incidencia;
+import baloncesto.modelo.Jugador;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import java.util.ArrayList;
@@ -109,14 +112,14 @@ public class DB4OInteface extends Conector {
         //Recorremos el resultado
         while (result.hasNext()) {
             //Obtenemos el jugador
-            Jugador j = result.next();
+            Jugador j = (Jugador) result.next();
 
             //Indicamos los nuevos datos del jugador
             j.setNombre(data.getNombre() != null ? data.getNombre() : j.getNombre());
-            j.setApellido1(data.getApellido1() != null ? data.getApellido1() : j.getApellido1());
+            j.setApellido(data.getApellido() != null ? data.getApellido() : j.getApellido());
             j.setApellido2(data.getApellido2() != null ? data.getApellido2() : j.getApellido2());
-            j.setAltura(data.getAltura() != null ? data.getAltura() : j.getAltura());
-            j.setPeso(data.getPeso() != null ? data.getPeso() : j.getPeso());
+            j.setAltura(data.getAltura() != 0 ? data.getAltura() : j.getAltura());
+            j.setPeso(data.getPeso() != 0 ? data.getPeso() : j.getPeso());
             j.setPosicion(data.getPosicion() != null ? data.getPosicion() : j.getPosicion());
             j.setDescripcion(data.getDescripcion() != null ? data.getDescripcion() : j.getDescripcion());
             j.setEquipo(data.getEquipo != null ? data.getEquipo() : j.getEquipo());
@@ -139,7 +142,7 @@ public class DB4OInteface extends Conector {
         //Recorremos el resultado
         while (result.hasNext()) {
             //Obtenemos el jugador
-            Jugador j = result.next();
+            Jugador j = (Jugador) result.next();
 
             //Borramos el jugador
             db.delete(j);
@@ -159,7 +162,7 @@ public class DB4OInteface extends Conector {
         ObjectSet result = db.queryByExample(query);
 
         if (result.size() > 0) {
-            i = result.next();
+            i = (Incidencia) result.next();
         }
 
         //Cerramos la conexion
@@ -189,7 +192,7 @@ public class DB4OInteface extends Conector {
         //Recorremos el resultado
         while (result.hasNext()) {
             //Obtenemos la incidencia
-            Incidencia i = result.next();
+            Incidencia i = (Incidencia) result.next();
 
             //Añadimos la incidencia al arraylist
             iList.add(i);
@@ -223,7 +226,7 @@ public class DB4OInteface extends Conector {
         //Recorremos el resultado
         while (result.hasNext()) {
             //Obtenemos el jugador
-            Incidencia i = result.next();
+            Incidencia i = (Incidencia) result.next();
 
             //Indicamos los nuevos datos del la incidencia
 
@@ -244,10 +247,115 @@ public class DB4OInteface extends Conector {
         //Recorremos el resultado
         while (result.hasNext()) {
             //Obtenemos la incidencia
-            Incidencia i = result.next();
+            Incidencia i = (Incidencia) result.next();
 
             //Borramos el jugador
             db.delete(i);
+        }
+
+        //Cerramos la bd
+        db.close();
+    }
+    
+       public static Entrenamiento getEntrenamiento(Entrenamiento query) {
+        //Abrimos la conexion
+        ObjectContainer db = getDb_4o();
+
+        Entrenamiento e = null;
+
+        //Obtenemos el resultado
+        ObjectSet result = db.queryByExample(query);
+
+        if (result.size() > 0) {
+            e = (Entrenamiento) result.next();
+        }
+
+        //Cerramos la conexion
+        db.close();
+
+        return e;
+    }
+    
+        public static ArrayList<Entrenamiento> getEntrenamientos(Entrenamiento query) {
+        //Abrimos la conexion
+        ObjectContainer db = getDb_4o();
+
+        //Creamoa un array list de incidencias
+        ArrayList<Entrenamiento> eList = new ArrayList<Entrenamiento>();
+
+        //Obtenemos el resultado
+        ObjectSet result = db.queryByExample(query);
+
+        //Comprobamos si hay resultados
+        if (result.size() == 0) {
+            //Cerramos la conexion
+            db.close();
+
+            return null;
+        }
+
+        //Recorremos el resultado
+        while (result.hasNext()) {
+            //Obtenemos la incidencia
+            Entrenamiento e = (Entrenamiento) result.next();
+
+            //Añadimos la incidencia al arraylist
+            eList.add(e);
+        }
+
+        //Cerramos la conexion
+        db.close();
+
+        //Devolvemos la lista
+        return eList;
+    }
+
+    public static void insertEntrenamiento(Entrenamiento e) {
+        //Abrimos la conexion
+        ObjectContainer db = getDb_4o();
+
+        //Guardamos la incidencia
+        db.store(e);
+
+        //cerramos la conexion
+        db.close();
+    }
+
+    public static void updateEntrenamiento(Entrenamiento query, Entrenamiento data) {
+        //Abrimos los conexion
+        ObjectContainer db = getDb_4o();
+
+        //Obtenemos el resultado
+        ObjectSet result = db.queryByExample(query);
+
+        //Recorremos el resultado
+        while (result.hasNext()) {
+            //Obtenemos el jugador
+            Entrenamiento e = (Entrenamiento) result.next();
+
+            //Indicamos los nuevos datos del la incidencia
+
+            db.store(e);
+        }
+
+        //Cerramos la conexion
+        db.close();
+    }
+
+    public static void deleteEntrenamiento(Entrenamiento query) {
+        //Abrimos los conexion
+        ObjectContainer db = getDb_4o();
+
+        //Obtenemos el resultado
+        ObjectSet result = db.queryByExample(query);
+
+        //Recorremos el resultado
+        while (result.hasNext()) {
+            //Obtenemos la incidencia
+            Entrenamiento e = (Entrenamiento) result.next();
+
+            //Borramos el jugador
+            db.delete(e);
         }
 
         //Cerramos la bd
