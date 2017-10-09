@@ -59,7 +59,7 @@ public class DB4OInteface extends Conector {
         ObjectContainer db = getDb_4o();
 
         //Creamoa un array list de jugadores
-        ArrayList<Jugador> jList = new ArrayList<Jugador>;
+        ArrayList<Jugador> jList = new ArrayList<Jugador>();
 
         //Obtenemos el resultado
         ObjectSet result = db.queryByExample(query);
@@ -88,7 +88,7 @@ public class DB4OInteface extends Conector {
         return jList;
     }
 
-    public static void storeJugador(Jugador j) {
+    public static void insertJugador(Jugador j) {
         //Abrimos la conexion
         ObjectContainer db = getDb_4o();
 
@@ -143,6 +143,111 @@ public class DB4OInteface extends Conector {
 
             //Borramos el jugador
             db.delete(j);
+        }
+
+        //Cerramos la bd
+        db.close();
+    }
+
+    public static Incidencia getIncidencia(Incidencia query) {
+        //Abrimos la conexion
+        ObjectContainer db = getDb_4o();
+
+        Incidencia i = null;
+
+        //Obtenemos el resultado
+        ObjectSet result = db.queryByExample(query);
+
+        if (result.size() > 0) {
+            i = result.next();
+        }
+
+        //Cerramos la conexion
+        db.close();
+
+        return i;
+    }
+    
+        public static ArrayList<Incidencia> getIncidencias(Incidencia query) {
+        //Abrimos la conexion
+        ObjectContainer db = getDb_4o();
+
+        //Creamoa un array list de incidencias
+        ArrayList<Incidencia> iList = new ArrayList<Incidencia>();
+
+        //Obtenemos el resultado
+        ObjectSet result = db.queryByExample(query);
+
+        //Comprobamos si hay resultados
+        if (result.size() == 0) {
+            //Cerramos la conexion
+            db.close();
+
+            return null;
+        }
+
+        //Recorremos el resultado
+        while (result.hasNext()) {
+            //Obtenemos la incidencia
+            Incidencia i = result.next();
+
+            //Añadimos la incidencia al arraylist
+            iList.add(i);
+        }
+
+        //Cerramos la conexion
+        db.close();
+
+        //Devolvemos la lista
+        return iList;
+    }
+
+    public static void insertIncidencia(Incidencia i) {
+        //Abrimos la conexion
+        ObjectContainer db = getDb_4o();
+
+        //Guardamos la incidencia
+        db.store(i);
+
+        //cerramos la conexion
+        db.close();
+    }
+
+    public static void updateIncidencia(Incidencia query, Incidencia data) {
+        //Abrimos los conexion
+        ObjectContainer db = getDb_4o();
+
+        //Obtenemos el resultado
+        ObjectSet result = db.queryByExample(query);
+
+        //Recorremos el resultado
+        while (result.hasNext()) {
+            //Obtenemos el jugador
+            Incidencia i = result.next();
+
+            //Indicamos los nuevos datos del la incidencia
+
+            db.store(i);
+        }
+
+        //Cerramos la conexion
+        db.close();
+    }
+
+    public static void deleteIncidencia(Incidencia query) {
+        //Abrimos los conexion
+        ObjectContainer db = getDb_4o();
+
+        //Obtenemos el resultado
+        ObjectSet result = db.queryByExample(query);
+
+        //Recorremos el resultado
+        while (result.hasNext()) {
+            //Obtenemos la incidencia
+            Incidencia i = result.next();
+
+            //Borramos el jugador
+            db.delete(i);
         }
 
         //Cerramos la bd
