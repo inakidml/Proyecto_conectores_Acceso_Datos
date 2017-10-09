@@ -11,108 +11,41 @@ package baloncesto.modelo;
  */
 public class Incidencia {
 
-    private int id;
-    private String tipo;
-    private String sancion;
-    private String descripcion;
-    private String fecha;
-    private String duracion;
+   private TipoIncidencia tipoIncidencia;
+   private Jugador jugador;
+   private String Fecha;
 
     public Incidencia() {
     }
 
-    
-    public Incidencia(int id, String tipo, String sancion, String descripcion, String fecha, String duracion) {
-        this.id = id;
-        this.tipo = tipo;
-        this.sancion = sancion;
-        this.descripcion = descripcion;
-        this.fecha = fecha;
-        this.duracion = duracion;
+    public Incidencia(TipoIncidencia tipoIncidencia, Jugador jugador, String Fecha) {
+        this.tipoIncidencia = tipoIncidencia;
+        this.jugador = jugador;
+        this.Fecha = Fecha;
     }
 
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
+    public TipoIncidencia getTipoIncidencia() {
+        return tipoIncidencia;
     }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
+    public void setTipoIncidencia(TipoIncidencia tipoIncidencia) {
+        this.tipoIncidencia = tipoIncidencia;
     }
 
-    /**
-     * @return the tipo
-     */
-    public String getTipo() {
-        return tipo;
+    public Jugador getJugador() {
+        return jugador;
     }
 
-    /**
-     * @param tipo the tipo to set
-     */
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setJugador(Jugador jugador) {
+        this.jugador = jugador;
     }
 
-    /**
-     * @return the sancion
-     */
-    public String getSancion() {
-        return sancion;
-    }
-
-    /**
-     * @param sancion the sancion to set
-     */
-    public void setSancion(String sancion) {
-        this.sancion = sancion;
-    }
-
-    /**
-     * @return the descripcion
-     */
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    /**
-     * @param descripcion the descripcion to set
-     */
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    /**
-     * @return the fecha
-     */
     public String getFecha() {
-        return fecha;
+        return Fecha;
     }
 
-    /**
-     * @param fecha the fecha to set
-     */
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
-    /**
-     * @return the duracion
-     */
-    public String getDuracion() {
-        return duracion;
-    }
-
-    /**
-     * @param duracion the duracion to set
-     */
-    public void setDuracion(String duracion) {
-        this.duracion = duracion;
+    public void setFecha(String Fecha) {
+        this.Fecha = Fecha;
     }
 
 }

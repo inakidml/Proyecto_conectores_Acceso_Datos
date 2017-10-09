@@ -10,23 +10,59 @@ package baloncesto.modelo;
  * @author 9fdam02
  */
 public class Entrenamiento {
-    int id;
-    String tipo;
-    String descripcion;
+    private Jugador jugador;
+    private TipoEntrenamiento tipoEntrenamiento;
+    private String fecha;
+    private String duracion;
 
     
     public Entrenamiento() {
     }
 
-    public Entrenamiento(int id, String tipo, String descripcion) {
-        this.id = id;
-        this.tipo = tipo;
-        this.descripcion = descripcion;
+    public Entrenamiento(Jugador jugador, TipoEntrenamiento tipoEntrenamiento, String fecha, String duracion) {
+        this.jugador = jugador;
+        this.tipoEntrenamiento = tipoEntrenamiento;
+        this.fecha = fecha;
+        this.duracion = duracion;
     }
-    
+
+    public Jugador getJugador() {
+        return jugador;
+    }
+
+    public void setJugador(Jugador jugador) {
+        this.jugador = jugador;
+    }
+
+    public TipoEntrenamiento getTipoEntrenamiento() {
+        return tipoEntrenamiento;
+    }
+
+    public void setTipoEntrenamiento(TipoEntrenamiento tipoEntrenamiento) {
+        this.tipoEntrenamiento = tipoEntrenamiento;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(String duracion) {
+        this.duracion = duracion;
+    }
+
     @Override
     public String toString() {
-        return "Entrenamiento{" + "id=" + id + ", tipo=" + tipo + ", descripcion=" + descripcion + '}';
+        return "Entrenamiento{" + "jugador=" + jugador.getNombre() + ", tipoEntrenamiento=" + tipoEntrenamiento.getTipo() + ", fecha=" + fecha + ", duracion=" + duracion + '}';
     }
+
+ 
     
 }

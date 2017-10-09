@@ -181,4 +181,14 @@ public class Jugador {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public Equipo getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(Equipo equipo) {
+        this.equipo = equipo;
+    }
+    
+    
 }
