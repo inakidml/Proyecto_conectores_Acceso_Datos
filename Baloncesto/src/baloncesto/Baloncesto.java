@@ -6,6 +6,7 @@
 package baloncesto;
 
 import baloncesto.modelo.Conector.Conector;
+import com.mysql.jdbc.Connection;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -14,20 +15,16 @@ import java.util.Properties;
  *
  * @author 9fdam03
  */
-public class Baloncesto {
+public class Baloncesto extends Conector {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
         // TODO code application logic here
+        Connection con = Conector.getCon_mysql_jdbc();
         
-        Conector obj_con = new Conector();
-        obj_con.getCon_sql();
-        obj_con.getCon_mysql_jdbc();
-      
-        
+        con.close();
         
     }
-    
 }
