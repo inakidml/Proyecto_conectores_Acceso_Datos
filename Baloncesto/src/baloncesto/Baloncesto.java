@@ -24,6 +24,7 @@ public class Baloncesto {
         
         Conector obj_con = new Conector();
         obj_con.getCon_sql();
+        obj_con.getCon_mysql_jdbc();
       
         
         

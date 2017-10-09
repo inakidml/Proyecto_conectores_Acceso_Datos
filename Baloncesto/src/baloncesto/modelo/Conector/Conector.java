@@ -41,7 +41,7 @@ public class Conector {
         
         System.out.println( config.getProperty("sql.server"));
 
-        this.con_mysql_jdbc = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3307/pruebas","root", "usbw");  
+        this.con_mysql_jdbc = (Connection) DriverManager.getConnection("jdbc:mysql://172.20.223.122/mydb","root", "root"); //pruebas","root", "usbw");   
         
         return con_mysql_jdbc;
         
