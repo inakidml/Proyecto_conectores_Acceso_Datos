@@ -9,26 +9,25 @@ package baloncesto.modelo;
  *
  * @author 9fdam02
  */
-public class Incidencia {
-
+public class TipoIncidencia {
     private int id;
     private String tipo;
     private String sancion;
     private String descripcion;
-    private String fecha;
-    private String duracion;
 
-    public Incidencia() {
+    public TipoIncidencia() {
     }
 
-    
-    public Incidencia(int id, String tipo, String sancion, String descripcion, String fecha, String duracion) {
+    public TipoIncidencia(int id, String tipo, String sancion, String descripcion) {
         this.id = id;
         this.tipo = tipo;
         this.sancion = sancion;
         this.descripcion = descripcion;
-        this.fecha = fecha;
-        this.duracion = duracion;
+    }
+
+    @Override
+    public String toString() {
+        return "TipoIncidencia{" + "id=" + id + ", tipo=" + tipo + ", sancion=" + sancion + ", descripcion=" + descripcion + '}';
     }
 
     /**
@@ -86,33 +85,7 @@ public class Incidencia {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
-    /**
-     * @return the fecha
-     */
-    public String getFecha() {
-        return fecha;
-    }
-
-    /**
-     * @param fecha the fecha to set
-     */
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
-    /**
-     * @return the duracion
-     */
-    public String getDuracion() {
-        return duracion;
-    }
-
-    /**
-     * @param duracion the duracion to set
-     */
-    public void setDuracion(String duracion) {
-        this.duracion = duracion;
-    }
-
+    
+    
+    
 }

@@ -21,8 +21,8 @@ public class Jugador {
     private float altura;
     private float peso;
     private String posicion;
-    private String descricion;
-    private int equipo;
+    private String descripcion;
+    private Equipo equipo;
 
     private List<Entrenamiento> entrenamientos;
     private List<Incidencia> incidencias;
@@ -32,24 +32,29 @@ public class Jugador {
         incidencias = new ArrayList<>();
     }
 
-    public Jugador(int id, String nombre, String apellido, String apellido2, float altura, float peso, int equipo) {
+    public Jugador(int id, String nombre, String apellido, String apellido2, float altura, float peso, String posicion, String descripcion, Equipo equipo) {
         entrenamientos = new ArrayList<>();
         incidencias = new ArrayList<>();
-
+        
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.apellido2 = apellido2;
         this.altura = altura;
         this.peso = peso;
+        this.posicion = posicion;
+        this.descripcion = descripcion;
         this.equipo = equipo;
     }
 
     @Override
     public String toString() {
-        return "Jugador{" + "id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", apellido2=" + apellido2 + ", altura=" + altura + ", peso=" + peso + ", posicion=" + posicion + ", descricion=" + descricion + ", equipo=" + equipo + ", entrenamientos=" + entrenamientos + ", incidencias=" + incidencias + '}';
+        return "Jugador{" + "id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", apellido2=" + apellido2 + ", altura=" + altura + ", peso=" + peso + ", posicion=" + posicion + ", descripcion=" + descripcion + ", equipo=" + equipo + ", entrenamientos=" + entrenamientos + ", incidencias=" + incidencias + '}';
     }
 
+
+
+  
     /**
      * @return the id
      */
@@ -148,33 +153,6 @@ public class Jugador {
         this.posicion = posicion;
     }
 
-    /**
-     * @return the descricion
-     */
-    public String getDescricion() {
-        return descricion;
-    }
-
-    /**
-     * @param descricion the descricion to set
-     */
-    public void setDescricion(String descricion) {
-        this.descricion = descricion;
-    }
-
-    /**
-     * @return the equipo
-     */
-    public int getEquipo() {
-        return equipo;
-    }
-
-    /**
-     * @param equipo the equipo to set
-     */
-    public void setEquipo(int equipo) {
-        this.equipo = equipo;
-    }
 
     /**
      * @return the entrenamientos
@@ -188,5 +166,19 @@ public class Jugador {
      */
     public List<Incidencia> getIncidencias() {
         return incidencias;
+    }
+
+    /**
+     * @return the descripcion
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * @param descripcion the descripcion to set
+     */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }
