@@ -23,17 +23,17 @@ import java.util.logging.Logger;
  */
 public abstract class Conector {
 
-    private static String getAbsoluteResourceName(String resourceName) {
+    protected static String getAbsoluteResourceName(String resourceName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    private static com.mysql.jdbc.Connection con_mysql_jdbc;
-    private static java.sql.Connection con_sql;
-    private static ObjectContainer db_4o;    
+    protected static com.mysql.jdbc.Connection con_mysql_jdbc;
+    protected static java.sql.Connection con_sql;
+    protected static ObjectContainer db_4o;    
     
     private static Properties config;
     
-    public static Connection getCon_mysql_jdbc() throws ClassNotFoundException, SQLException {
+    protected static Connection getCon_mysql_jdbc() throws ClassNotFoundException, SQLException {
         
         try {
             Conector.setConfig(Conector.getConfig());
@@ -51,7 +51,7 @@ public abstract class Conector {
         
     }
 
-    public static java.sql.Connection getCon_sql() throws ClassNotFoundException, SQLException {
+    protected static java.sql.Connection getCon_sql() throws ClassNotFoundException, SQLException {
         
         try {
             Conector.setConfig(Conector.getConfig());
@@ -67,7 +67,7 @@ public abstract class Conector {
         
     }
 
-    public static ObjectContainer getDb_4o() {
+    protected static ObjectContainer getDb_4o() {
         
         try {
             Conector.setConfig(Conector.getConfig());
@@ -83,7 +83,7 @@ public abstract class Conector {
         
     }       
 
-    private static Properties getConfig() throws FileNotFoundException, IOException {          
+    protected static Properties getConfig() throws FileNotFoundException, IOException {          
         
         FileInputStream file = new FileInputStream("src\\baloncesto\\modelo\\Conector\\config.properties");
         
@@ -95,7 +95,7 @@ public abstract class Conector {
         
     }    
 
-    public static void setConfig(Properties config) {
+    protected static void setConfig(Properties config) {
         Conector.config = config;
     }
        
