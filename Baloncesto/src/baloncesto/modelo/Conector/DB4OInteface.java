@@ -25,7 +25,7 @@ public class DB4OInteface extends Conector {
      * Obtener el equipo
      *
      * @param query Equipo Query para realizar la busqueda
-     * @return Equipo|null  Devuelve el equipo que coincida con la query si no
+     * @return Equipo|null Devuelve el equipo que coincida con la query si no
      * coincide devuelve un null
      */
     public static Equipo getEquipo(Equipo query) {
@@ -51,7 +51,7 @@ public class DB4OInteface extends Conector {
     /**
      * Insertar el equipo
      *
-     * @param e Equipo  Equipo a insertar
+     * @param e Equipo Equipo a insertar
      */
     public static void insertEquipo(Equipo e) {
         //Abrimos la conexion
@@ -67,8 +67,8 @@ public class DB4OInteface extends Conector {
     /**
      * Modificar el equipo
      *
-     * @param query Equipo  Equipo que deseamos modificar
-     * @param data Equipo   Nuevos datos del equipo
+     * @param query Equipo Equipo que deseamos modificar
+     * @param data Equipo Nuevos datos del equipo
      */
     public static void updateEquipo(Equipo query, Equipo data) {
         //Abrimos los conexion
@@ -661,6 +661,58 @@ public class DB4OInteface extends Conector {
 
         //Cerramos la bd
         db.close();
+    }
+
+    public static void setDBData() {
+        //Obtenemos el equipo
+        Equipo e = getEquipo(new Equipo());
+
+        //Comprobamos si no hay un equipo
+        if (e == null) {
+            //Creamos el equipo
+            e = new Equipo(1, "Gran Canaria", 1963, "Enrique Moreno", "	Gran Canaria Arena", "Herbalife");
+
+            //Añadimos el equipo
+            insertEquipo(e);
+        }
+
+        //Obtenemos los tipos de entrenamiento
+        ArrayList<TipoEntrenamiento> arrL_tipoEntre = getTiposEntrenamientos(new TipoEntrenamiento());
+
+        //Comprabos si hay tipos de entrenamiento
+        if (arrL_tipoEntre == null) {
+            //Creamos los tipos de entrenamiento
+            arrL_tipoEntre = new ArrayList<>();
+            arrL_tipoEntre.add(new TipoEntrenamiento(1, "Defensivo", "Se practica la defensa"));
+            arrL_tipoEntre.add(new TipoEntrenamiento(2, "Ofensivo", "Se practica la ofensa"));
+            arrL_tipoEntre.add(new TipoEntrenamiento(3, "Explosivo", "Para cansar"));
+
+            //Recorremos los tipos de entrenamiento
+            for (int i = 0; i < arrL_tipoEntre.size(); i++) {
+                //Guardamos el tipo de entrenamiento
+                insertTipoEntrenamiento(arrL_tipoEntre.get(i));
+            }
+        }
+
+        //Obtenemos los tipos de incidencias
+        ArrayList<TipoIncidencia> arrL_tipoInci = getTiposIncidencias(new TipoIncidencia());
+
+        //Comprabos si hay tipos de incidencias
+        if (arrL_tipoInci == null) {
+            //Creamos los tipos de incidencias
+            arrL_tipoInci = new ArrayList<>();
+            arrL_tipoInci.add(new TipoIncidencia(1, "Retraso", "1000", "Llegar tarde"));
+            arrL_tipoInci.add(new TipoIncidencia(1, "Insultar", "500", "Insultar al jefe o a los compañeros"));
+            arrL_tipoInci.add(new TipoIncidencia(1, "Falta", "10000", "No venir al entrenamiento"));
+
+            //Recorremos los tipos de incidencias
+            for (int i = 0; i < arrL_tipoInci.size(); i++) {
+
+                //Guardamos el tipo de incidencias
+                insertTipoIncidencia(arrL_tipoInci.get(i));
+            }
+        }
+
     }
 
 }
