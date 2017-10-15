@@ -83,7 +83,7 @@ public abstract class Conector {
     }
 
     protected static Properties getConfig() throws FileNotFoundException, IOException {
-        System.out.println(System.getProperty("os.name"));
+        //System.out.println(System.getProperty("os.name"));
         
         FileInputStream file = null;
         switch (System.getProperty("os.name")) {
