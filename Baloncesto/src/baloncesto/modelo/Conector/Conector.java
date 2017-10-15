@@ -90,6 +90,9 @@ public abstract class Conector {
             case "Linux":
                 file = new FileInputStream("src/baloncesto/modelo/Conector/config.properties");
                 break;
+            case "Mac OS X":
+                file = new FileInputStream("src/baloncesto/modelo/Conector/config.properties");
+                break;
             default:
                 file = new FileInputStream("src\\baloncesto\\modelo\\Conector\\config.properties");
         }
