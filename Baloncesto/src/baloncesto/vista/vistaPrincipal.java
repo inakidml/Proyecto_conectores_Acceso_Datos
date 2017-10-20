@@ -17,15 +17,43 @@ public class vistaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form vistaPrincipal
      */
+    
+    private Equipo eq_1;
+    private Equipo eq_2;
+    private Equipo eq_3;
+    
     public vistaPrincipal() {
         initComponents();
     }
     
      public vistaPrincipal( ArrayList<Equipo> arrL_equipos) {
         initComponents();         
-        this.jButton1.setText(arrL_equipos.get(0).getNombre());
-       // this.jButton1.setText(arrL_equipos.get(1).getNombre());
-        //this.jButton1.setText(arrL_equipos.get(2).getNombre());
+      //  this.setExtendedState(MAXIMIZED_BOTH);
+        
+        eq_1 = arrL_equipos.get(0);
+        eq_2 = arrL_equipos.get(1);
+        eq_3 = arrL_equipos.get(2);
+        String str_info = "";
+        this.jButton1.setText(eq_1.getNombre());
+        str_info = "El presidente del equipo " + eq_1.getNombre() + " es " + eq_1.getPresidente() 
+                + " su patrocinador " + eq_1.getPatrocinador() + " y su pabellon " + eq_1.getPabellon(); 
+        
+       
+        this.jLabel1.setText(str_info);
+        
+        this.jButton2.setText(eq_2.getNombre());
+        str_info = "El presidente del equipo " + eq_2.getNombre() + " es " + eq_2.getPresidente() 
+                + " su patrocinador " + eq_2.getPatrocinador() + " y su pabellon " + eq_2.getPabellon(); 
+        
+       this.jLabel2.setText(str_info);
+        
+        this.jButton3.setText(eq_3.getNombre());
+        str_info = "El presidente del equipo " + eq_3.getNombre() + " es " + eq_3.getPresidente() 
+                + " su patrocinador " + eq_3.getPatrocinador() + " y su pabellon " + eq_3.getPabellon(); 
+        
+        this.jLabel3.setText(str_info);
+        
+        
     }
 
     /**
@@ -40,6 +68,9 @@ public class vistaPrincipal extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,29 +95,48 @@ public class vistaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("jLabel1");
+
+        jLabel2.setText("jLabel2");
+
+        jLabel3.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(116, 116, 116)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)))
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(278, 278, 278)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(302, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(57, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(32, 32, 32)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(54, 54, 54)
+                .addComponent(jLabel2)
+                .addGap(28, 28, 28)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(46, 46, 46)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46))
+                .addGap(40, 40, 40))
         );
 
         pack();
@@ -95,7 +145,7 @@ public class vistaPrincipal extends javax.swing.JFrame {
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
         System.out.println("Soy el boton " + this.jButton1.getText());
-        vistaEquipo vE = new vistaEquipo(this.jButton1.getText());  
+        vistaEquipo vE = new vistaEquipo(this, eq_1);  
         vE.setVisible(true);
       
         this.setVisible(false);
@@ -106,11 +156,19 @@ public class vistaPrincipal extends javax.swing.JFrame {
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         // TODO add your handling code here:
         System.out.println("Soy el boton " + this.jButton2.getText());
+        vistaEquipo vE = new vistaEquipo(this, eq_2);  
+        vE.setVisible(true);
+      
+        this.setVisible(false);
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
         System.out.println("Soy el boton " + this.jButton3.getText());
+        vistaEquipo vE = new vistaEquipo(this, eq_3);  
+        vE.setVisible(true);
+      
+        this.setVisible(false);
     }//GEN-LAST:event_jButton3MouseClicked
 
     /**
@@ -152,5 +210,8 @@ public class vistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }

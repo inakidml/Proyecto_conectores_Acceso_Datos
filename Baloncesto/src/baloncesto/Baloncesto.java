@@ -23,6 +23,10 @@ public class Baloncesto extends Conector {
      * @param args the command line arguments
      */
     private static vistaPrincipal vP;
+    
+    private static Equipo eq_mysql = new Equipo(01, "Tau Ceramica", 1941, "El jefazo 01", "pabellon-1", "patrocinador-1");;
+    private static Equipo eq_sql = new Equipo(02, "Unicaja", 1942, "El jefazo 02", "pabellon-2", "patrocinador-2");
+    private static Equipo eq_db4o = new Equipo(03, "Barcelona", 1943, "El jefazo 03", "pabellon-3", "patrocinador-3");
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
         // TODO code application logic here      
@@ -30,16 +34,10 @@ public class Baloncesto extends Conector {
         ArrayList<Equipo> arrL_equipos = new ArrayList<>();
 
         //Creamos los datos (Equipo, Tipos de Entrenamientos y Tipos de incidencias)
-        DB4OInteface.setDBData();
+        //DB4OInteface.setDBData();
 
         //Obtenmos el equipde desde DB4o
-        arrL_equipos.add(DB4OInteface.getEquipo(new Equipo()));
-
-        /*
-        arrL_equipos.add(mikelDB4O());
-        arrL_equipos.add(mikelMYSQL());
-        arrL_equipos.add(mikelSQL());
-         */
+        arrL_equipos.add(eq_mysql);arrL_equipos.add(eq_sql);arrL_equipos.add(eq_db4o);
         
         lanzarVistaPrincipal(arrL_equipos);
     }
