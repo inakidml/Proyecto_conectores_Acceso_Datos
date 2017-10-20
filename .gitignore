@@ -23,6 +23,5 @@ hs_err_pid*
 /Baloncesto/nbproject/private/
 /Baloncesto/build/
 
-#config
-/Baloncesto/src/baloncesto/modelo/Conector/config.properties
+
 *.yap
