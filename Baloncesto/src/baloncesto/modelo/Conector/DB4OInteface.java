@@ -44,9 +44,11 @@ public class DB4OInteface extends Conector {
 
         //Cerramos la conexion
         db.close();
-        
-        e.setConector("db4o");
-        
+
+        if (e != null) {
+            e.setConector("db4o");
+        }
+
         return e;
     }
 
