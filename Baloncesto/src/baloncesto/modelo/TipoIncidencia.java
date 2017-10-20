@@ -14,6 +14,8 @@ public class TipoIncidencia {
     private static final String mysqlConector = "mysql";
     private static final String sqlServerConector = "sqlServer";
     private static final String db4oConector = "db4o";
+    private String conector;
+    
     private int id;
     private String tipo;
     private String sancion;
@@ -90,4 +92,12 @@ public class TipoIncidencia {
         this.descripcion = descripcion;
     }
 
+    public String getConector() {
+        return conector;
+    }
+
+    public void setConector(String conector) {
+        this.conector = conector;
+    }
+    
 }

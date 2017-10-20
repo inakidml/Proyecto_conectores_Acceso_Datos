@@ -10,12 +10,17 @@ package baloncesto.modelo;
  * @author 9fdam02
  */
 public class Entrenamiento {
+
+    private static final String mysqlConector = "mysql";
+    private static final String sqlServerConector = "sqlServer";
+    private static final String db4oConector = "db4o";
+    private String conector;
+
     private Jugador jugador;
     private TipoEntrenamiento tipoEntrenamiento;
     private String fecha;
     private String duracion;
 
-    
     public Entrenamiento() {
     }
 
@@ -26,6 +31,11 @@ public class Entrenamiento {
         this.duracion = duracion;
     }
 
+    public Entrenamiento(String fecha, String duracion) {
+        this.fecha = fecha;
+        this.duracion = duracion;
+    }
+    
     public Jugador getJugador() {
         return jugador;
     }
@@ -63,6 +73,12 @@ public class Entrenamiento {
         return "Entrenamiento{" + "jugador=" + jugador.getNombre() + ", tipoEntrenamiento=" + tipoEntrenamiento.getTipo() + ", fecha=" + fecha + ", duracion=" + duracion + '}';
     }
 
- 
+    public String getConector() {
+        return conector;
+    }
+
+    public void setConector(String conector) {
+        this.conector = conector;
+    }
     
 }

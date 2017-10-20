@@ -30,7 +30,6 @@ public class Equipo {
     private String presidente;
     private String pabellon;
     private String patrocinador;
-
     private List<Jugador> jugadores;
 
     public Equipo() {

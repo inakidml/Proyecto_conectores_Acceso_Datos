@@ -10,13 +10,15 @@ package baloncesto.modelo;
  * @author 9fdam02
  */
 public class Incidencia {
-   
-      private static final String mysqlConector = "mysql";
+
+    private static final String mysqlConector = "mysql";
     private static final String sqlServerConector = "sqlServer";
-    private static final String db4oConector = "db4o"; 
-   private TipoIncidencia tipoIncidencia;
-   private Jugador jugador;
-   private String Fecha;
+    private static final String db4oConector = "db4o";
+    private String conector;
+    
+    private TipoIncidencia tipoIncidencia;
+    private Jugador jugador;
+    private String Fecha;
 
     public Incidencia() {
     }
@@ -26,6 +28,11 @@ public class Incidencia {
         this.jugador = jugador;
         this.Fecha = Fecha;
     }
+
+    public Incidencia(String Fecha) {
+        this.Fecha = Fecha;
+    }
+    
 
     public TipoIncidencia getTipoIncidencia() {
         return tipoIncidencia;
@@ -49,6 +56,14 @@ public class Incidencia {
 
     public void setFecha(String Fecha) {
         this.Fecha = Fecha;
+    }
+
+    public String getConector() {
+        return conector;
+    }
+
+    public void setConector(String conector) {
+        this.conector = conector;
     }
 
 }
