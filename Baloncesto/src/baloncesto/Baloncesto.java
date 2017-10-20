@@ -7,6 +7,7 @@ package baloncesto;
 
 import baloncesto.modelo.Conector.Conector;
 import baloncesto.modelo.Conector.DB4OInteface;
+import baloncesto.modelo.Conector.SQLInterface;
 import baloncesto.modelo.Equipo;
 import baloncesto.vista.vistaPrincipal;
 import java.io.IOException;
@@ -23,6 +24,8 @@ public class Baloncesto extends Conector {
      * @param args the command line arguments
      */
     private static vistaPrincipal vP;
+    private static final String mysqlConector = "mysql";
+    private static final String sqlServerConector = "sqlServer";
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
         // TODO code application logic here      
@@ -31,7 +34,10 @@ public class Baloncesto extends Conector {
 
         //Creamos los datos (Equipo, Tipos de Entrenamientos y Tipos de incidencias)
         DB4OInteface.setDBData();
-
+        
+        //Obtenemos el equipo de mysql
+        arrL_equipos.add(SQLInterface.getEquipo(mysqlConector));
+       
         //Obtenmos el equipde desde DB4o
         arrL_equipos.add(DB4OInteface.getEquipo(new Equipo()));
 
@@ -40,7 +46,6 @@ public class Baloncesto extends Conector {
         arrL_equipos.add(mikelMYSQL());
         arrL_equipos.add(mikelSQL());
          */
-        
         lanzarVistaPrincipal(arrL_equipos);
     }
 
