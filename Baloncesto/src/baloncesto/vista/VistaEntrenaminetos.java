@@ -19,7 +19,7 @@ public class VistaEntrenaminetos extends javax.swing.JFrame {
     public VistaEntrenaminetos() {
         initComponents();
     }
-        public VistaEntrenaminetos(Jugador j) {
+        public VistaEntrenaminetos(Jugador j, vistaEquipo vE) {
         initComponents();
     }
 

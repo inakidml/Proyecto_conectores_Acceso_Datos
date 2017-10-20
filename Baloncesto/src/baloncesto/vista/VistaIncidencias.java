@@ -20,7 +20,7 @@ public class VistaIncidencias extends javax.swing.JFrame {
         initComponents();
     }
     
-    public VistaIncidencias(Jugador j){
+    public VistaIncidencias(Jugador j, vistaEquipo vE){
         initComponents();
     }
 
