@@ -21,6 +21,8 @@ public class vistaEquipo extends javax.swing.JFrame {
     /**
      * Creates new form vistaEquipo
      */
+    private Equipo equipo;
+    
     public vistaEquipo() {
         initComponents();
     }
@@ -28,6 +30,7 @@ public class vistaEquipo extends javax.swing.JFrame {
     private vistaPrincipal vP;
     
      public vistaEquipo(vistaPrincipal vP, Equipo equipo) {
+         this.equipo = equipo;
         initComponents();
        // this.setExtendedState(MAXIMIZED_BOTH);
         this.vP = vP;
@@ -80,6 +83,11 @@ public class vistaEquipo extends javax.swing.JFrame {
         jLabel10.setText("Selecciona tu jugador");
 
         jButton1.setText("Incidencias");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         jButton2.setText("Entrenamientos");
 
@@ -142,6 +150,21 @@ public class vistaEquipo extends javax.swing.JFrame {
       
         
     }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        
+        Jugador jugador;
+        
+         if(equipo.getJugadores() != null && equipo.getJugadores().size() > 0){
+            for (Jugador curJ : equipo.getJugadores()){
+                jComboBox1.addItem(curJ.getId() + "_" + curJ.getNombre());                
+            }     
+        }
+        
+       // VistaIncidencias vIn = VistaIncidencias(this, jugador);
+        
+    
+    }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * @param args the command line arguments
