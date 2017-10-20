@@ -5,8 +5,13 @@
  */
 package baloncesto.modelo;
 
+import baloncesto.modelo.Conector.DB4OInteface;
+import baloncesto.modelo.Conector.SQLInterface;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,6 +22,8 @@ public class Jugador {
     private static final String mysqlConector = "mysql";
     private static final String sqlServerConector = "sqlServer";
     private static final String db4oConector = "db4o";
+    private String conector;
+
     private int id;
     private String nombre;
     private String apellido;
@@ -26,7 +33,6 @@ public class Jugador {
     private String posicion;
     private String descripcion;
     private Equipo equipo;
-    private String conector;
 
     private List<Entrenamiento> entrenamientos;
     private List<Incidencia> incidencias;
@@ -36,10 +42,22 @@ public class Jugador {
         incidencias = new ArrayList<>();
     }
 
-    public Jugador(int id, String nombre, String apellido, String apellido2, float altura, float peso, String posicion, String descripcion) {
+    public Jugador(int id, String nombre, String apellido, String apellido2, float altura, float peso, String posicion, String descripcion, Equipo equipo) {
         entrenamientos = new ArrayList<>();
         incidencias = new ArrayList<>();
 
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.apellido2 = apellido2;
+        this.altura = altura;
+        this.peso = peso;
+        this.posicion = posicion;
+        this.descripcion = descripcion;
+        this.equipo = equipo;
+    }
+
+    public Jugador(int id, String nombre, String apellido, String apellido2, float altura, float peso, String posicion, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -157,6 +175,25 @@ public class Jugador {
      * @return the entrenamientos
      */
     public List<Entrenamiento> getEntrenamientos() {
+        try {
+
+            switch (this.conector) {
+                case db4oConector:
+                    this.entrenamientos = DB4OInteface.getEntrenamientos(new Entrenamiento(this, null, null, null));
+                    break;
+                case mysqlConector:
+                    this.entrenamientos = SQLInterface.getEntrenamientosByJugador(this.id, conector);
+                    break;
+                case sqlServerConector:
+                    this.entrenamientos = SQLInterface.getEntrenamientosByJugador(this.id, conector);
+                    break;
+            }
+
+            return this.entrenamientos;
+        } catch (SQLException ex) {
+            Logger.getLogger(Equipo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return entrenamientos;
     }
 
@@ -196,6 +233,5 @@ public class Jugador {
     public void setConector(String conector) {
         this.conector = conector;
     }
-    
 
 }
