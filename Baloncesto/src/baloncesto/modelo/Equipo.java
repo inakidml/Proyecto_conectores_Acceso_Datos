@@ -10,6 +10,8 @@ import baloncesto.modelo.Conector.SQLInterface;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,13 +22,14 @@ public class Equipo {
     private static final String mysqlConector = "mysql";
     private static final String sqlServerConector = "sqlServer";
     private static final String db4oConector = "db4o";
+    private String conector;
+
     private int id;
     private String nombre;
     private int anoFundacion;
     private String presidente;
     private String pabellon;
     private String patrocinador;
-    private String conector;
 
     private List<Jugador> jugadores;
 
@@ -35,7 +38,7 @@ public class Equipo {
     }
 
     public Equipo(int id, String nombre, int anoFundacion, String presidente, String pabellon, String patrocinador) {
-        jugadores = new ArrayList<>();
+        this.jugadores = new ArrayList<>();
         this.id = id;
         this.nombre = nombre;
         this.anoFundacion = anoFundacion;
@@ -136,20 +139,24 @@ public class Equipo {
     /**
      * @return the jugadores
      */
-    public List<Jugador> getJugadores() throws SQLException  {
-        switch (this.conector) {
-            case db4oConector:
-                this.jugadores = DB4OInteface.getJugadores(new Jugador());
-                break;
-            case mysqlConector:
-                this.jugadores = SQLInterface.getJugadores(conector);
-                break;
-            case sqlServerConector:
-                this.jugadores = SQLInterface.getJugadores(conector);
-                break;
-        }
-        
+    public List<Jugador> getJugadores() {
+        try {
+            switch (this.conector) {
+                case db4oConector:
+                    this.jugadores = DB4OInteface.getJugadores(new Jugador());
+                    break;
+                case mysqlConector:
+                    this.jugadores = SQLInterface.getJugadores(conector);
+                    break;
+                case sqlServerConector:
+                    this.jugadores = SQLInterface.getJugadores(conector);
+                    break;
+            }
 
+            return jugadores;
+        } catch (SQLException ex) {
+            Logger.getLogger(Equipo.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return jugadores;
     }
 
