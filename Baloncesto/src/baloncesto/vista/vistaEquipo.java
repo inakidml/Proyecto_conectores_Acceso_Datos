@@ -90,6 +90,11 @@ public class vistaEquipo extends javax.swing.JFrame {
         });
 
         jButton2.setText("Entrenamientos");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         jButton3.setText("+");
 
@@ -153,18 +158,46 @@ public class vistaEquipo extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         
-        Jugador jugador;
+        Jugador jugador = new Jugador();
         
          if(equipo.getJugadores() != null && equipo.getJugadores().size() > 0){
             for (Jugador curJ : equipo.getJugadores()){
-                jComboBox1.addItem(curJ.getId() + "_" + curJ.getNombre());                
+                
+                Integer select_id = (Integer) Integer.parseInt(jComboBox1.getSelectedItem().toString().split("_")[0]);
+                
+                if(curJ.getId() == select_id){
+                    System.out.println(select_id + " -> " + curJ.getNombre());                
+                    VistaIncidencias vIn = new VistaIncidencias(curJ, this);
+                    this.setVisible(false);
+                    vIn.setVisible(true);
+                    break;
+                }
+                
             }     
         }
-        
-       // VistaIncidencias vIn = VistaIncidencias(this, jugador);
-        
     
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+         Jugador jugador = new Jugador();
+        
+         if(equipo.getJugadores() != null && equipo.getJugadores().size() > 0){
+            for (Jugador curJ : equipo.getJugadores()){
+                
+                Integer select_id = (Integer) Integer.parseInt(jComboBox1.getSelectedItem().toString().split("_")[0]);
+                
+                if(curJ.getId() == select_id){
+                    System.out.println(select_id + " -> " + curJ.getNombre());                
+                    VistaEntrenaminetos vIn = new VistaEntrenaminetos(curJ, this);
+                    this.setVisible(false);
+                    vIn.setVisible(true);
+                    break;
+                }
+                
+            }     
+        }
+      
+    }//GEN-LAST:event_jButton2MouseClicked
 
     /**
      * @param args the command line arguments
