@@ -10,7 +10,10 @@ package baloncesto.modelo;
  * @author 9fdam02
  */
 public class Incidencia {
-
+   
+      private static final String mysqlConector = "mysql";
+    private static final String sqlServerConector = "sqlServer";
+    private static final String db4oConector = "db4o"; 
    private TipoIncidencia tipoIncidencia;
    private Jugador jugador;
    private String Fecha;

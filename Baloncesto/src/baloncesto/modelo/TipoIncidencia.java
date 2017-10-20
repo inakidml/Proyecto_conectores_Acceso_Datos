@@ -10,6 +10,10 @@ package baloncesto.modelo;
  * @author 9fdam02
  */
 public class TipoIncidencia {
+
+    private static final String mysqlConector = "mysql";
+    private static final String sqlServerConector = "sqlServer";
+    private static final String db4oConector = "db4o";
     private int id;
     private String tipo;
     private String sancion;
@@ -85,7 +89,5 @@ public class TipoIncidencia {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    
-    
+
 }

@@ -9,10 +9,14 @@ import baloncesto.modelo.Conector.Conector;
 import baloncesto.modelo.Conector.DB4OInteface;
 import baloncesto.modelo.Conector.SQLInterface;
 import baloncesto.modelo.Equipo;
+import baloncesto.modelo.Jugador;
 import baloncesto.vista.vistaPrincipal;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  *
@@ -33,6 +37,8 @@ public class Baloncesto extends Conector {
         // TODO code application logic here      
         //Lanzamos la seleccion de los conectores con la Base de datos
         ArrayList<Equipo> arrL_equipos = new ArrayList<>();
+        
+        //Obtener los conectores 
 
         //Creamos los datos (Equipo, Tipos de Entrenamientos y Tipos de incidencias)
         DB4OInteface.setDBData();
@@ -43,11 +49,10 @@ public class Baloncesto extends Conector {
        
         //Obtenmos el equipde desde DB4o
         arrL_equipos.add(DB4OInteface.getEquipo(new Equipo()));
-        
-        
+         
         lanzarVistaPrincipal(arrL_equipos);
     }
-
+    
     public static void lanzarVistaPrincipal(ArrayList<Equipo> arrL_equipos) {
         Baloncesto.vP = new vistaPrincipal(arrL_equipos);
         vP.setLocationRelativeTo(vP);

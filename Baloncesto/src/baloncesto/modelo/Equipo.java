@@ -5,6 +5,9 @@
  */
 package baloncesto.modelo;
 
+import baloncesto.modelo.Conector.DB4OInteface;
+import baloncesto.modelo.Conector.SQLInterface;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +17,9 @@ import java.util.List;
  */
 public class Equipo {
 
+    private static final String mysqlConector = "mysql";
+    private static final String sqlServerConector = "sqlServer";
+    private static final String db4oConector = "db4o";
     private int id;
     private String nombre;
     private int anoFundacion;
@@ -130,7 +136,20 @@ public class Equipo {
     /**
      * @return the jugadores
      */
-    public List<Jugador> getJugadores() {
+    public List<Jugador> getJugadores() throws SQLException  {
+        switch (this.conector) {
+            case db4oConector:
+                this.jugadores = DB4OInteface.getJugadores(new Jugador());
+                break;
+            case mysqlConector:
+                this.jugadores = SQLInterface.getJugadores(conector);
+                break;
+            case sqlServerConector:
+                this.jugadores = SQLInterface.getJugadores(conector);
+                break;
+        }
+        
+
         return jugadores;
     }
 
@@ -141,7 +160,5 @@ public class Equipo {
     public void setConector(String conector) {
         this.conector = conector;
     }
-    
-    
 
 }

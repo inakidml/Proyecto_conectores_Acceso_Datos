@@ -14,6 +14,9 @@ import java.util.List;
  */
 public class Jugador {
 
+    private static final String mysqlConector = "mysql";
+    private static final String sqlServerConector = "sqlServer";
+    private static final String db4oConector = "db4o";
     private int id;
     private String nombre;
     private String apellido;
@@ -23,6 +26,7 @@ public class Jugador {
     private String posicion;
     private String descripcion;
     private Equipo equipo;
+    private String conector;
 
     private List<Entrenamiento> entrenamientos;
     private List<Incidencia> incidencias;
@@ -32,10 +36,10 @@ public class Jugador {
         incidencias = new ArrayList<>();
     }
 
-    public Jugador(int id, String nombre, String apellido, String apellido2, float altura, float peso, String posicion, String descripcion, Equipo equipo) {
+    public Jugador(int id, String nombre, String apellido, String apellido2, float altura, float peso, String posicion, String descripcion) {
         entrenamientos = new ArrayList<>();
         incidencias = new ArrayList<>();
-        
+
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -44,7 +48,6 @@ public class Jugador {
         this.peso = peso;
         this.posicion = posicion;
         this.descripcion = descripcion;
-        this.equipo = equipo;
     }
 
     @Override
@@ -52,9 +55,6 @@ public class Jugador {
         return "Jugador{" + "id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", apellido2=" + apellido2 + ", altura=" + altura + ", peso=" + peso + ", posicion=" + posicion + ", descripcion=" + descripcion + ", equipo=" + equipo + ", entrenamientos=" + entrenamientos + ", incidencias=" + incidencias + '}';
     }
 
-
-
-  
     /**
      * @return the id
      */
@@ -153,7 +153,6 @@ public class Jugador {
         this.posicion = posicion;
     }
 
-
     /**
      * @return the entrenamientos
      */
@@ -189,6 +188,14 @@ public class Jugador {
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
     }
+
+    public String getConector() {
+        return conector;
+    }
+
+    public void setConector(String conector) {
+        this.conector = conector;
+    }
     
-    
+
 }
