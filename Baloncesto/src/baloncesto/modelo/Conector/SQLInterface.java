@@ -33,7 +33,7 @@ public class SQLInterface extends Conector {
             conn = getConnection(conector);
 
             //Query
-            String query = "SELECT * FROM equipo";
+            String query = "SELECT * FROM EQUIPO";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
 
@@ -42,7 +42,9 @@ public class SQLInterface extends Conector {
             }
 
             conn.close();
-
+            
+            obj_equipo.setConector(conector);
+            
             return obj_equipo;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,7 +69,7 @@ public class SQLInterface extends Conector {
             conn = getConnection(conector);
 
             //Query
-            String query = "SELECT * FROM jugador WHERE idJUGADOR = ?";
+            String query = "SELECT * FROM JUGADOR WHERE idJUGADOR = ?";
             PreparedStatement ps = conn.prepareStatement(query);
             
             ps.setInt(1, id);

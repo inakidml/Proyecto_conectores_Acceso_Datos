@@ -20,6 +20,7 @@ public class Equipo {
     private String presidente;
     private String pabellon;
     private String patrocinador;
+    private String conector;
 
     private List<Jugador> jugadores;
 
@@ -132,5 +133,15 @@ public class Equipo {
     public List<Jugador> getJugadores() {
         return jugadores;
     }
+
+    public String getConector() {
+        return conector;
+    }
+
+    public void setConector(String conector) {
+        this.conector = conector;
+    }
+    
+    
 
 }

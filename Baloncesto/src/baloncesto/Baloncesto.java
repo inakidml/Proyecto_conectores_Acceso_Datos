@@ -26,11 +26,9 @@ public class Baloncesto extends Conector {
     private static vistaPrincipal vP;
     private static final String mysqlConector = "mysql";
     private static final String sqlServerConector = "sqlServer";
+    private static final String db4oConector = "db4o"; 
     
-    private static Equipo eq_mysql = new Equipo(01, "Tau Ceramica", 1941, "El jefazo 01", "pabellon-1", "patrocinador-1");;
-    private static Equipo eq_sql = new Equipo(02, "Unicaja", 1942, "El jefazo 02", "pabellon-2", "patrocinador-2");
-    private static Equipo eq_db4o = new Equipo(03, "Barcelona", 1943, "El jefazo 03", "pabellon-3", "patrocinador-3");
-
+ 
     public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
         // TODO code application logic here      
         //Lanzamos la seleccion de los conectores con la Base de datos
@@ -39,12 +37,14 @@ public class Baloncesto extends Conector {
         //Creamos los datos (Equipo, Tipos de Entrenamientos y Tipos de incidencias)
         DB4OInteface.setDBData();
         
-        //Obtenemos el equipo de mysql
+        //Obtenemos el equipo de mysql y sqlServer
         arrL_equipos.add(SQLInterface.getEquipo(mysqlConector));
+        arrL_equipos.add(SQLInterface.getEquipo(sqlServerConector));
        
         //Obtenmos el equipde desde DB4o
         arrL_equipos.add(DB4OInteface.getEquipo(new Equipo()));
-        arrL_equipos.add(eq_mysql);arrL_equipos.add(eq_sql);arrL_equipos.add(eq_db4o);
+        
+        
         lanzarVistaPrincipal(arrL_equipos);
     }
 

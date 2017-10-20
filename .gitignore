@@ -25,3 +25,4 @@ hs_err_pid*
 
 #config
 /Baloncesto/src/baloncesto/modelo/Conector/config.properties
+*.yap
