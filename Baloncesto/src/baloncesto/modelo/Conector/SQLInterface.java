@@ -214,7 +214,8 @@ public class SQLInterface extends Conector {
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
-
+                TipoEntrenamiento tE = new TipoEntrenamiento(rs.getInt(1), rs.getString(2), rs.getString(3));
+                lista.add(tE);
             }
 
             conn.close();
