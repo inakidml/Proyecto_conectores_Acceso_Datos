@@ -45,7 +45,7 @@ public class SQLInterface extends Conector {
             //Query
             String query = "SELECT * FROM EQUIPO";
             Statement st = conn.createStatement();
-            
+
             //Ejecutamos la query
             ResultSet rs = st.executeQuery(query);
 
@@ -142,7 +142,7 @@ public class SQLInterface extends Conector {
             //Query
             String query = "SELECT * FROM JUGADOR";
             Statement st = conn.createStatement();
-            
+
             //Ejecutamos la query
             ResultSet rs = st.executeQuery(query);
 
@@ -396,8 +396,99 @@ public class SQLInterface extends Conector {
                 conn.close();
             }
         }
-        
+
         //Devolvemos la lista
+        return list;
+    }
+
+    public static TipoIncidencia getTipoIncidenciaById(int id, String conector) throws SQLException {
+        TipoIncidencia obj = null;
+
+        try {
+            //Obtenemos la conexion
+            conn = getConnection(conector);
+
+            //Query
+            String query = "SELECT * FROM INCIDENCIA WHERE idINCIDENCIA = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            //Añadimos el id del tipo de incidencia al where
+            ps.setInt(1, id);
+
+            //Ejecutamos la query
+            ResultSet rs = ps.executeQuery();
+
+            //Recorremos el resultado
+            while (rs.next()) {
+                obj = (TipoIncidencia) parseObject(rs, TipoIncidencia.class.getSimpleName());
+
+                //Comprobamos que no se null
+                if (obj != null) {
+                    //Añadimos el conector
+                    obj.setConector(conector);
+                }
+            }
+
+            //Cerramos la conexion
+            conn.close();
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        return obj;
+    }
+
+    public static ArrayList<TipoIncidencia> getTiposIncidencias(String conector) throws SQLException {
+        //Lista de tipos de incidencia
+        ArrayList<TipoIncidencia> list = new ArrayList<>();
+
+        try {
+            //Obtemos la conexion
+            conn = getConnection(conector);
+
+            //Query
+            String query = "SELECT * FROM INCIDENCIA";
+            Statement st = conn.createStatement();
+
+            //Ejecutamos la query
+            ResultSet rs = st.executeQuery(query);
+
+            //Recorremos el resultado
+            while (rs.next()) {
+                //Obtenemos el tipo incidencia
+                TipoIncidencia obj = (TipoIncidencia) parseObject(rs, TipoIncidencia.class.getSimpleName());
+
+                //Comprobamos que no sea null
+                if (obj != null) {
+                    //Añadimos el conector
+                    obj.setConector(conector);
+
+                    //Añadimos el tipo de incidencia a la lista
+                    list.add(obj);
+                }
+            }
+
+            //Cerramos conexion
+            conn.close();
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        //Devovemos la lista
         return list;
     }
 
@@ -430,9 +521,9 @@ public class SQLInterface extends Conector {
         } else if (tipo.equals(TipoIncidencia.class.getSimpleName())) {
             //Creamo el objeto Tipo incidencia
             return new TipoIncidencia(rs.getInt("idINCIDENCIA"), rs.getString("Tipo_Incidencia"), rs.getString("Sancion"), rs.getString("Descripcion"));
-        }else{
+        } else {
             //Devolvemos un null 
             return null;
-        }  
+        }
     }
 }
