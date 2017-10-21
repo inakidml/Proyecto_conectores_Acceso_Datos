@@ -8,10 +8,8 @@ package baloncesto.vista;
 import baloncesto.modelo.Conector.DB4OInteface;
 import baloncesto.modelo.Conector.SQLInterface;
 import baloncesto.modelo.Entrenamiento;
-import baloncesto.modelo.Incidencia;
 import baloncesto.modelo.Jugador;
 import baloncesto.modelo.TipoEntrenamiento;
-import baloncesto.modelo.TipoIncidencia;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +37,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
     private List<TipoEntrenamiento> tiposEntrenamientos = null;
 
     private DefaultTableModel tableModel;
-    
+
     /**
      * Creates new form VistaIncidencias
      */
@@ -118,7 +116,8 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
             jComboBox1.addItem("Sin Tipos");
         }
     }
-public void refrescarJTable(){     
+
+    public void refrescarJTable() {
         tableModel.setRowCount(0);
         Object[] data = {};
         if (listaEntrenamientos != null) {
@@ -131,11 +130,16 @@ public void refrescarJTable(){
                 tableModel.addRow(data);
                 System.out.println(tableModel.getRowCount());
             }
-        }       
-
+        }
+        data[0] = "refrescado";
+        data[1] = "";
+        data[2] = "";
+        data[3] = "";
+        tableModel.addRow(data);
         jTable1.setModel(tableModel);
         tableModel.fireTableDataChanged();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -301,20 +305,8 @@ public void refrescarJTable(){
         tE = tiposEntrenamientos.get(tiposEntrenamientos.indexOf(tE)); //conseguimos el objeto
 
         Entrenamiento e = new Entrenamiento(j, tE, fecha, duracion);
-
-        switch (j.getConector()) {
-            case mysqlConector:
-            case sqlServerConector:
-                // SQLInterface.insertEntrenamiento(e);
-
-                break;
-            case db4oConector:
-                DB4OInteface.insertEntrenamiento(e);
-                System.out.println("Insertado entrenamiento");
-                break;
-            default:
-                throw new AssertionError();
-        }
+        e.setConector(j.getConector());
+        e.save();
 
         refrescarJTable();
     }//GEN-LAST:event_jButton1ActionPerformed

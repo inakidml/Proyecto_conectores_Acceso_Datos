@@ -7,10 +7,8 @@ package baloncesto.vista;
 
 import baloncesto.modelo.Conector.DB4OInteface;
 import baloncesto.modelo.Conector.SQLInterface;
-import baloncesto.modelo.Entrenamiento;
 import baloncesto.modelo.Incidencia;
 import baloncesto.modelo.Jugador;
-import baloncesto.modelo.TipoEntrenamiento;
 import baloncesto.modelo.TipoIncidencia;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,16 +17,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
  * @author 9fdam02
  */
-public class VistaIncidencias extends javax.swing.JFrame{
+public class VistaIncidencias extends javax.swing.JFrame {
 
     private final boolean pruebas = false;
 
@@ -40,7 +35,7 @@ public class VistaIncidencias extends javax.swing.JFrame{
     private Jugador j;
     private List<Incidencia> listaIncidencias = new ArrayList<>();
     private List<TipoIncidencia> tiposIncidencias = null;
-    
+
     private DefaultTableModel tableModel;
 
     /**
@@ -85,15 +80,16 @@ public class VistaIncidencias extends javax.swing.JFrame{
         jTable1 = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(data, colName));
-        
-        tableModel = (DefaultTableModel)jTable1.getModel();
+
+        tableModel = (DefaultTableModel) jTable1.getModel();
         jScrollPane1.setViewportView(jTable1);
 
         jTable1 = new JTable(data, colName);
         jScrollPane1 = new JScrollPane(jTable1);
-        
+
     }
-    public void refrescarJTable(){     
+
+    public void refrescarJTable() {
         tableModel.setRowCount(0);
         Object[] data = {};
         if (listaIncidencias != null) {
@@ -106,8 +102,12 @@ public class VistaIncidencias extends javax.swing.JFrame{
                 tableModel.addRow(data);
                 System.out.println(tableModel.getRowCount());
             }
-        }       
-
+        }
+        data[0] = "refrescado";
+        data[1] = "";
+        data[2] = "";
+        data[3] = "";
+        tableModel.addRow(data);
         jTable1.setModel(tableModel);
         tableModel.fireTableDataChanged();
     }
@@ -287,24 +287,8 @@ public class VistaIncidencias extends javax.swing.JFrame{
         tI = tiposIncidencias.get(tiposIncidencias.indexOf(tI)); //conseguimos el objeto
 
         Incidencia i = new Incidencia(tI, j, fecha);
-
-        switch (j.getConector()) {
-            case mysqlConector:
-            case sqlServerConector: {
-                try {
-                    SQLInterface.insertIncidencia(i, j.getConector());
-                } catch (SQLException ex) {
-                    Logger.getLogger(VistaIncidencias.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            break;
-            case db4oConector:
-                DB4OInteface.insertIncidencia(i);
-                System.out.println("Insertada incidencia");
-                break;
-            default:
-                throw new AssertionError();
-        }
+        i.setConector(j.getConector());
+        i.save();
         refrescarJTable();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -356,6 +340,5 @@ public class VistaIncidencias extends javax.swing.JFrame{
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
-
 
 }
