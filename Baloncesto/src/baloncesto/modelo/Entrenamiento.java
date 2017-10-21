@@ -5,6 +5,12 @@
  */
 package baloncesto.modelo;
 
+import baloncesto.modelo.Conector.DB4OInteface;
+import baloncesto.modelo.Conector.SQLInterface;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author 9fdam02
@@ -35,7 +41,7 @@ public class Entrenamiento {
         this.fecha = fecha;
         this.duracion = duracion;
     }
-    
+
     public Jugador getJugador() {
         return jugador;
     }
@@ -80,5 +86,27 @@ public class Entrenamiento {
     public void setConector(String conector) {
         this.conector = conector;
     }
-    
+
+    public boolean save() {
+        Boolean result = false;
+
+        try {
+            switch (this.conector) {
+                case db4oConector:
+                    result = DB4OInteface.insertEntrenamiento(this);
+                    break;
+                case mysqlConector:
+                    result = SQLInterface.insertEntrenamiento(this, conector);
+                    break;
+                case sqlServerConector:
+                    result = SQLInterface.insertEntrenamiento(this, conector);
+                    break;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jugador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
+    }
 }
