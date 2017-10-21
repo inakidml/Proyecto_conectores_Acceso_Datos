@@ -66,6 +66,9 @@ public class DB4OInteface extends Conector {
 
         //cerramos el equipo
         db.close();
+        
+        //Indicamos el conector con el que se ha insertado
+        e.setConector("db4o");
     }
 
     /**
@@ -94,6 +97,9 @@ public class DB4OInteface extends Conector {
             e.setPatrocinador(data.getPatrocinador() != null ? data.getPatrocinador() : e.getPatrocinador());
 
             db.store(e);
+            
+            //Indicamos el conector con el que se ha actualizado
+            e.setConector("db4o");
         }
 
         //Cerramos la conexion
@@ -194,6 +200,9 @@ public class DB4OInteface extends Conector {
 
         //cerramos el jugador
         db.close();
+        
+        //Indicamos el conector con el que se ha insertado
+        j.setConector("db4o");
     }
 
     public static void updateJugador(Jugador query, Jugador data) {
@@ -219,11 +228,14 @@ public class DB4OInteface extends Conector {
             j.setEquipo(data.getEquipo() != null ? data.getEquipo() : j.getEquipo());
 
             db.store(j);
+            
+            //Indicamos el conector con el que se ha actualizado
+            j.setConector("db4o");
         }
 
         //Cerramos la conexion
         db.close();
-
+        
     }
 
     public static void deleteJugador(Jugador query) {
@@ -315,6 +327,9 @@ public class DB4OInteface extends Conector {
 
         //cerramos la conexion
         db.close();
+        
+        //Indicamos el conector con el que se ha insertado
+        i.setConector("db4o");
     }
 
     public static void updateIncidencia(Incidencia query, Incidencia data) {
@@ -333,6 +348,9 @@ public class DB4OInteface extends Conector {
             i.setFecha(data.getFecha() != null ? data.getFecha() : i.getFecha());
 
             db.store(i);
+            
+            //Indicamos el conector con el que se ha actualizado
+            i.setConector("db4o");
         }
 
         //Cerramos la conexion
@@ -428,6 +446,9 @@ public class DB4OInteface extends Conector {
 
         //cerramos la conexion
         db.close();
+        
+        //Indicamos el conector con el que se ha insertado
+        e.setConector("db4o");
     }
 
     public static void updateEntrenamiento(Entrenamiento query, Entrenamiento data) {
@@ -447,6 +468,9 @@ public class DB4OInteface extends Conector {
             e.setDuracion(data.getDuracion() != null ? data.getDuracion() : e.getDuracion());
 
             db.store(e);
+            
+            //Indicamos el conector con el que se ha actualizado
+            e.setConector("db4o");
         }
 
         //Cerramos la conexion
@@ -542,6 +566,9 @@ public class DB4OInteface extends Conector {
 
         //cerramos la conexion
         db.close();
+        
+        //Indicamos el conector con el que se ha insertado
+        ti.setConector("db4o");
     }
 
     public static void updateTipoIncidencia(TipoIncidencia query, TipoIncidencia data) {
@@ -562,6 +589,9 @@ public class DB4OInteface extends Conector {
             ti.setDescripcion(data.getDescripcion() != null ? data.getDescripcion() : ti.getDescripcion());
 
             db.store(ti);
+            
+            //Indicamos el conector con el que se ha actualizado
+            ti.setConector("db4o");
         }
 
         //Cerramos la conexion
@@ -656,6 +686,9 @@ public class DB4OInteface extends Conector {
 
         //cerramos la conexion
         db.close();
+        
+        //Indicamos el conector con el que se ha insertado
+        te.setConector("db4o");
     }
 
     public static void updateTipoEntrenamiento(TipoEntrenamiento query, TipoEntrenamiento data) {
@@ -675,6 +708,9 @@ public class DB4OInteface extends Conector {
             te.setDescripcion(data.getDescripcion() != null ? data.getDescripcion() : te.getDescripcion());
 
             db.store(te);
+            
+            //Indicamos el conector con el que se ha actualizado
+            te.setConector("db4o");
         }
 
         //Cerramos la conexion
@@ -712,17 +748,19 @@ public class DB4OInteface extends Conector {
 
             //Añadimos el equipo
             insertEquipo(e);
-        }else{
-            ArrayList<Jugador> arrJugadores = (ArrayList<Jugador>) e.getJugadores();            
-            if(!(arrJugadores != null 
-                    && arrJugadores.size()>0)){
-                Jugador jugador = new Jugador(1, "Jon", "López", "Garrido", 1.70f, 74.0f, "central", "es un jugador de la ostia");
-                DB4OInteface.insertJugador(jugador);                
-                Jugador jugador_2 = new Jugador(2, "Mikel", "Ereño", "Ereño", 1.70f, 72.0f, "campista", "es un jugador de la ostia 2");
-                DB4OInteface.insertJugador(jugador_2);                
-                Jugador jugador_3 = new Jugador(3, "Iñaki", "Iñaki", "Iñaki", 1.70f, 68.0f, "delantero", "es un jugador de la ostia 3");
-                DB4OInteface.insertJugador(jugador_3);                
-            }
+        }
+        
+        if(e != null && 
+                (e.getJugadores() == null 
+                            || (e.getJugadores() != null 
+                                    && e.getJugadores().size()<=0))
+                ){           
+            Jugador jugador = new Jugador(1, "Jon", "López", "Garrido", 1.70f, 74.0f, "central", "es un jugador de la ostia");
+            DB4OInteface.insertJugador(jugador);                
+            Jugador jugador_2 = new Jugador(2, "Mikel", "Ereño", "Ereño", 1.70f, 72.0f, "campista", "es un jugador de la ostia 2");
+            DB4OInteface.insertJugador(jugador_2);                
+            Jugador jugador_3 = new Jugador(3, "Iñaki", "Iñaki", "Iñaki", 1.70f, 68.0f, "delantero", "es un jugador de la ostia 3");
+            DB4OInteface.insertJugador(jugador_3);                
         }
 
         //Obtenemos los tipos de entrenamiento
@@ -760,6 +798,11 @@ public class DB4OInteface extends Conector {
                 //Guardamos el tipo de incidencias
                 insertTipoIncidencia(arrL_tipoInci.get(i));
             }
+        }
+        //Si el equipo no existe es porque no exitía el aricho .yap 
+        //y ahora si podremos llenar con los datos el archivo
+        if(e == null){
+            setDBData();
         }
 
     }
