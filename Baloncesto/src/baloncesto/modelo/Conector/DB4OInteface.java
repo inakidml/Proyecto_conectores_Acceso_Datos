@@ -328,7 +328,9 @@ public class DB4OInteface extends Conector {
         return iList;
     }
 
-    public static void insertIncidencia(Incidencia i) {
+    public static Boolean insertIncidencia(Incidencia i) {
+        Boolean result = false;
+        
         //Abrimos la conexion
         ObjectContainer db = getDb_4o();
 
@@ -338,8 +340,15 @@ public class DB4OInteface extends Conector {
         //cerramos la conexion
         db.close();
         
+        //Comprobamos si sea insertado la incidencia
+        if(getIncidencia(i) != null){
+            result = true;
+        }
+        
         //Indicamos el conector con el que se ha insertado
         i.setConector("db4o");
+        
+        return result;
     }
 
     public static void updateIncidencia(Incidencia query, Incidencia data) {

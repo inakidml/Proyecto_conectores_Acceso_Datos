@@ -321,6 +321,10 @@ public class SQLInterface extends Conector {
             while (rs.next()) {
                 //Obtenemos el tipo de entrenamiento
                 Entrenamiento obj = (Entrenamiento) parseObject(rs, Entrenamiento.class.getSimpleName());
+                
+                //Obtenemos el tipo de entrenamiento
+                int idTipoEntrenamiento = rs.getInt("ENTRENAMIENTO_idENTRENAMIENTO");
+                System.out.println(idTipoEntrenamiento);
 
                 //Comprobamos que no sea null
                 if (obj != null) {
@@ -330,8 +334,8 @@ public class SQLInterface extends Conector {
                     //Añadimos el jugador
                     obj.setJugador(getJugadorById(idJugador, conector));
 
-                    //Añadimos el tipo de entramiento∫
-                    obj.setTipoEntrenamiento(getTipoEntrenamientoById(rs.getInt("ENTRENAMIENTO_idENTRENAMIENTO"), conector));
+                    //Añadimos el tipo de entramiento
+                    obj.setTipoEntrenamiento(getTipoEntrenamientoById(idTipoEntrenamiento, conector));
 
                     //Lo añadimos a la lista
                     list.add(obj);
@@ -403,6 +407,12 @@ public class SQLInterface extends Conector {
 
         //Devolvemos el objeto
         return obj;
+    }
+    
+    public static Boolean insertIncidencia(Incidencia obj, String conector){
+        Boolean result = false;
+        
+        return result;
     }
 
     public static ArrayList<TipoEntrenamiento> getTipoEntrenamientos(String conector) throws SQLException {
