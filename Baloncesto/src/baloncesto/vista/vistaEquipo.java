@@ -393,6 +393,7 @@ public class vistaEquipo extends javax.swing.JFrame {
             VistaEntrenaminetos vIn = new VistaEntrenaminetos(jugador, this);
             this.setVisible(false);
             vIn.setVisible(true);   
+                    VistaEntrenamientos vIn = new VistaEntrenamientos(curJ, this);
         }
     }//GEN-LAST:event_jButton2MouseClicked
 
