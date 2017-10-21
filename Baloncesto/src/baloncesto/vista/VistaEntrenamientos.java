@@ -82,7 +82,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(data, colName));
-        tableModel = (DefaultTableModel)jTable1.getModel();//para refrescar luego
+        tableModel = (DefaultTableModel) jTable1.getModel();//para refrescar luego
         jScrollPane1.setViewportView(jTable1);
 
         jTable1 = new JTable(data, colName);
@@ -119,6 +119,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
 
     public void refrescarJTable() {
         tableModel.setRowCount(0);
+        listaEntrenamientos = j.getEntrenamientos();
         Object[] data = {};
         if (listaEntrenamientos != null) {
             data = new Object[4];
@@ -128,16 +129,12 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                 data[2] = listaEntrenamientos.get(i).getDuracion();
                 data[3] = listaEntrenamientos.get(i).getTipoEntrenamiento().getDescripcion();
                 tableModel.addRow(data);
-                System.out.println(tableModel.getRowCount());
             }
         }
-        data[0] = "refrescado";
-        data[1] = "";
-        data[2] = "";
-        data[3] = "";
-        tableModel.addRow(data);
         jTable1.setModel(tableModel);
         tableModel.fireTableDataChanged();
+        jTextField1.setText("");
+        jTextField2.setText("");
     }
 
     /**
@@ -307,7 +304,6 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         Entrenamiento e = new Entrenamiento(j, tE, fecha, duracion);
         e.setConector(j.getConector());
         e.save();
-
         refrescarJTable();
     }//GEN-LAST:event_jButton1ActionPerformed
 

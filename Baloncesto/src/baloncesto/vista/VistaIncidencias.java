@@ -82,6 +82,7 @@ public class VistaIncidencias extends javax.swing.JFrame {
         jTable1.setModel(new javax.swing.table.DefaultTableModel(data, colName));
 
         tableModel = (DefaultTableModel) jTable1.getModel();
+        
         jScrollPane1.setViewportView(jTable1);
 
         jTable1 = new JTable(data, colName);
@@ -92,6 +93,7 @@ public class VistaIncidencias extends javax.swing.JFrame {
     public void refrescarJTable() {
         tableModel.setRowCount(0);
         Object[] data = {};
+        listaIncidencias = j.getIncidencias();
         if (listaIncidencias != null) {
             data = new Object[4];
             for (int i = 0; i < listaIncidencias.size(); i++) {
@@ -100,16 +102,11 @@ public class VistaIncidencias extends javax.swing.JFrame {
                 data[2] = listaIncidencias.get(i).getTipoIncidencia().getSancion();
                 data[3] = listaIncidencias.get(i).getTipoIncidencia().getDescripcion();
                 tableModel.addRow(data);
-                System.out.println(tableModel.getRowCount());
             }
         }
-        data[0] = "refrescado";
-        data[1] = "";
-        data[2] = "";
-        data[3] = "";
-        tableModel.addRow(data);
         jTable1.setModel(tableModel);
         tableModel.fireTableDataChanged();
+        jTextField1.setText("");
     }
 
     private void rellenarJComboBox() {
