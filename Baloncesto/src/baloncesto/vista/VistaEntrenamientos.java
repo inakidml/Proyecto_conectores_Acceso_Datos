@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -26,13 +27,19 @@ import javax.swing.JTable;
  */
 public class VistaEntrenamientos extends javax.swing.JFrame {
 
-    private final boolean pruebas = true;
+    private final boolean pruebas = false;
+
+    private static final String mysqlConector = "mysql";
+    private static final String sqlServerConector = "sqlServer";
+    private static final String db4oConector = "db4o";
 
     private vistaEquipo vE;
     private Jugador j;
     private List<Entrenamiento> listaEntrenamientos = new ArrayList<>();
     private List<TipoEntrenamiento> tiposEntrenamientos = null;
 
+    private DefaultTableModel tableModel;
+    
     /**
      * Creates new form VistaIncidencias
      */
@@ -53,6 +60,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
     }
 
     private void rellenarJTable() {
+        jTable1 = null;
         if (pruebas) {
             listaEntrenamientos = new ArrayList<>();
             TipoEntrenamiento tE = new TipoEntrenamiento(1, "Explosivo", "pues eso");
@@ -61,19 +69,22 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         } else {
             listaEntrenamientos = j.getEntrenamientos();
         }
-
-        Object[][] data = new Object[listaEntrenamientos.size()][4];
-        for (int i = 0; i < listaEntrenamientos.size(); i++) {
-            data[i][0] = listaEntrenamientos.get(i).getTipoEntrenamiento().getTipo();
-            data[i][1] = listaEntrenamientos.get(i).getFecha();
-            data[i][2] = listaEntrenamientos.get(i).getDuracion();
-            data[i][3] = listaEntrenamientos.get(i).getTipoEntrenamiento().getDescripcion();
+        Object[][] data = {};
+        if (listaEntrenamientos != null) {
+            data = new Object[listaEntrenamientos.size()][4];
+            for (int i = 0; i < listaEntrenamientos.size(); i++) {
+                data[i][0] = listaEntrenamientos.get(i).getTipoEntrenamiento().getTipo();
+                data[i][1] = listaEntrenamientos.get(i).getFecha();
+                data[i][2] = listaEntrenamientos.get(i).getDuracion();
+                data[i][3] = listaEntrenamientos.get(i).getTipoEntrenamiento().getDescripcion();
+            }
         }
         String[] colName = {"Tipo", "Fecha", "Duración", "Descripción"};
 
         jTable1 = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(data, colName));
+        tableModel = (DefaultTableModel)jTable1.getModel();//para refrescar luego
         jScrollPane1.setViewportView(jTable1);
 
         jTable1 = new JTable(data, colName);
@@ -83,8 +94,8 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
     private void rellenarJComboBox() {
         jComboBox1.removeAllItems();
         switch (j.getConector()) {
-            case "mysql":
-            case "sqlServer": {
+            case mysqlConector:
+            case sqlServerConector: {
                 try {
                     tiposEntrenamientos = SQLInterface.getTipoEntrenamientos(j.getConector());
                 } catch (SQLException ex) {
@@ -92,7 +103,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                 }
             }
             break;
-            case "db4o":
+            case db4oConector:
                 tiposEntrenamientos = DB4OInteface.getTiposEntrenamientos(new TipoEntrenamiento());
                 break;
             default:
@@ -107,7 +118,24 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
             jComboBox1.addItem("Sin Tipos");
         }
     }
+public void refrescarJTable(){     
+        tableModel.setRowCount(0);
+        Object[] data = {};
+        if (listaEntrenamientos != null) {
+            data = new Object[4];
+            for (int i = 0; i < listaEntrenamientos.size(); i++) {
+                data[0] = listaEntrenamientos.get(i).getTipoEntrenamiento().getTipo();
+                data[1] = listaEntrenamientos.get(i).getFecha();
+                data[2] = listaEntrenamientos.get(i).getDuracion();
+                data[3] = listaEntrenamientos.get(i).getTipoEntrenamiento().getDescripcion();
+                tableModel.addRow(data);
+                System.out.println(tableModel.getRowCount());
+            }
+        }       
 
+        jTable1.setModel(tableModel);
+        tableModel.fireTableDataChanged();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -269,27 +297,26 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         String elegido = (String) jComboBox1.getSelectedItem();
         String[] id = elegido.split("_");
         tE.setId(Integer.parseInt(id[0]));//conseguimos el id y se lo asignamos al tipo de entrenamiento
-        
+
         tE = tiposEntrenamientos.get(tiposEntrenamientos.indexOf(tE)); //conseguimos el objeto
-        
-        Entrenamiento e = new Entrenamiento(j, tE, fecha, duracion); 
-        
-        
-         switch (j.getConector()) {
-            case "mysql":
-            case "sqlServer": {
-  //            SQLInterface.insertEntrenamiento(e);
-            }
-            break;
-            case "db4o":
-               DB4OInteface.insertEntrenamiento(e);
+
+        Entrenamiento e = new Entrenamiento(j, tE, fecha, duracion);
+
+        switch (j.getConector()) {
+            case mysqlConector:
+            case sqlServerConector:
+                // SQLInterface.insertEntrenamiento(e);
+
+                break;
+            case db4oConector:
+                DB4OInteface.insertEntrenamiento(e);
                 System.out.println("Insertado entrenamiento");
                 break;
             default:
                 throw new AssertionError();
         }
-         
-         rellenarJTable();
+
+        refrescarJTable();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

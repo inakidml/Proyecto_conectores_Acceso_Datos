@@ -12,22 +12,36 @@ import baloncesto.modelo.Incidencia;
 import baloncesto.modelo.Jugador;
 import baloncesto.modelo.TipoEntrenamiento;
 import baloncesto.modelo.TipoIncidencia;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
  * @author 9fdam02
  */
-public class VistaIncidencias extends javax.swing.JFrame {
+public class VistaIncidencias extends javax.swing.JFrame{
 
-    private final boolean pruebas = true;
+    private final boolean pruebas = false;
+
+    private static final String mysqlConector = "mysql";
+    private static final String sqlServerConector = "sqlServer";
+    private static final String db4oConector = "db4o";
 
     private vistaEquipo vE;
     private Jugador j;
     private List<Incidencia> listaIncidencias = new ArrayList<>();
+    private List<TipoIncidencia> tiposIncidencias = null;
+    
+    private DefaultTableModel tableModel;
 
     /**
      * Creates new form VistaIncidencias
@@ -56,34 +70,61 @@ public class VistaIncidencias extends javax.swing.JFrame {
         } else {
             listaIncidencias = j.getIncidencias();
         }
-
-        Object[][] data = new Object[listaIncidencias.size()][4];
-        for (int i = 0; i < listaIncidencias.size(); i++) {
-            data[i][0] = listaIncidencias.get(i).getTipoIncidencia().getTipo();
-            data[i][1] = listaIncidencias.get(i).getFecha();
-            data[i][2] = listaIncidencias.get(i).getTipoIncidencia().getSancion();
-            data[i][3] = listaIncidencias.get(i).getTipoIncidencia().getDescripcion();
+        Object[][] data = {};
+        if (listaIncidencias != null) {
+            data = new Object[listaIncidencias.size()][4];
+            for (int i = 0; i < listaIncidencias.size(); i++) {
+                data[i][0] = listaIncidencias.get(i).getTipoIncidencia().getTipo();
+                data[i][1] = listaIncidencias.get(i).getFecha();
+                data[i][2] = listaIncidencias.get(i).getTipoIncidencia().getSancion();
+                data[i][3] = listaIncidencias.get(i).getTipoIncidencia().getDescripcion();
+            }
         }
         String[] colName = {"Tipo", "Fecha", "Sanción", "Descripción"};
 
         jTable1 = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(data, colName));
+        
+        tableModel = (DefaultTableModel)jTable1.getModel();
         jScrollPane1.setViewportView(jTable1);
 
         jTable1 = new JTable(data, colName);
         jScrollPane1 = new JScrollPane(jTable1);
+        
+    }
+    public void refrescarJTable(){     
+        tableModel.setRowCount(0);
+        Object[] data = {};
+        if (listaIncidencias != null) {
+            data = new Object[4];
+            for (int i = 0; i < listaIncidencias.size(); i++) {
+                data[0] = listaIncidencias.get(i).getTipoIncidencia().getTipo();
+                data[1] = listaIncidencias.get(i).getFecha();
+                data[2] = listaIncidencias.get(i).getTipoIncidencia().getSancion();
+                data[3] = listaIncidencias.get(i).getTipoIncidencia().getDescripcion();
+                tableModel.addRow(data);
+                System.out.println(tableModel.getRowCount());
+            }
+        }       
+
+        jTable1.setModel(tableModel);
+        tableModel.fireTableDataChanged();
     }
 
     private void rellenarJComboBox() {
-        jComboBox1.removeAllItems();
-        List<TipoIncidencia> tiposIncidencias = null;
+
         switch (j.getConector()) {
-            case "mysql":
-            case "sqlServer":
-                //tiposIncidencias = SQLInterface.getTiposIncidencias();
-                break;
-            case "db4o":
+            case mysqlConector:
+            case sqlServerConector: {
+                try {
+                    tiposIncidencias = SQLInterface.getTiposIncidencias(j.getConector());
+                } catch (SQLException ex) {
+                    Logger.getLogger(VistaIncidencias.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            break;
+            case db4oConector:
                 tiposIncidencias = DB4OInteface.getTiposIncidencias(new TipoIncidencia());
                 break;
             default:
@@ -154,6 +195,11 @@ public class VistaIncidencias extends javax.swing.JFrame {
         jLabel4.setToolTipText("");
 
         jButton1.setText("Añadir Incidencia");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -231,6 +277,37 @@ public class VistaIncidencias extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String fecha = jTextField1.getText();
+        TipoIncidencia tI = new TipoIncidencia();
+        String elegido = (String) jComboBox1.getSelectedItem();
+        String[] id = elegido.split("_");
+        tI.setId(Integer.parseInt(id[0]));//conseguimos el id y se lo asignamos al tipo de Incidencia
+
+        tI = tiposIncidencias.get(tiposIncidencias.indexOf(tI)); //conseguimos el objeto
+
+        Incidencia i = new Incidencia(tI, j, fecha);
+
+        switch (j.getConector()) {
+            case mysqlConector:
+            case sqlServerConector: {
+                try {
+                    SQLInterface.insertIncidencia(i, j.getConector());
+                } catch (SQLException ex) {
+                    Logger.getLogger(VistaIncidencias.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            break;
+            case db4oConector:
+                DB4OInteface.insertIncidencia(i);
+                System.out.println("Insertada incidencia");
+                break;
+            default:
+                throw new AssertionError();
+        }
+        refrescarJTable();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -279,4 +356,6 @@ public class VistaIncidencias extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+
+
 }
