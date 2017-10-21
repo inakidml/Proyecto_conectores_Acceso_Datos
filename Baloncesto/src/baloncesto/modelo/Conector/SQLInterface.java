@@ -392,7 +392,7 @@ public class SQLInterface extends Conector {
                     ps.setTime(4, sqlTime);
                     break;
                 case sqlServerConector:
-                    //MS microsoft, con decimas de segundo
+                    //MS microsoft, con décimas de segundo
                     //Convertimos la fecha
                     System.out.println(obj.getFecha());
                     SimpleDateFormat sdf_dateMS = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SS");

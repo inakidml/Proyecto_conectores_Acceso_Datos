@@ -824,8 +824,8 @@ public class DB4OInteface extends Conector {
             //Creamos los tipos de incidencias
             arrL_tipoInci = new ArrayList<>();
             arrL_tipoInci.add(new TipoIncidencia(1, "Retraso", "1000", "Llegar tarde"));
-            arrL_tipoInci.add(new TipoIncidencia(1, "Insultar", "500", "Insultar al jefe o a los compañeros"));
-            arrL_tipoInci.add(new TipoIncidencia(1, "Falta", "10000", "No venir al entrenamiento"));
+            arrL_tipoInci.add(new TipoIncidencia(2, "Insultar", "500", "Insultar al jefe o a los compañeros"));
+            arrL_tipoInci.add(new TipoIncidencia(3, "Falta", "10000", "No venir al entrenamiento"));
 
             //Recorremos los tipos de incidencias
             for (int i = 0; i < arrL_tipoInci.size(); i++) {
