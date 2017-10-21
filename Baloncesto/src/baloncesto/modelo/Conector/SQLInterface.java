@@ -324,7 +324,6 @@ public class SQLInterface extends Conector {
                 
                 //Obtenemos el tipo de entrenamiento
                 int idTipoEntrenamiento = rs.getInt("ENTRENAMIENTO_idENTRENAMIENTO");
-                System.out.println(idTipoEntrenamiento);
 
                 //Comprobamos que no sea null
                 if (obj != null) {
@@ -409,12 +408,6 @@ public class SQLInterface extends Conector {
         return obj;
     }
     
-    public static Boolean insertIncidencia(Incidencia obj, String conector){
-        Boolean result = false;
-        
-        return result;
-    }
-
     public static ArrayList<TipoEntrenamiento> getTipoEntrenamientos(String conector) throws SQLException {
         //Lista de tipos de entrenamiento
         ArrayList<TipoEntrenamiento> list = new ArrayList<>();
@@ -544,6 +537,9 @@ public class SQLInterface extends Conector {
             while (rs.next()) {
                 //Obtenemos la incidencia
                 Incidencia obj = (Incidencia) parseObject(rs, Incidencia.class.getSimpleName());
+                
+                //Obtenemos el id del tipo de incidencia
+                int idTipoIncidencia = rs.getInt("INCIDENCIA_idINCIDENCIA");
 
                 //Comprobamos que no sea null
                 if (obj != null) {
@@ -554,7 +550,7 @@ public class SQLInterface extends Conector {
                     obj.setJugador(getJugadorById(idJugador, conector));
 
                     //Añadimos el tipo de incidencia
-                    obj.setTipoIncidencia(getTipoIncidenciaById(rs.getInt("INCIDENCIA_idINCIDENCIA"), conector));
+                    obj.setTipoIncidencia(getTipoIncidenciaById(idTipoIncidencia, conector));
 
                     //Añadimos la incidencia a la lista
                     list.add(obj);
@@ -576,6 +572,30 @@ public class SQLInterface extends Conector {
 
         //Devolvemos la lista
         return list;
+    }
+    
+    public static Boolean insertIncidencia(Incidencia obj, String conector) throws SQLException{
+        Boolean result = false;
+        Connection conn = null;
+        
+        try {
+            //Obtenemos la conexion
+            conn = getConnection(conector);
+            
+            //Query
+            String query = "";
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        
+        return result;
     }
 
     public static TipoIncidencia getTipoIncidenciaById(int id, String conector) throws SQLException {
@@ -690,7 +710,7 @@ public class SQLInterface extends Conector {
             //Creamos el objeto entrenamiento
             SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
             return new Entrenamiento(formatDate.format(rs.getDate("Fecha")), rs.getTime("Duracion").toString());
-        } else if (tipo.equals(TipoEntrenamiento.class.getName())) {
+        } else if (tipo.equals(TipoEntrenamiento.class.getSimpleName())) {
             //Creamos objeto tipo entrenamiento
             return new TipoEntrenamiento(rs.getInt("idENTRENAMIENTO"), rs.getString("Tipo_Entrenamiento"), rs.getString("Descripcion"));
         } else if (tipo.equals(Incidencia.class.getSimpleName())) {
