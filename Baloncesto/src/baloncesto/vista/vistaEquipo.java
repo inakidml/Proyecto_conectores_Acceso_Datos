@@ -390,10 +390,9 @@ public class vistaEquipo extends javax.swing.JFrame {
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         Jugador jugador = findJugadorSelecionado();
         if(jugador != null){
-            VistaEntrenaminetos vIn = new VistaEntrenaminetos(jugador, this);
+            VistaEntrenamientos vIn = new VistaEntrenamientos(jugador, this);
             this.setVisible(false);
-            vIn.setVisible(true);   
-                    VistaEntrenamientos vIn = new VistaEntrenamientos(curJ, this);
+            vIn.setVisible(true);  
         }
     }//GEN-LAST:event_jButton2MouseClicked
 
