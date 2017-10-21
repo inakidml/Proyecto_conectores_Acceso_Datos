@@ -144,7 +144,7 @@ public class vistaPrincipal extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        System.out.println("Soy el boton " + this.jButton1.getText());
+       // System.out.println("Soy el boton " + this.jButton1.getText());
         vistaEquipo vE = new vistaEquipo(this, eq_1);  
         vE.setVisible(true);
       
@@ -155,7 +155,7 @@ public class vistaPrincipal extends javax.swing.JFrame {
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         // TODO add your handling code here:
-        System.out.println("Soy el boton " + this.jButton2.getText());
+       // System.out.println("Soy el boton " + this.jButton2.getText());
         vistaEquipo vE = new vistaEquipo(this, eq_2);  
         vE.setVisible(true);
       
@@ -164,7 +164,7 @@ public class vistaPrincipal extends javax.swing.JFrame {
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
-        System.out.println("Soy el boton " + this.jButton3.getText());
+        //System.out.println("Soy el boton " + this.jButton3.getText());
         vistaEquipo vE = new vistaEquipo(this, eq_3);  
         vE.setVisible(true);
       
