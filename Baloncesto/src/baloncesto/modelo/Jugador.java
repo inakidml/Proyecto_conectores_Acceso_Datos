@@ -176,7 +176,6 @@ public class Jugador {
      */
     public List<Entrenamiento> getEntrenamientos() {
         try {
-
             switch (this.conector) {
                 case db4oConector:
                     this.entrenamientos = DB4OInteface.getEntrenamientos(new Entrenamiento(this, null, null, null));
@@ -188,8 +187,6 @@ public class Jugador {
                     this.entrenamientos = SQLInterface.getEntrenamientosByJugador(this.id, conector);
                     break;
             }
-
-            return this.entrenamientos;
         } catch (SQLException ex) {
             Logger.getLogger(Equipo.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -201,6 +198,24 @@ public class Jugador {
      * @return the incidencias
      */
     public List<Incidencia> getIncidencias() {
+        try {
+            switch (this.conector){
+                case db4oConector:
+                    this.incidencias = DB4OInteface.getIncidencias(new Incidencia(null, this, null));
+                    break;
+                case mysqlConector:
+                    this.incidencias = SQLInterface.getIncidenciasByJugador(this.id, conector);
+                break;
+                case sqlServerConector:
+                    this.incidencias = SQLInterface.getIncidenciasByJugador(this.id, conector);
+                break;
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Jugador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return incidencias;
     }
 
