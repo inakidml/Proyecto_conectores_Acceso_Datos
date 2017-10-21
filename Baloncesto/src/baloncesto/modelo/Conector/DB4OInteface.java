@@ -191,18 +191,28 @@ public class DB4OInteface extends Conector {
         return jList;
     }
 
-    public static void insertJugador(Jugador j) {
+    public static Boolean insertJugador(Jugador j) {
+        Boolean result = false;
+        
         //Abrimos la conexion
         ObjectContainer db = getDb_4o();
 
         //Guardamos el jugador
         db.store(j);
-
-        //cerramos el jugador
+        
+        //cerramos la conexion
         db.close();
+        
+        //Comprbamos si el jugador se ha añadido
+        if(getJugador(j) != null){
+            result = true;
+        }
         
         //Indicamos el conector con el que se ha insertado
         j.setConector("db4o");
+        
+        //Devolvemos el resultado
+        return result;
     }
 
     public static boolean updateJugador(Jugador query, Jugador data) {
@@ -325,7 +335,9 @@ public class DB4OInteface extends Conector {
         return iList;
     }
 
-    public static void insertIncidencia(Incidencia i) {
+    public static Boolean insertIncidencia(Incidencia i) {
+        Boolean result = false;
+        
         //Abrimos la conexion
         ObjectContainer db = getDb_4o();
 
@@ -335,8 +347,15 @@ public class DB4OInteface extends Conector {
         //cerramos la conexion
         db.close();
         
+        //Comprobamos si sea insertado la incidencia
+        if(getIncidencia(i) != null){
+            result = true;
+        }
+        
         //Indicamos el conector con el que se ha insertado
         i.setConector("db4o");
+        
+        return result;
     }
 
     public static void updateIncidencia(Incidencia query, Incidencia data) {

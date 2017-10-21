@@ -199,23 +199,22 @@ public class Jugador {
      */
     public List<Incidencia> getIncidencias() {
         try {
-            switch (this.conector){
+            switch (this.conector) {
                 case db4oConector:
                     this.incidencias = DB4OInteface.getIncidencias(new Incidencia(null, this, null));
                     break;
                 case mysqlConector:
                     this.incidencias = SQLInterface.getIncidenciasByJugador(this.id, conector);
-                break;
+                    break;
                 case sqlServerConector:
                     this.incidencias = SQLInterface.getIncidenciasByJugador(this.id, conector);
-                break;
+                    break;
             }
-            
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(Jugador.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return incidencias;
     }
 
@@ -247,6 +246,29 @@ public class Jugador {
 
     public void setConector(String conector) {
         this.conector = conector;
+    }
+
+    public boolean save() {
+        Boolean result = false;
+        
+        try {
+            switch (this.conector) {
+                case db4oConector:
+                    result = DB4OInteface.insertJugador(this);
+                    break;
+                case mysqlConector:
+                    result = SQLInterface.insertJugador(this, conector);
+                    break;
+                case sqlServerConector:
+                    result = SQLInterface.insertJugador(this, conector);
+                    break;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jugador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return result;
     }
 
 }
