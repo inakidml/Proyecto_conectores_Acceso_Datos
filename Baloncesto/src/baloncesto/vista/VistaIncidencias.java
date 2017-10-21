@@ -5,6 +5,8 @@
  */
 package baloncesto.vista;
 
+import baloncesto.modelo.Conector.DB4OInteface;
+import baloncesto.modelo.Conector.SQLInterface;
 import baloncesto.modelo.Entrenamiento;
 import baloncesto.modelo.Incidencia;
 import baloncesto.modelo.Jugador;
@@ -24,6 +26,7 @@ public class VistaIncidencias extends javax.swing.JFrame {
     private final boolean pruebas = true;
 
     private vistaEquipo vE;
+    private Jugador j;
     private List<Incidencia> listaIncidencias = new ArrayList<>();
 
     /**
@@ -38,6 +41,13 @@ public class VistaIncidencias extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(this);
         this.vE = vE;
+        this.j = j;
+        jLabel1.setText("Incidencias de " + j.getNombre() + j.getApellido());
+        rellenarJTable();
+        rellenarJComboBox();
+    }
+
+    private void rellenarJTable() {
         if (pruebas) {
             listaIncidencias = new ArrayList<>();
             TipoIncidencia tE = new TipoIncidencia(1, "llegar tarde", "1000", "pues eso");
@@ -63,6 +73,30 @@ public class VistaIncidencias extends javax.swing.JFrame {
 
         jTable1 = new JTable(data, colName);
         jScrollPane1 = new JScrollPane(jTable1);
+    }
+
+    private void rellenarJComboBox() {
+        jComboBox1.removeAllItems();
+        List<TipoIncidencia> tiposIncidencias = null;
+        switch (j.getConector()) {
+            case "mysql":
+            case "sqlServer":
+                //tiposIncidencias = SQLInterface.getTiposIncidencias();
+                break;
+            case "db4o":
+                tiposIncidencias = DB4OInteface.getTiposIncidencias(new TipoIncidencia());
+                break;
+            default:
+                throw new AssertionError();
+        }
+
+        if (tiposIncidencias != null && tiposIncidencias.size() > 0) {
+            for (TipoIncidencia curT : tiposIncidencias) {
+                jComboBox1.addItem(curT.getId() + "_" + curT.getTipo());
+            }
+        } else {
+            jComboBox1.addItem("Sin Tipos");
+        }
     }
 
     /**

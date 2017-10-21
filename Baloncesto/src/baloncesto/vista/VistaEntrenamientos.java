@@ -5,10 +5,14 @@
  */
 package baloncesto.vista;
 
+import baloncesto.modelo.Conector.DB4OInteface;
+import baloncesto.modelo.Conector.SQLInterface;
 import baloncesto.modelo.Entrenamiento;
 import baloncesto.modelo.Incidencia;
 import baloncesto.modelo.Jugador;
 import baloncesto.modelo.TipoEntrenamiento;
+import baloncesto.modelo.TipoIncidencia;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JScrollPane;
@@ -21,7 +25,7 @@ import javax.swing.JTable;
 public class VistaEntrenamientos extends javax.swing.JFrame {
 
     private final boolean pruebas = true;
-    
+
     private vistaEquipo vE;
     private Jugador j;
     private List<Entrenamiento> listaEntrenamientos = new ArrayList<>();
@@ -35,12 +39,16 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
 
     }
 
-    public VistaEntrenamientos(Jugador j, vistaEquipo vE) {
+    public VistaEntrenamientos(Jugador j, vistaEquipo vE) throws SQLException {
         initComponents();
         this.setLocationRelativeTo(this);
         this.vE = vE;
         this.j = j;
+        rellenarJTable();
+        rellenarJComboBox();
+    }
 
+    private void rellenarJTable() {
         if (pruebas) {
             listaEntrenamientos = new ArrayList<>();
             TipoEntrenamiento tE = new TipoEntrenamiento(1, "Explosivo", "pues eso");
@@ -66,9 +74,30 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
 
         jTable1 = new JTable(data, colName);
         jScrollPane1 = new JScrollPane(jTable1);
-
     }
+    private void rellenarJComboBox() throws SQLException{
+     jComboBox1.removeAllItems();
+        List<TipoEntrenamiento> tiposEntrenamientos = null;
+        switch (j.getConector()) {
+            case "mysql":
+            case "sqlServer":
+                tiposEntrenamientos = SQLInterface.getTipoEntrenamientos(j.getConector());
+                break;
+            case "db4o":
+                tiposEntrenamientos = DB4OInteface.getTiposEntrenamientos(new TipoEntrenamiento());
+                break;
+            default:
+                throw new AssertionError();
+        }
 
+        if (tiposEntrenamientos != null && tiposEntrenamientos.size() > 0) {
+            for (TipoEntrenamiento curE : tiposEntrenamientos) {
+                jComboBox1.addItem(curE.getId() + "_" + curE.getTipo());
+            }
+        } else {
+            jComboBox1.addItem("Sin Tipos");
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
