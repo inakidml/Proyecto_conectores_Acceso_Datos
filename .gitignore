@@ -26,3 +26,4 @@ hs_err_pid*
 
 *.yap
 /Baloncesto/dist/
+Baloncesto/src/baloncesto/modelo/Conector/config copia\.properties

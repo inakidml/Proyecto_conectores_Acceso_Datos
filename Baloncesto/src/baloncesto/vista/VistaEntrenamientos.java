@@ -31,6 +31,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
     private vistaEquipo vE;
     private Jugador j;
     private List<Entrenamiento> listaEntrenamientos = new ArrayList<>();
+    private List<TipoEntrenamiento> tiposEntrenamientos = null;
 
     /**
      * Creates new form VistaIncidencias
@@ -41,11 +42,12 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
 
     }
 
-    public VistaEntrenamientos(Jugador j, vistaEquipo vE){
+    public VistaEntrenamientos(Jugador j, vistaEquipo vE) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.vE = vE;
         this.j = j;
+        jLabel1.setText("Entrenamientos de " + j.getNombre() + " " + j.getApellido());
         rellenarJTable();
         rellenarJComboBox();
     }
@@ -77,20 +79,19 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         jTable1 = new JTable(data, colName);
         jScrollPane1 = new JScrollPane(jTable1);
     }
-    private void rellenarJComboBox(){
-     jComboBox1.removeAllItems();
-        List<TipoEntrenamiento> tiposEntrenamientos = null;
+
+    private void rellenarJComboBox() {
+        jComboBox1.removeAllItems();
         switch (j.getConector()) {
             case "mysql":
-            case "sqlServer":
-     {
-         try {
-             tiposEntrenamientos = SQLInterface.getTipoEntrenamientos(j.getConector());
-         } catch (SQLException ex) {
-             Logger.getLogger(VistaEntrenamientos.class.getName()).log(Level.SEVERE, null, ex);
-         }
-     }
-                break;
+            case "sqlServer": {
+                try {
+                    tiposEntrenamientos = SQLInterface.getTipoEntrenamientos(j.getConector());
+                } catch (SQLException ex) {
+                    Logger.getLogger(VistaEntrenamientos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            break;
             case "db4o":
                 tiposEntrenamientos = DB4OInteface.getTiposEntrenamientos(new TipoEntrenamiento());
                 break;
@@ -106,6 +107,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
             jComboBox1.addItem("Sin Tipos");
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -166,6 +168,11 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         jLabel4.setToolTipText("");
 
         jButton1.setText("Añadir Entrenamiento");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Duración (min)");
         jLabel5.setToolTipText("");
@@ -178,20 +185,23 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(jButton1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox1, 0, 99, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(75, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,9 +218,9 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -251,6 +261,36 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         vE.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String fecha = jTextField1.getText();
+        String duracion = jTextField2.getText();
+        TipoEntrenamiento tE = new TipoEntrenamiento();
+        String elegido = (String) jComboBox1.getSelectedItem();
+        String[] id = elegido.split("_");
+        tE.setId(Integer.parseInt(id[0]));//conseguimos el id y se lo asignamos al tipo de entrenamiento
+        
+        tE = tiposEntrenamientos.get(tiposEntrenamientos.indexOf(tE)); //conseguimos el objeto
+        
+        Entrenamiento e = new Entrenamiento(j, tE, fecha, duracion); 
+        
+        
+         switch (j.getConector()) {
+            case "mysql":
+            case "sqlServer": {
+  //            SQLInterface.insertEntrenamiento(e);
+            }
+            break;
+            case "db4o":
+               DB4OInteface.insertEntrenamiento(e);
+                System.out.println("Insertado entrenamiento");
+                break;
+            default:
+                throw new AssertionError();
+        }
+         
+         rellenarJTable();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -42,7 +42,7 @@ public class VistaIncidencias extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         this.vE = vE;
         this.j = j;
-        jLabel1.setText("Incidencias de " + j.getNombre() + j.getApellido());
+        jLabel1.setText("Incidencias de " + j.getNombre() + " " + j.getApellido());
         rellenarJTable();
         rellenarJComboBox();
     }
