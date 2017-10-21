@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -360,6 +361,64 @@ public class SQLInterface extends Conector {
         //Devolvemos la lista
         return list;
     }
+    
+    public static Boolean insertEntrenamiento(Entrenamiento obj, String conector) throws SQLException{
+        Boolean result = false;
+        Connection conn = null;
+        
+        try {
+            //Establecemos la conexion
+            conn = getConnection(conector);
+            
+            //Query
+            String query = "INSERT INTO JUGADOR_has_ENTRENAMIENTO values (?,?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            //Indicamos los datos del entrenamiento
+            ps.setInt(1, obj.getJugador().getId());
+            ps.setInt(2, obj.getTipoEntrenamiento().getId());
+            
+            //Convertimos la fecha
+            SimpleDateFormat sdf_date = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = sdf_date.parse(obj.getFecha());
+            java.sql.Date sqlDate = new java.sql.Date(parsedDate.getTime());
+            
+            //Añadimos la fecha
+            ps.setDate(3, sqlDate);
+            
+            //Convertimo la duracion
+            SimpleDateFormat sdf_time = new SimpleDateFormat("hh:mm:ss");
+            java.sql.Time sqlTime = new java.sql.Time(sdf_time.parse(obj.getDuracion()).getTime());
+            
+            //Añadimos la duracion
+            ps.setTime(4, sqlTime);
+            
+            //Ejecutamos la insert
+            int action = ps.executeUpdate();
+            
+            //Comprobamos si ha funcionado
+            if(action > 0){
+                result = true;
+            }
+            
+            //Cerramos la conexion
+            conn.close();
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        
+        //Devolvemos el resultado
+        return result;
+    }
 
     public static TipoEntrenamiento getTipoEntrenamientoById(int id, String conector) throws SQLException {
         //Objeto tipo entrenamiento
@@ -583,11 +642,37 @@ public class SQLInterface extends Conector {
             conn = getConnection(conector);
             
             //Query
-            String query = "";
+            String query = "INSERT INTO INCIDENCIA_has_JUGADOR values(?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            //Indicamos los datos de la incidencia
+            ps.setInt(1, obj.getTipoIncidencia().getId());
+            ps.setInt(2, obj.getJugador().getId());
+            
+            //Convertimos la fecha
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = sdf.parse(obj.getFecha());
+            java.sql.Date sqlDate = new java.sql.Date(parsedDate.getTime());
+            
+            //Añadimos la fecha
+            ps.setDate(3, sqlDate);
+            
+            //Ejecutamos la insert
+            int action = ps.executeUpdate();
+            
+            //Comprobamos si ha funcionado
+            if(action > 0){
+                result = true;
+            }
+            
+            //Cerramos conexion
+            conn.close();
             
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (conn != null) {

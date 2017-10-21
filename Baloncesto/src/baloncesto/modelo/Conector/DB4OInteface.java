@@ -463,7 +463,9 @@ public class DB4OInteface extends Conector {
         return eList;
     }
 
-    public static void insertEntrenamiento(Entrenamiento e) {
+    public static Boolean insertEntrenamiento(Entrenamiento e) {
+        Boolean result = false;
+        
         //Abrimos la conexion
         ObjectContainer db = getDb_4o();
 
@@ -473,8 +475,15 @@ public class DB4OInteface extends Conector {
         //cerramos la conexion
         db.close();
         
+        //Comprobamos si el entrenamiento se ha añadido correctamente
+        if(getEntrenamiento(e)!= null){
+            result = true;
+        }
+        
         //Indicamos el conector con el que se ha insertado
         e.setConector("db4o");
+        
+        return result;
     }
 
     public static void updateEntrenamiento(Entrenamiento query, Entrenamiento data) {
