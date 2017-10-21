@@ -5,6 +5,7 @@
  */
 package baloncesto.vista;
 
+import baloncesto.modelo.Conector.DB4OInteface;
 import baloncesto.modelo.Equipo;
 import baloncesto.modelo.Jugador;
 import javax.swing.JTable;
@@ -60,7 +61,7 @@ public class vistaEquipo extends javax.swing.JFrame {
          detalleWritteJugador(jug);
      }
      
-     private void detalleWritteJugador(Jugador jug){
+     private void detalleReadJugador(Jugador jug){
          if(jug != null){
             labelNombreRead.setText(jug.getNombre());
             labelApellido1Read.setText(jug.getApellido());
@@ -72,7 +73,7 @@ public class vistaEquipo extends javax.swing.JFrame {
          }         
      }
      
-     private void detalleReadJugador(Jugador jug){
+     private void detalleWritteJugador(Jugador jug){
          if(jug != null){
             jTFieldNombre.setText(jug.getNombre());
             jTFieldApellido1.setText(jug.getApellido());
@@ -325,6 +326,11 @@ public class vistaEquipo extends javax.swing.JFrame {
         jTabbedPane2.addTab("Detalle", jPanel1);
 
         jButton6.setText("Grabar");
+        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton6MouseClicked(evt);
+            }
+        });
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -550,6 +556,33 @@ public class vistaEquipo extends javax.swing.JFrame {
         //System.out.print("Cambiando item");
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
+    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+        // TODO add your handling code here:
+        
+        Jugador jMod = modificarJugador();
+        if(jMod != null){
+            if(DB4OInteface.updateJugador(new Jugador(), jMod)){
+                detalleReadJugador(jMod);
+                llenarComboJugadores();
+            }
+        }
+        
+    }//GEN-LAST:event_jButton6MouseClicked
+
+    private Jugador modificarJugador(){
+        Jugador jug = findJugadorSelecionado();
+         if(jug != null){
+            jug.setNombre(jTFieldNombre.getText());
+            jug.setApellido(jTFieldApellido1.getText());
+            jug.setApellido2(jTFieldApellido2.getText());
+            jug.setPeso(Float.parseFloat(jTFieldPeso.getText()));
+            jug.setAltura(Float.parseFloat(jTFieldAltura.getText()));            
+            jug.setPosicion(jTFieldPosicion.getText());
+            jug.setDescripcion(jTAreaDescripcion.getText());
+         }  
+        
+        return jug;
+    }
     /**
      * @param args the command line arguments
      */

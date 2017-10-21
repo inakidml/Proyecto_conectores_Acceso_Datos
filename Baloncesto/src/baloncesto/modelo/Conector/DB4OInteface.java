@@ -205,28 +205,33 @@ public class DB4OInteface extends Conector {
         j.setConector("db4o");
     }
 
-    public static void updateJugador(Jugador query, Jugador data) {
+    public static boolean updateJugador(Jugador query, Jugador data) {
         //Abrimos los conexion
         ObjectContainer db = getDb_4o();
 
         //Obtenemos el resultado
         ObjectSet result = db.queryByExample(query);
 
+        //Hasta que lo encontremos recorremos
+        boolean encontrado = false;
         //Recorremos el resultado
-        while (result.hasNext()) {
+        while (result.hasNext() && !encontrado) {
             //Obtenemos el jugador
             Jugador j = (Jugador) result.next();
 
-            //Indicamos los nuevos datos del jugador
-            j.setNombre(data.getNombre() != null ? data.getNombre() : j.getNombre());
-            j.setApellido(data.getApellido() != null ? data.getApellido() : j.getApellido());
-            j.setApellido2(data.getApellido2() != null ? data.getApellido2() : j.getApellido2());
-            j.setAltura(data.getAltura() != 0 ? data.getAltura() : j.getAltura());
-            j.setPeso(data.getPeso() != 0 ? data.getPeso() : j.getPeso());
-            j.setPosicion(data.getPosicion() != null ? data.getPosicion() : j.getPosicion());
-            j.setDescripcion(data.getDescripcion() != null ? data.getDescripcion() : j.getDescripcion());
-            j.setEquipo(data.getEquipo() != null ? data.getEquipo() : j.getEquipo());
-
+            if(j.getId() == data.getId()){
+                //Indicamos los nuevos datos del jugador
+                j.setNombre(data.getNombre() != null ? data.getNombre() : j.getNombre());
+                j.setApellido(data.getApellido() != null ? data.getApellido() : j.getApellido());
+                j.setApellido2(data.getApellido2() != null ? data.getApellido2() : j.getApellido2());
+                j.setAltura(data.getAltura() != 0 ? data.getAltura() : j.getAltura());
+                j.setPeso(data.getPeso() != 0 ? data.getPeso() : j.getPeso());
+                j.setPosicion(data.getPosicion() != null ? data.getPosicion() : j.getPosicion());
+                j.setDescripcion(data.getDescripcion() != null ? data.getDescripcion() : j.getDescripcion());
+                j.setEquipo(data.getEquipo() != null ? data.getEquipo() : j.getEquipo());
+                encontrado = true;
+            }
+            
             db.store(j);
             
             //Indicamos el conector con el que se ha actualizado
@@ -235,6 +240,8 @@ public class DB4OInteface extends Conector {
 
         //Cerramos la conexion
         db.close();
+        
+        return encontrado;
         
     }
 

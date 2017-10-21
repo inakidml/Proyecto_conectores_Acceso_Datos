@@ -420,6 +420,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Grabar"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButton6MouseClicked"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel5">
               <Properties>
