@@ -15,6 +15,8 @@ import baloncesto.modelo.TipoIncidencia;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -39,7 +41,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
 
     }
 
-    public VistaEntrenamientos(Jugador j, vistaEquipo vE) throws SQLException {
+    public VistaEntrenamientos(Jugador j, vistaEquipo vE){
         initComponents();
         this.setLocationRelativeTo(this);
         this.vE = vE;
@@ -75,13 +77,19 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         jTable1 = new JTable(data, colName);
         jScrollPane1 = new JScrollPane(jTable1);
     }
-    private void rellenarJComboBox() throws SQLException{
+    private void rellenarJComboBox(){
      jComboBox1.removeAllItems();
         List<TipoEntrenamiento> tiposEntrenamientos = null;
         switch (j.getConector()) {
             case "mysql":
             case "sqlServer":
-                tiposEntrenamientos = SQLInterface.getTipoEntrenamientos(j.getConector());
+     {
+         try {
+             tiposEntrenamientos = SQLInterface.getTipoEntrenamientos(j.getConector());
+         } catch (SQLException ex) {
+             Logger.getLogger(VistaEntrenamientos.class.getName()).log(Level.SEVERE, null, ex);
+         }
+     }
                 break;
             case "db4o":
                 tiposEntrenamientos = DB4OInteface.getTiposEntrenamientos(new TipoEntrenamiento());
