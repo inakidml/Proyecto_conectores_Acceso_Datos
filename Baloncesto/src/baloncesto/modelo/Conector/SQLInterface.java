@@ -31,11 +31,11 @@ public class SQLInterface extends Conector {
     private static final String mysqlConector = "mysql";
     private static final String sqlServerConector = "sqlServer";
     private static final String db4oConector = "db4o";
-    private static Connection conn;
 
     public static Equipo getEquipo(String conector) throws SQLException {
         //Objeto equipo
         Equipo obj = null;
+        Connection conn = null;
 
         try {
 
@@ -82,6 +82,7 @@ public class SQLInterface extends Conector {
     public static Jugador getJugadorById(int id, String conector) throws SQLException {
         //Objeto jugador
         Jugador obj = null;
+        Connection conn = null;
 
         try {
             //Obtenemos el conector
@@ -134,6 +135,7 @@ public class SQLInterface extends Conector {
     public static ArrayList<Jugador> getJugadores(String conector) throws SQLException {
         //Lista de jugadores
         ArrayList<Jugador> list = new ArrayList<>();
+        Connection conn = null;
 
         try {
             //Obtenemos el conector
@@ -185,6 +187,7 @@ public class SQLInterface extends Conector {
     public static Entrenamiento getEntrenamientoById(int idJugador, int idTipoEntrenamiento, String fecha, String conector) throws SQLException {
         //Objeto entrenamiento  
         Entrenamiento obj = null;
+        Connection conn = null;
 
         try {
 
@@ -250,6 +253,7 @@ public class SQLInterface extends Conector {
     public static ArrayList<Entrenamiento> getEntrenamientosByJugador(int idJugador, String conector) throws SQLException {
         //Lista de entrenamientos
         ArrayList<Entrenamiento> list = new ArrayList<>();
+        Connection conn = null;
 
         try {
             //Obtenemos el conector
@@ -309,6 +313,7 @@ public class SQLInterface extends Conector {
     public static TipoEntrenamiento getTipoEntrenamientoById(int id, String conector) throws SQLException {
         //Objeto tipo entrenamiento
         TipoEntrenamiento obj = null;
+        Connection conn = null;
 
         try {
             //Obtenemos la conexion
@@ -355,6 +360,7 @@ public class SQLInterface extends Conector {
     public static ArrayList<TipoEntrenamiento> getTipoEntrenamientos(String conector) throws SQLException {
         //Lista de tipos de entrenamiento
         ArrayList<TipoEntrenamiento> list = new ArrayList<>();
+        Connection conn = null;
 
         try {
             //Obtenemos el conector
@@ -401,8 +407,122 @@ public class SQLInterface extends Conector {
         return list;
     }
 
+    public static Incidencia getIncidenciaById(int idTipoIncidencia, int idJugador, String conector) throws SQLException {
+        //Objeto de incidencia
+        Incidencia obj = null;
+        Connection conn = null;
+
+        try {
+            //Obtener el conector
+            conn = getConnection(conector);
+
+            //query
+            String query = "SELECT * FROM INCIDENCIA_has_JUGADOR WHERE INCIDENCIA_idINCIDENCIA = ? AND JUGADOR_idJUGADOR = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            //Añadimos el id del tipo de incidencia a la condicion de where
+            ps.setInt(1, idTipoIncidencia);
+
+            //Añadimos el id del jugador al where
+            ps.setInt(2, idJugador);
+
+            //Ejecutamos la query
+            ResultSet rs = ps.executeQuery();
+
+            //Recorremos el resultado
+            while (rs.next()) {
+                //Obteneos la incidencia
+                obj = (Incidencia) parseObject(rs, Incidencia.class.getSimpleName());
+
+                //Comprobamos que no se null
+                if (obj != null) {
+                    //Añadimos el conector
+                    obj.setConector(conector);
+
+                    //Añadimos el tipo de incidencia
+                    obj.setTipoIncidencia(getTipoIncidenciaById(idTipoIncidencia, conector));
+
+                    //Añadimos el jugador
+                    obj.setJugador(getJugadorById(idJugador, conector));
+                }
+            }
+
+            //Cerramos la conexion
+            conn.close();
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        //Devolver el objeto
+        return obj;
+    }
+
+    public static ArrayList<Incidencia> getIncidenciasByJugador(int idJugador, String conector) throws SQLException {
+        ArrayList<Incidencia> list = new ArrayList<>();
+        Connection conn = null;
+
+        try {
+            //Obtener la conexion
+            conn = getConnection(conector);
+
+            //Query
+            String query = "SELECT * FROM INCIDENCIA_has_JUGADOR WHERE JUGADOR_idJUGADOR = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            //Añadimos el id de jugador al where
+            ps.setInt(1, idJugador);
+
+            //Ejecutmos la query
+            ResultSet rs = ps.executeQuery();
+
+            //Recorremos el resultado
+            while (rs.next()) {
+                //Obtenemos la incidencia
+                Incidencia obj = (Incidencia) parseObject(rs, Incidencia.class.getSimpleName());
+
+                //Comprobamos que no sea null
+                if (obj != null) {
+                    //Añadimos el conector
+                    obj.setConector(conector);
+
+                    //Añadimos el juagador
+                    obj.setJugador(getJugadorById(idJugador, conector));
+
+                    //Añadimos el tipo de incidencia
+                    obj.setTipoIncidencia(getTipoIncidenciaById(rs.getInt("INCIDENCIA_idINCIDENCIA"), conector));
+
+                    //Añadimos la incidencia a la lista
+                    list.add(obj);
+                }
+            }
+            
+            //Cerramos conexion
+            conn.close();
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        //Devolvemos la lista
+        return list;
+    }
+
     public static TipoIncidencia getTipoIncidenciaById(int id, String conector) throws SQLException {
         TipoIncidencia obj = null;
+        Connection conn = null;
 
         try {
             //Obtenemos la conexion
@@ -448,6 +568,7 @@ public class SQLInterface extends Conector {
     public static ArrayList<TipoIncidencia> getTiposIncidencias(String conector) throws SQLException {
         //Lista de tipos de incidencia
         ArrayList<TipoIncidencia> list = new ArrayList<>();
+        Connection conn = null;
 
         try {
             //Obtemos la conexion
