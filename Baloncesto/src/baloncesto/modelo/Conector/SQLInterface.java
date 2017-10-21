@@ -16,7 +16,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,8 +34,10 @@ public class SQLInterface extends Conector {
     private static Connection conn;
 
     public static Equipo getEquipo(String conector) throws SQLException {
+        //Objeto equipo
+        Equipo obj = null;
+
         try {
-            Equipo obj = null;
 
             //Obtenemos el conector
             conn = getConnection(conector);
@@ -41,25 +45,24 @@ public class SQLInterface extends Conector {
             //Query
             String query = "SELECT * FROM EQUIPO";
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
             
+            //Ejecutamos la query
+            ResultSet rs = st.executeQuery(query);
+
             //Recoremos el resultado
             while (rs.next()) {
                 //Parseamos el objeto
                 obj = (Equipo) parseObject(rs, Equipo.class.getSimpleName());
-                
+
                 //Comprobamos si no es null
                 if (obj != null) {
                     //Añadimos el conector
                     obj.setConector(conector);
                 }
             }
-            
+
             //Cerramos la conexion
             conn.close();
-            
-            //Devolevos el objeto
-            return obj;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -72,13 +75,15 @@ public class SQLInterface extends Conector {
             }
         }
 
-        return null;
+        //Devolevos el objeto
+        return obj;
     }
 
     public static Jugador getJugadorById(int id, String conector) throws SQLException {
-        try {
-            Jugador obj = null;
+        //Objeto jugador
+        Jugador obj = null;
 
+        try {
             //Obtenemos el conector
             conn = getConnection(conector);
 
@@ -86,21 +91,30 @@ public class SQLInterface extends Conector {
             String query = "SELECT * FROM JUGADOR WHERE idJUGADOR = ?";
             PreparedStatement ps = conn.prepareStatement(query);
 
+            //Añadimos el id a la condicion
             ps.setInt(1, id);
 
+            //Ejecutamos la query
             ResultSet rs = ps.executeQuery();
 
+            //Recorremos el resultado
             while (rs.next()) {
+                //Obtenemos el jugador
                 obj = (Jugador) parseObject(rs, Jugador.class.getSimpleName());
 
+                //Comprobamos que no sea nulo
                 if (obj != null) {
+                    //Añadimos el conector
+                    obj.setConector(conector);
+
+                    //Añadimos el equipo
                     obj.setEquipo(getEquipo(conector));
                 }
             }
 
+            //Cerramos conexion
             conn.close();
 
-            return obj;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -111,38 +125,48 @@ public class SQLInterface extends Conector {
             if (conn != null) {
                 conn.close();
             }
-
         }
 
-        return null;
+        //Devolvemos el jugador
+        return obj;
     }
 
     public static ArrayList<Jugador> getJugadores(String conector) throws SQLException {
-        try {
-            ArrayList<Jugador> list = new ArrayList<>();
+        //Lista de jugadores
+        ArrayList<Jugador> list = new ArrayList<>();
 
+        try {
             //Obtenemos el conector
             conn = getConnection(conector);
 
             //Query
             String query = "SELECT * FROM JUGADOR";
             Statement st = conn.createStatement();
+            
+            //Ejecutamos la query
             ResultSet rs = st.executeQuery(query);
 
+            //Recorremos el resultado
             while (rs.next()) {
+                //Obtenemos el juagador
                 Jugador obj = (Jugador) parseObject(rs, Jugador.class.getSimpleName());
 
-                if (obj!= null) {
+                //Comprobamos que no sea nulo
+                if (obj != null) {
+                    //Añadimos el conector
                     obj.setConector(conector);
+
+                    //Añadimos el equipo
                     obj.setEquipo(getEquipo(conector));
 
+                    //Añadimos el jugador a la lista
                     list.add(obj);
                 }
             }
 
+            //Cerramos la conexion
             conn.close();
 
-            return list;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -155,37 +179,58 @@ public class SQLInterface extends Conector {
             }
         }
 
-        return null;
+        return list;
     }
 
-    public static ArrayList<Entrenamiento> getEntrenamientosByJugador(int idJugador, String conector) throws SQLException {
+    public static Entrenamiento getEntrenamientoById(int idJugador, int idTipoEntrenamiento, String fecha, String conector) throws SQLException {
+        //Objeto entrenamiento  
+        Entrenamiento obj = null;
+
         try {
-            ArrayList<Entrenamiento> list = new ArrayList<>();
 
             //Obtenemos el conector
             conn = getConnection(conector);
 
             //Query
-            String query = "SELECT * FROM JUGADOR_has_ENTRENAMIENTO WHERE idJUGADOR = ?";
+            String query = "SELECT * FROM JUGADOR_has_ENTRENAMIENTO WHERE JUGADOR_idJUGADOR = ? AND ENTRENAMIENTO_idENTRENAMIENTO = ? AND Fecha = ?";
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, idJugador);
 
+            //Añadimos al where el idJugador y idEntrenamiento
+            ps.setInt(1, idJugador);
+            ps.setInt(2, idTipoEntrenamiento);
+
+            //Convertimos la fecha
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsed_date = format.parse(fecha);
+            java.sql.Date sql_date = new java.sql.Date(parsed_date.getTime());
+
+            //Añadimos la fecha el where
+            ps.setDate(3, sql_date);
+
+            //Executamos la query
             ResultSet rs = ps.executeQuery();
 
+            //Recorremos el resultado
             while (rs.next()) {
-                Entrenamiento obj = (Entrenamiento) parseObject(rs, Entrenamiento.class.getSimpleName());
+                //Obtenemos el entrenamiento
+                obj = (Entrenamiento) parseObject(rs, Entrenamiento.class.getSimpleName());
 
+                //Comprobamos que no sea null
                 if (obj != null) {
+                    //Añadimos el conector
                     obj.setConector(conector);
-                    obj.setJugador(getJugadorById(idJugador, conector));
-                    list.add(obj);
-                }
 
+                    //Añadimos el jugador
+                    obj.setJugador(getJugadorById(idJugador, conector));
+
+                    //Añadimos tipo de entrenamiento
+                    obj.setTipoEntrenamiento(getTipoEntrenamientoById(idTipoEntrenamiento, conector));
+                }
             }
 
+            //Cerramos la conexion
             conn.close();
 
-            return list;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -198,28 +243,148 @@ public class SQLInterface extends Conector {
             }
         }
 
-        return null;
+        //Devolvemos el entrenamiento
+        return obj;
+    }
+
+    public static ArrayList<Entrenamiento> getEntrenamientosByJugador(int idJugador, String conector) throws SQLException {
+        //Lista de entrenamientos
+        ArrayList<Entrenamiento> list = new ArrayList<>();
+
+        try {
+            //Obtenemos el conector
+            conn = getConnection(conector);
+
+            //Query
+            String query = "SELECT * FROM JUGADOR_has_ENTRENAMIENTO WHERE JUGADOR_idJUGADOR = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            //Añadimos el idJugador al where
+            ps.setInt(1, idJugador);
+
+            //Ejecutamos la query
+            ResultSet rs = ps.executeQuery();
+
+            //Recorremos el resultado
+            while (rs.next()) {
+                //Obtenemos el tipo de entrenamiento
+                Entrenamiento obj = (Entrenamiento) parseObject(rs, Entrenamiento.class.getSimpleName());
+
+                //Comprobamos que no sea null
+                if (obj != null) {
+                    //Añadimos el conector
+                    obj.setConector(conector);
+
+                    //Añadimos el jugador
+                    obj.setJugador(getJugadorById(idJugador, conector));
+
+                    //Añadimos el tipo de entramiento∫
+                    obj.setTipoEntrenamiento(getTipoEntrenamientoById(rs.getInt("ENTRENAMIENTO_idENTRENAMIENTO"), conector));
+
+                    //Lo añadimos a la lista
+                    list.add(obj);
+                }
+
+            }
+
+            //Cerramos conexion
+            conn.close();
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        //Devolvemos la lista
+        return list;
+    }
+
+    public static TipoEntrenamiento getTipoEntrenamientoById(int id, String conector) throws SQLException {
+        //Objeto tipo entrenamiento
+        TipoEntrenamiento obj = null;
+
+        try {
+            //Obtenemos la conexion
+            conn = getConnection(conector);
+
+            //Query
+            String query = "SELECT * FROM ENTRENAMIENTO WHERE idENTRENAMIENTO = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            //Añadimos el id de jugador a where
+            ps.setInt(1, id);
+
+            //Ejecutamos la query
+            ResultSet rs = ps.executeQuery();
+
+            //Recorremos el resultado
+            while (rs.next()) {
+                //Obtenemos el tipo de entrenamiento
+                obj = (TipoEntrenamiento) parseObject(rs, TipoEntrenamiento.class.getSimpleName());
+
+                //Comprobamos que no sea null
+                if (obj != null) {
+                    //Añadimos el conector
+                    obj.setConector(conector);
+                }
+            }
+
+            //Cerramos conexion
+            conn.close();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        //Devolvemos el objeto
+        return obj;
     }
 
     public static ArrayList<TipoEntrenamiento> getTipoEntrenamientos(String conector) throws SQLException {
-        try {
-            ArrayList<TipoEntrenamiento> lista = new ArrayList<>();
+        //Lista de tipos de entrenamiento
+        ArrayList<TipoEntrenamiento> list = new ArrayList<>();
 
+        try {
             //Obtenemos el conector
             conn = getConnection(conector);
 
             //Query
             String query = "SELECT * FROM ENTRENAMIENTO";
             Statement st = conn.createStatement();
+
+            //Ejecutamos la query
             ResultSet rs = st.executeQuery(query);
 
+            //Recorremos el resultado
             while (rs.next()) {
+                //Obtenemos el tipo de entrenamiento
+                TipoEntrenamiento obj = (TipoEntrenamiento) parseObject(rs, TipoEntrenamiento.class.getSimpleName());
 
+                //Comprobamos que no sea null
+                if (obj != null) {
+                    //Añadimos el conector
+                    obj.setConector(conector);
+
+                    //Añadimos el objeto a lista
+                    list.add(obj);
+                }
             }
 
+            //Cerramos conexion
             conn.close();
 
-            return lista;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -231,35 +396,43 @@ public class SQLInterface extends Conector {
                 conn.close();
             }
         }
-
-        return null;
+        
+        //Devolvemos la lista
+        return list;
     }
 
     private static Connection getConnection(String conector) throws ClassNotFoundException, SQLException {
         if (conector.equals(mysqlConector)) {
             return getCon_mysql_jdbc();
-        } else if (conector.equals(sqlServerConector)) {
+        } else {
             return getCon_sql();
         }
-
-        return null;
     }
 
     private static Object parseObject(ResultSet rs, String tipo) throws SQLException {
         if (tipo.equals(Equipo.class.getSimpleName())) {
+            //Creamos el objeto equipo
             return new Equipo(rs.getInt("idEquipo"), rs.getString("Nombre"), rs.getInt("Año_Fundacion"), rs.getString("Presidente"), rs.getString("Pabellon"), rs.getString("Patrocinador"));
         } else if (tipo.equals(Jugador.class.getSimpleName())) {
+            //Creamos el objeto jugador
             return new Jugador(rs.getInt("idJUGADOR"), rs.getString("Nombre"), rs.getString("Apellido1"), rs.getString("Apellido2"), rs.getFloat("Altura"), rs.getFloat("Peso"), rs.getString("Posicion"), rs.getString("Descripcion"));
         } else if (tipo.equals(Entrenamiento.class.getSimpleName())) {
-            return new Entrenamiento(rs.getString("Fecha"), rs.getString("Duracion"));
+            //Creamos el objeto entrenamiento
+            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+            return new Entrenamiento(formatDate.format(rs.getDate("Fecha")), rs.getTime("Duracion").toString());
         } else if (tipo.equals(TipoEntrenamiento.class.getName())) {
+            //Creamos objeto tipo entrenamiento
             return new TipoEntrenamiento(rs.getInt("idENTRENAMIENTO"), rs.getString("Tipo_Entrenamiento"), rs.getString("Descripcion"));
         } else if (tipo.equals(Incidencia.class.getSimpleName())) {
-            return new Incidencia(rs.getString("Fecha"));
-        }else if(tipo.equals(TipoIncidencia.class.getSimpleName())){
+            //Creamod el objeto incidencia
+            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+            return new Incidencia(formatDate.format(rs.getDate("Fecha")));
+        } else if (tipo.equals(TipoIncidencia.class.getSimpleName())) {
+            //Creamo el objeto Tipo incidencia
             return new TipoIncidencia(rs.getInt("idINCIDENCIA"), rs.getString("Tipo_Incidencia"), rs.getString("Sancion"), rs.getString("Descripcion"));
-        }
-
-        return null;
+        }else{
+            //Devolvemos un null 
+            return null;
+        }  
     }
 }
