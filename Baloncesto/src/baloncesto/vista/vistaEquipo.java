@@ -188,7 +188,7 @@ public class vistaEquipo extends javax.swing.JFrame {
                 
                 if(curJ.getId() == select_id){
                     System.out.println(select_id + " -> " + curJ.getNombre());                
-                    VistaEntrenaminetos vIn = new VistaEntrenaminetos(curJ, this);
+                    VistaEntrenamientos vIn = new VistaEntrenamientos(curJ, this);
                     this.setVisible(false);
                     vIn.setVisible(true);
                     break;

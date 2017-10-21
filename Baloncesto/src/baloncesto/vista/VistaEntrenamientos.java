@@ -9,7 +9,6 @@ import baloncesto.modelo.Entrenamiento;
 import baloncesto.modelo.Incidencia;
 import baloncesto.modelo.Jugador;
 import baloncesto.modelo.TipoEntrenamiento;
-import baloncesto.modelo.TipoIncidencia;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JScrollPane;
@@ -19,42 +18,46 @@ import javax.swing.JTable;
  *
  * @author 9fdam02
  */
-public class VistaIncidencias extends javax.swing.JFrame {
+public class VistaEntrenamientos extends javax.swing.JFrame {
 
     private final boolean pruebas = true;
-
+    
     private vistaEquipo vE;
-    private List<Incidencia> listaIncidencias = new ArrayList<>();
+    private Jugador j;
+    private List<Entrenamiento> listaEntrenamientos = new ArrayList<>();
 
     /**
      * Creates new form VistaIncidencias
      */
-    public VistaIncidencias() {
+    public VistaEntrenamientos() {
         initComponents();
         this.setLocationRelativeTo(this);
+
     }
 
-    public VistaIncidencias(Jugador j, vistaEquipo vE) {
+    public VistaEntrenamientos(Jugador j, vistaEquipo vE) {
         initComponents();
         this.setLocationRelativeTo(this);
         this.vE = vE;
+        this.j = j;
+
         if (pruebas) {
-            listaIncidencias = new ArrayList<>();
-            TipoIncidencia tE = new TipoIncidencia(1, "llegar tarde", "1000", "pues eso");
-            Incidencia i = new Incidencia(tE, j, "22-07-19977");
-            listaIncidencias.add(i);
+            listaEntrenamientos = new ArrayList<>();
+            TipoEntrenamiento tE = new TipoEntrenamiento(1, "Explosivo", "pues eso");
+            Entrenamiento e = new Entrenamiento(j, tE, "22/07/77", "40");
+            listaEntrenamientos.add(e);
         } else {
-            listaIncidencias = j.getIncidencias();
+            listaEntrenamientos = j.getEntrenamientos();
         }
 
-        Object[][] data = new Object[listaIncidencias.size()][4];
-        for (int i = 0; i < listaIncidencias.size(); i++) {
-            data[i][0] = listaIncidencias.get(i).getTipoIncidencia().getTipo();
-            data[i][1] = listaIncidencias.get(i).getFecha();
-            data[i][2] = listaIncidencias.get(i).getTipoIncidencia().getSancion();
-            data[i][3] = listaIncidencias.get(i).getTipoIncidencia().getDescripcion();
+        Object[][] data = new Object[listaEntrenamientos.size()][4];
+        for (int i = 0; i < listaEntrenamientos.size(); i++) {
+            data[i][0] = listaEntrenamientos.get(i).getTipoEntrenamiento().getTipo();
+            data[i][1] = listaEntrenamientos.get(i).getFecha();
+            data[i][2] = listaEntrenamientos.get(i).getDuracion();
+            data[i][3] = listaEntrenamientos.get(i).getTipoEntrenamiento().getDescripcion();
         }
-        String[] colName = {"Tipo", "Fecha", "Sanción", "Descripción"};
+        String[] colName = {"Tipo", "Fecha", "Duración", "Descripción"};
 
         jTable1 = new javax.swing.JTable();
 
@@ -63,6 +66,7 @@ public class VistaIncidencias extends javax.swing.JFrame {
 
         jTable1 = new JTable(data, colName);
         jScrollPane1 = new JScrollPane(jTable1);
+
     }
 
     /**
@@ -85,14 +89,18 @@ public class VistaIncidencias extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel1.setText("Incidencias Jugador");
+        jLabel1.setText("Entrenamientos Jugador");
+        jLabel1.setToolTipText("");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {},
                 {},
                 {}
             },
@@ -112,14 +120,18 @@ public class VistaIncidencias extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Nueva Incidecnia");
+        jLabel2.setText("Nueva Entrenamiento");
 
-        jLabel3.setText("Tipo incidencia");
+        jLabel3.setText("Tipo Entrenamiento");
+        jLabel3.setToolTipText("");
 
         jLabel4.setText("Fecha(YYYY-MM-DD)");
         jLabel4.setToolTipText("");
 
-        jButton1.setText("Añadir Incidencia");
+        jButton1.setText("Añadir Entrenamiento");
+
+        jLabel5.setText("Duración (min)");
+        jLabel5.setToolTipText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -132,13 +144,17 @@ public class VistaIncidencias extends javax.swing.JFrame {
                     .addComponent(jButton1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, Short.MAX_VALUE))
+                            .addComponent(jComboBox1, 0, 99, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jTextField1))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField2)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,11 +164,13 @@ public class VistaIncidencias extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -214,20 +232,19 @@ public class VistaIncidencias extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaIncidencias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaEntrenamientos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaIncidencias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaEntrenamientos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaIncidencias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaEntrenamientos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaIncidencias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaEntrenamientos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VistaIncidencias().setVisible(true);
+                new VistaEntrenamientos().setVisible(true);
             }
         });
     }
@@ -240,9 +257,11 @@ public class VistaIncidencias extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
