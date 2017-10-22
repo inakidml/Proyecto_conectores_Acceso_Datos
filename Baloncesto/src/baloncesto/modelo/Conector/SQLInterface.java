@@ -546,10 +546,40 @@ public class SQLInterface extends Conector {
             ps.setInt(1, idJugador);
             ps.setInt(2, idTipoEntrenamiento);
             
+            //Convertimo la fecha
+            if(conector == mysqlConector){
+                //Fecha mysql
+                SimpleDateFormat sdf_mysql = new SimpleDateFormat("yyyy-MM-dd");
+                java.sql.Date mysql_date = new java.sql.Date(sdf_mysql.parse(fecha).getTime());
+                
+                //Añadimos la fecha
+                ps.setDate(3, mysql_date);
+                
+            }else if(conector == sqlServerConector){
+                //Fecha sqlServer
+                SimpleDateFormat sdf_sqlServer = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SS");
+                java.sql.Date sqlServer_date = new java.sql.Date(sdf_sqlServer.parse(fecha + " 00:00:00.00").getTime());
+                
+                //Añadimos la fecha 
+                ps.setDate(3, sqlServer_date);
+            }
+            
+            //Ejecutamos el delete
+            int action = ps.executeUpdate();
+            
+            //Comprobamos si ha funcionado
+            if(action > 0){
+                result = true;
+            }
+            
+            //Cerramos conexion
+            conn.close();
             
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (conn != null) {
@@ -823,7 +853,68 @@ public class SQLInterface extends Conector {
 
         return result;
     }
-
+    
+    public static boolean deleteIncidencia(int idTipoIncidencia, int idJugador, String fecha, String conector) throws SQLException{
+        boolean result = false;
+        Connection conn = null;
+        
+        try {
+            //Establecemos conexion
+            conn = getConnection(conector);
+            
+            //Query
+            String query = "DELETE FROM INCIDENCIA_has_JUGADOR WHERE INCIDENCIA_idINCIDENCIA = ? AND JUGADOR_idJUGADOR = ? AND Fecha = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            //Añadimos la ids
+            ps.setInt(1, idTipoIncidencia);
+            ps.setInt(2, idJugador);
+            
+            //Convertimo la fecha
+            if(conector == mysqlConector){
+                //Fecha mysql
+                SimpleDateFormat sdf_mysql = new SimpleDateFormat("yyyy-MM-dd");
+                java.sql.Date mysql_date = new java.sql.Date(sdf_mysql.parse(fecha).getTime());
+                
+                //Añadimos la fecha
+                ps.setDate(3, mysql_date);
+                
+            }else if(conector == sqlServerConector){
+                //Fecha sqlServer
+                SimpleDateFormat sdf_sqlServer = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SS");
+                java.sql.Date sqlServer_date = new java.sql.Date(sdf_sqlServer.parse(fecha + " 00:00:00.00").getTime());
+                
+                //Añadimos la fecha 
+                ps.setDate(3, sqlServer_date);
+            }
+            
+            //Ejecutamos el delete
+            int action = ps.executeUpdate();
+            
+            //Comprobamos si ha funcionado
+            if(action > 0){
+                result = true;
+            }
+            
+            //Cerramos conexion
+            conn.close();
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }        
+        
+        //Devolvemos el resultado
+        return result;
+    }
+    
     public static TipoIncidencia getTipoIncidenciaById(int id, String conector) throws SQLException {
         TipoIncidencia obj = null;
         Connection conn = null;
