@@ -7,6 +7,7 @@ package baloncesto.vista;
 
 import baloncesto.modelo.Conector.DB4OInteface;
 import baloncesto.modelo.Conector.SQLInterface;
+import baloncesto.modelo.Herramientas;
 import baloncesto.modelo.Incidencia;
 import baloncesto.modelo.Jugador;
 import baloncesto.modelo.TipoIncidencia;
@@ -555,7 +556,7 @@ public class VistaIncidencias extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jLabel13.setText("");
         String fecha = jTextField1.getText();
-        boolean fechaOk = SQLInterface.validarFecha(fecha);
+        boolean fechaOk = Herramientas.validarFecha(fecha);
 
         if (fechaOk) {
             TipoIncidencia tI = new TipoIncidencia();
@@ -602,7 +603,7 @@ public class VistaIncidencias extends javax.swing.JFrame {
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         String fecha = jTextField1.getText();
-        boolean fechaOk = SQLInterface.validarFecha(fecha);
+        boolean fechaOk = Herramientas.validarFecha(fecha);
         if (fechaOk) {
             jTextField1.setBackground(Color.green);
         } else {

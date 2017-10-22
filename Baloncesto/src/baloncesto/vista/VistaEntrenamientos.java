@@ -8,6 +8,7 @@ package baloncesto.vista;
 import baloncesto.modelo.Conector.DB4OInteface;
 import baloncesto.modelo.Conector.SQLInterface;
 import baloncesto.modelo.Entrenamiento;
+import baloncesto.modelo.Herramientas;
 import baloncesto.modelo.Jugador;
 import baloncesto.modelo.TipoEntrenamiento;
 import java.awt.Color;
@@ -581,8 +582,8 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         jLabel12.setText("");
         String fecha = jTextField1.getText();
         String duracion = jTextField2.getText();
-        boolean fechaOk = SQLInterface.validarFecha(fecha);
-        boolean duracionOk = SQLInterface.validarTime(duracion);
+        boolean fechaOk = Herramientas.validarFecha(fecha);
+        boolean duracionOk = Herramientas.validarTime(duracion);
         if (!fechaOk) {
             jLabel12.setText("Formato de fecha inválido");
         } else if (!duracionOk) {
@@ -628,7 +629,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         String fecha = jTextField1.getText();
-        boolean fechaOk = SQLInterface.validarFecha(fecha);
+        boolean fechaOk = Herramientas.validarFecha(fecha);
         if (fechaOk) {
             jTextField1.setBackground(Color.green);
         } else {
@@ -638,7 +639,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
 
     private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
         String duracion = jTextField2.getText();
-        boolean durOk = SQLInterface.validarTime(duracion);
+        boolean durOk = Herramientas.validarTime(duracion);
         if (durOk) {
             jTextField2.setBackground(Color.green);
         } else {
