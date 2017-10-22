@@ -688,6 +688,48 @@ public class SQLInterface extends Conector {
         return list;
     }
 
+    public static boolean insertTipoEntrenamiento(TipoEntrenamiento obj, String conector) throws SQLException {
+        Connection conn = null;
+        boolean result = false;
+
+        try {
+            //Establecemos conexion
+            conn = getConnection(conector);
+
+            //Query
+            String query = "INSERT INTO ENTRENAMIENTO values(?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            //Añadimos los datos
+            ps.setInt(1, obj.getId());
+            ps.setString(2, obj.getTipo());
+            ps.setString(3, obj.getDescripcion());
+
+            //Ejecutamos la insert
+            int action = ps.executeUpdate();
+
+            //Comprobamos si insert ha funcionado
+            if (action > 0) {
+                result = true;
+            }
+
+            //Cerrar conexion
+            conn.close();
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        //Devolvemos el resultado
+        return result;
+    }
+
     public static Incidencia getIncidenciaById(int idTipoIncidencia, int idJugador, String conector) throws SQLException {
         //Objeto de incidencia
         Incidencia obj = null;
@@ -1008,6 +1050,49 @@ public class SQLInterface extends Conector {
         return list;
     }
 
+    public static boolean insertTipoIncidencia(TipoIncidencia obj, String conector) throws SQLException {
+        Connection conn = null;
+        boolean result = false;
+
+        try {
+            //Establecemos conexion
+            conn = getConnection(conector);
+
+            //Query
+            String query = "INSERT INTO INCIDENCIA values(?,?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            //Añadimos los datos
+            ps.setInt(1, obj.getId());
+            ps.setString(2, obj.getTipo());
+            ps.setString(3, obj.getSancion());
+            ps.setString(4, obj.getDescripcion());
+
+            //Ejecutamos la insert
+            int action = ps.executeUpdate();
+
+            //Comprobamos si insert ha funcionado
+            if (action > 0) {
+                result = true;
+            }
+
+            //Cerrar conexion
+            conn.close();
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+
+        //Devolvemos el resultado
+        return result;
+    }
+
     private static Connection getConnection(String conector) throws ClassNotFoundException, SQLException {
         if (conector.equals(mysqlConector)) {
             return getCon_mysql_jdbc();
@@ -1015,7 +1100,7 @@ public class SQLInterface extends Conector {
             return getCon_sql();
         }
     }
-    
+
     public static boolean validarFecha(String fecha) {
         String[] fechaDiv = fecha.split("-");
         int ano, mes, dia;
@@ -1071,7 +1156,7 @@ public class SQLInterface extends Conector {
             }
         }
     }
-    
+
     private static Object parseObject(ResultSet rs, String tipo) throws SQLException {
         if (tipo.equals(Equipo.class.getSimpleName())) {
             //Creamos el objeto equipo

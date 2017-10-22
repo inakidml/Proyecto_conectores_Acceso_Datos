@@ -21,7 +21,7 @@ public class TipoIncidencia {
     private static final String sqlServerConector = "sqlServer";
     private static final String db4oConector = "db4o";
     private String conector;
-    
+
     private int id;
     private String tipo;
     private String sancion;
@@ -130,18 +130,23 @@ public class TipoIncidencia {
     public void setConector(String conector) {
         this.conector = conector;
     }
-    
-    public void save(){
-        switch (this.conector) {
-            case db4oConector:
-                DB4OInteface.insertTipoIncidencia(this);
-                break;
-            case mysqlConector:
-//                    SQLInterface.insertTipoIncidencia(this);
-                break;
-            case sqlServerConector:
-//                    SQLInterface.insertTipoIncidencia(this);
-                break;
+
+    public void save() {
+        try {
+            switch (this.conector) {
+                case db4oConector:
+                    DB4OInteface.insertTipoIncidencia(this);
+                    break;
+                case mysqlConector:
+
+                    SQLInterface.insertTipoIncidencia(this, conector);
+                    break;
+                case sqlServerConector:
+                    SQLInterface.insertTipoIncidencia(this, conector);
+                    break;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TipoIncidencia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
