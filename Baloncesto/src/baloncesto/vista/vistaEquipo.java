@@ -115,6 +115,7 @@ public class vistaEquipo extends javax.swing.JFrame {
              //Cogemos el Id del ultimo jugador y lo incrementamos
              jugador.setId(equipo.getJugadores().get(equipo.getJugadores().size() -1).getId() + 1);
              jugador.setConector(this.equipo.getConector());
+             jugador.setEquipo(equipo);
              //System.out.println("Id ultimo jugador -> " + equipo.getJugadores().get(equipo.getJugadores().size() -1).getId());
              //System.out.println("Id juhador nuevo -> " + jugador.getId());
          }
@@ -659,11 +660,12 @@ public class vistaEquipo extends javax.swing.JFrame {
                             //System.out.println("Id aux -> " + select_id_aux);
                             jComboBox1.setSelectedIndex(select_id_aux -1);
                         }    
-                    }else{
+                    }else{                        
                         if(jMod.save()){
                             equipo.getJugadores().add(jMod);
                             detalleReadJugador(jMod);
                             llenarComboJugadores();
+                            jComboBox1.setSelectedIndex(jComboBox1.getItemCount() -2); 
                         }
                     }
                 }
