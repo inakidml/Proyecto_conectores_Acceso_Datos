@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
     private DefaultTableModel tableModel;
 
     /**
-     * Creates new form VistaIncidencias
+     * Creates new form VistaEntrenamientos
      */
     public VistaEntrenamientos() {
         initComponents();
@@ -93,14 +94,9 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
             }
         };
 
-        if (pruebas) {
-            listaEntrenamientos = new ArrayList<>();
-            TipoEntrenamiento tE = new TipoEntrenamiento(1, "Explosivo", "pues eso");
-            Entrenamiento e = new Entrenamiento(j, tE, "22/07/77", "40");
-            listaEntrenamientos.add(e);
-        } else {
-            listaEntrenamientos = j.getEntrenamientos();
-        }
+        listaEntrenamientos = j.getEntrenamientos();
+        j.listasANull();
+
         Object[][] data = {};
         if (listaEntrenamientos != null) {
             data = new Object[listaEntrenamientos.size()][4];
@@ -162,8 +158,47 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
     public void refrescarJTable() {
         tableModel.setRowCount(0);
         listaEntrenamientos = j.getEntrenamientos();
+        j.listasANull();
         Object[] data = {};
         if (listaEntrenamientos != null) {
+            data = new Object[4];
+            for (int i = 0; i < listaEntrenamientos.size(); i++) {
+                data[0] = listaEntrenamientos.get(i).getTipoEntrenamiento().getTipo();
+                data[1] = listaEntrenamientos.get(i).getFecha();
+                data[2] = listaEntrenamientos.get(i).getDuracion();
+                data[3] = listaEntrenamientos.get(i).getTipoEntrenamiento().getDescripcion();
+                tableModel.addRow(data);
+            }
+        }
+        jTable1.setModel(tableModel);
+        tableModel.fireTableDataChanged();
+        jTextField1.setText("");
+        jTextField2.setText("");
+    }
+
+    public void refrescarJTable(String orden) {
+
+        tableModel.setRowCount(0);
+        listaEntrenamientos = j.getEntrenamientos();
+        j.listasANull();
+        if (listaEntrenamientos != null) {
+            switch (orden) {
+                case "Ordenar por...":
+                    break;
+                case "Tipo":
+                    Collections.sort(listaEntrenamientos, (Entrenamiento e1, Entrenamiento e2) -> e1.getTipoEntrenamiento().getTipo().compareTo(e2.getTipoEntrenamiento().getTipo()));
+                    break;
+                case "Fecha":
+                    Collections.sort(listaEntrenamientos, (Entrenamiento e1, Entrenamiento e2) -> e1.getFecha().compareTo(e2.getFecha()));
+                    break;
+                case "Duración":
+                    Collections.sort(listaEntrenamientos, (Entrenamiento e1, Entrenamiento e2) -> e1.getDuracion().compareTo(e2.getDuracion()));
+                    break;
+                default:
+
+            }
+            Object[] data = {};
+
             data = new Object[4];
             for (int i = 0; i < listaEntrenamientos.size(); i++) {
                 data[0] = listaEntrenamientos.get(i).getTipoEntrenamiento().getTipo();
@@ -221,6 +256,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jComboBox2 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -286,7 +322,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(232, 10, 10));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -298,18 +334,18 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1)
+                    .addComponent(jTextField2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(0, 112, Short.MAX_VALUE))
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField2))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel12))
+                        .addGap(0, 112, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -329,10 +365,10 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel12))
+                .addComponent(jButton1)
                 .addContainerGap())
         );
 
@@ -482,6 +518,13 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ordenar por...", "Tipo", "Fecha", "Duración" }));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -492,6 +535,8 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(96, 96, 96)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -511,7 +556,9 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jButton2))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton2)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -537,9 +584,9 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         boolean fechaOk = SQLInterface.validarFecha(fecha);
         boolean duracionOk = SQLInterface.validarTime(duracion);
         if (!fechaOk) {
-            jLabel12.setText("Formato de fecha invalido");
+            jLabel12.setText("Formato de fecha inválido");
         } else if (!duracionOk) {
-            jLabel12.setText("Formato duración invalido");
+            jLabel12.setText("Formato duración inválido");
         } else {
             TipoEntrenamiento tE = new TipoEntrenamiento();
             String elegido = (String) jComboBox1.getSelectedItem();
@@ -599,6 +646,10 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField2KeyReleased
 
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        refrescarJTable(jComboBox2.getSelectedItem().toString());
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -639,6 +690,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
