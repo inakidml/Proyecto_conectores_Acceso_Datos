@@ -26,7 +26,8 @@ public class Entrenamiento {
     private static final String db4oConector = "db4o";
     private String conector;
 
-    private Jugador jugador;
+    private int idJugador;
+    //private Jugador jugador;
     private int idTipo;
     //private TipoEntrenamiento tipoEntrenamiento;
     private String fecha;
@@ -36,7 +37,7 @@ public class Entrenamiento {
     }
 
     public Entrenamiento(Jugador jugador, TipoEntrenamiento tipoEntrenamiento, String fecha, String duracion) {
-        this.jugador = jugador;
+        setJugador(jugador);
         setTipoEntrenamiento(tipoEntrenamiento);
         this.fecha = fecha;
         this.duracion = duracion;
@@ -49,10 +50,10 @@ public class Entrenamiento {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.jugador);
-        hash = 47 * hash + this.idTipo;
-        hash = 47 * hash + Objects.hashCode(this.fecha);
+        int hash = 5;
+        hash = 73 * hash + this.idJugador;
+        hash = 73 * hash + this.idTipo;
+        hash = 73 * hash + Objects.hashCode(this.fecha);
         return hash;
     }
 
@@ -68,24 +69,45 @@ public class Entrenamiento {
             return false;
         }
         final Entrenamiento other = (Entrenamiento) obj;
+        if (this.idJugador != other.idJugador) {
+            return false;
+        }
         if (this.idTipo != other.idTipo) {
             return false;
         }
         if (!Objects.equals(this.fecha, other.fecha)) {
             return false;
         }
-        if (!Objects.equals(this.jugador, other.jugador)) {
-            return false;
-        }
         return true;
     }
 
     public Jugador getJugador() {
-        return jugador;
+
+        Jugador j = new Jugador(idJugador, "", "", "", 0, 0, "", "");
+        List<Jugador> jugadores = new ArrayList<Jugador>();
+        switch (conector) {
+            case mysqlConector:
+            case sqlServerConector: {
+                try {
+                    jugadores = SQLInterface.getJugadores(conector);
+                } catch (SQLException ex) {
+                    Logger.getLogger(VistaEntrenamientos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            break;
+            case db4oConector:
+                jugadores = DB4OInteface.getJugadores(new Jugador());
+                break;
+            default:
+                throw new AssertionError();
+        }
+        return jugadores.get(jugadores.indexOf(j));
     }
 
     public void setJugador(Jugador jugador) {
-        this.jugador = jugador;
+        if (jugador != null) {
+            this.idJugador = jugador.getId();
+        }
     }
 
     public TipoEntrenamiento getTipoEntrenamiento() {
@@ -135,7 +157,7 @@ public class Entrenamiento {
 
     @Override
     public String toString() {
-        return "Entrenamiento{" + "conector=" + conector + ", jugador=" + jugador + ", idTipo=" + idTipo + ", fecha=" + fecha + ", duracion=" + duracion + '}';
+        return "Entrenamiento{" + "conector=" + conector + ", idJugador=" + idJugador + ", idTipo=" + idTipo + ", fecha=" + fecha + ", duracion=" + duracion + '}';
     }
 
     public String getConector() {
