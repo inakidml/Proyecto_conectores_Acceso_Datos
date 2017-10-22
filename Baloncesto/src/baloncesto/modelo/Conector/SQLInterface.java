@@ -482,11 +482,8 @@ public class SQLInterface extends Conector {
                 case sqlServerConector:
                     //MS microsoft, con décimas de segundo
                     //Convertimos la fecha
-                    System.out.println(obj.getFecha());
                     SimpleDateFormat sdf_dateMS = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SS");
-                    System.out.println(sdf_dateMS);
                     Date parsedDateMS = sdf_dateMS.parse(obj.getFecha() + " 00:00:00.00");
-                    System.out.println(parsedDateMS);
                     java.sql.Timestamp sqlDateMS = new java.sql.Timestamp(parsedDateMS.getTime());
 
                     //Añadimos la fecha
