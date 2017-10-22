@@ -7,7 +7,11 @@ package baloncesto.modelo;
 
 import baloncesto.modelo.Conector.DB4OInteface;
 import baloncesto.modelo.Conector.SQLInterface;
+import baloncesto.vista.VistaEntrenamientos;
+import baloncesto.vista.VistaIncidencias;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,16 +27,18 @@ public class Incidencia {
     private static final String db4oConector = "db4o";
     private String conector;
 
-    private TipoIncidencia tipoIncidencia;
-    private Jugador jugador;
+    private int idJugador;
+    //private TipoIncidencia tipoIncidencia;
+    private int idTipo;
+    //private Jugador jugador;
     private String Fecha;
 
     public Incidencia() {
     }
 
     public Incidencia(TipoIncidencia tipoIncidencia, Jugador jugador, String Fecha) {
-        this.tipoIncidencia = tipoIncidencia;
-        this.jugador = jugador;
+        setTipoIncidencia(tipoIncidencia);
+        setJugador(jugador);
         this.Fecha = Fecha;
     }
 
@@ -42,10 +48,10 @@ public class Incidencia {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.tipoIncidencia);
-        hash = 59 * hash + Objects.hashCode(this.jugador);
-        hash = 59 * hash + Objects.hashCode(this.Fecha);
+        int hash = 5;
+        hash = 17 * hash + this.idJugador;
+        hash = 17 * hash + this.idTipo;
+        hash = 17 * hash + Objects.hashCode(this.Fecha);
         return hash;
     }
 
@@ -61,13 +67,13 @@ public class Incidencia {
             return false;
         }
         final Incidencia other = (Incidencia) obj;
+        if (this.idJugador != other.idJugador) {
+            return false;
+        }
+        if (this.idTipo != other.idTipo) {
+            return false;
+        }
         if (!Objects.equals(this.Fecha, other.Fecha)) {
-            return false;
-        }
-        if (!Objects.equals(this.tipoIncidencia, other.tipoIncidencia)) {
-            return false;
-        }
-        if (!Objects.equals(this.jugador, other.jugador)) {
             return false;
         }
         return true;
@@ -75,23 +81,65 @@ public class Incidencia {
 
     @Override
     public String toString() {
-        return "Incidencia{" + "conector=" + conector + ", tipoIncidencia=" + tipoIncidencia + ", jugador=" + jugador + ", Fecha=" + Fecha + '}';
+        return "Incidencia{" + "conector=" + conector + ", idJugador=" + idJugador + ", idTipo=" + idTipo + ", Fecha=" + Fecha + '}';
     }
 
     public TipoIncidencia getTipoIncidencia() {
-        return tipoIncidencia;
+        TipoIncidencia t = new TipoIncidencia(idTipo, "", "", "");
+        List<TipoIncidencia> tiposIncidencias = new ArrayList<TipoIncidencia>();
+        switch (conector) {
+            case mysqlConector:
+            case sqlServerConector: {
+                try {
+                    tiposIncidencias = SQLInterface.getTiposIncidencias(conector);
+                } catch (SQLException ex) {
+                    Logger.getLogger(VistaIncidencias.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            break;
+            case db4oConector:
+                tiposIncidencias = DB4OInteface.getTiposIncidencias(new TipoIncidencia());
+                break;
+            default:
+                throw new AssertionError();
+        }
+        return tiposIncidencias.get(tiposIncidencias.indexOf(t));
+
     }
 
     public void setTipoIncidencia(TipoIncidencia tipoIncidencia) {
-        this.tipoIncidencia = tipoIncidencia;
+        if (tipoIncidencia != null) {
+            this.idTipo = tipoIncidencia.getId();
+        }
     }
 
     public Jugador getJugador() {
-        return jugador;
+
+        Jugador j = new Jugador(idJugador, "", "", "", 0, 0, "", "");
+        List<Jugador> jugadores = new ArrayList<Jugador>();
+        switch (conector) {
+            case mysqlConector:
+            case sqlServerConector: {
+                try {
+                    jugadores = SQLInterface.getJugadores(conector);
+                } catch (SQLException ex) {
+                    Logger.getLogger(VistaEntrenamientos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            break;
+            case db4oConector:
+                jugadores = DB4OInteface.getJugadores(new Jugador());
+                break;
+            default:
+                throw new AssertionError();
+        }
+        return jugadores.get(jugadores.indexOf(j));
     }
 
     public void setJugador(Jugador jugador) {
-        this.jugador = jugador;
+        if (jugador != null) {
+            this.idJugador = jugador.getId();
+        }
     }
 
     public String getFecha() {
@@ -135,7 +183,7 @@ public class Incidencia {
 
     public boolean delete() {
         boolean result = false;
-        
+
         try {
             switch (this.conector) {
                 case db4oConector:

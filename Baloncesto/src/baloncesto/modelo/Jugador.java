@@ -305,7 +305,7 @@ public class Jugador {
                     //Jugador por id
                     Jugador query = new Jugador();
                     query.setId(this.id);
-                    
+
                     result = DB4OInteface.updateJugador(query, this);
                     break;
                 case mysqlConector:
@@ -322,10 +322,10 @@ public class Jugador {
 
         return result;
     }
-    
-    public boolean delete(){
+
+    public boolean delete() {
         boolean result = false;
-        
+
         try {
             switch (this.conector) {
                 case db4oConector:
@@ -344,6 +344,11 @@ public class Jugador {
         }
 
         return result;
+    }
+
+    public void listasANull() {
+        this.entrenamientos = null;
+        this.incidencias = null;
     }
 
 }

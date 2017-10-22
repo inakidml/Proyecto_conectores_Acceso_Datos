@@ -6,6 +6,10 @@
 package baloncesto.modelo;
 
 import baloncesto.modelo.Conector.DB4OInteface;
+import baloncesto.modelo.Conector.SQLInterface;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -112,16 +116,23 @@ public class TipoEntrenamiento {
     }
 
     public void save() {
-        switch (this.conector) {
-            case db4oConector:
-                DB4OInteface.insertTipoEntrenamiento(this);
-                break;
-            case mysqlConector:
-//                    SQLInterface.insertTipoEntrenamiento(this);
-                break;
-            case sqlServerConector:
-//                    SQLInterface.insertTipoEntrenamiento(this);
-                break;
+        try {
+            switch (this.conector) {
+
+                case db4oConector:
+                    DB4OInteface.insertTipoEntrenamiento(this);
+                    break;
+                case mysqlConector:
+
+                    SQLInterface.insertTipoEntrenamiento(this, conector);
+
+                    break;
+                case sqlServerConector:
+                    SQLInterface.insertTipoEntrenamiento(this, conector);
+                    break;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TipoEntrenamiento.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
