@@ -26,6 +26,7 @@ public class vistaEquipo extends javax.swing.JFrame {
     private Equipo equipo;
     private Jugador jugador;
     private int select_id;
+    private int select_index;
     
     public vistaEquipo() {
         initComponents();
@@ -35,6 +36,11 @@ public class vistaEquipo extends javax.swing.JFrame {
     public int getSelect_id() {
         this.select_id = (Integer) Integer.parseInt(jComboBox1.getSelectedItem().toString().split("_")[0]);
         return select_id;
+    }
+    
+     public int getSelect_index() {
+        this.select_index = (Integer) jComboBox1.getSelectedIndex();
+        return select_index;
     }
         
     private vistaPrincipal vP;
@@ -654,11 +660,10 @@ public class vistaEquipo extends javax.swing.JFrame {
                 if(jMod != null){
                     if(getSelect_id() != 0){
                         if(jMod.update()){
-                            detalleReadJugador(jMod);
-                            int select_id_aux = getSelect_id();
+                            detalleReadJugador(jMod);  
+                            int index_aux = getSelect_index();
                             llenarComboJugadores();
-                            //System.out.println("Id aux -> " + select_id_aux);
-                            jComboBox1.setSelectedIndex(select_id_aux -1);
+                            jComboBox1.setSelectedIndex(index_aux);
                         }    
                     }else{                        
                         if(jMod.save()){
