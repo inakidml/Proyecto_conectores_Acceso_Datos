@@ -30,7 +30,7 @@ public class Entrenamiento {
 
     public Entrenamiento() {
     }
-    
+
     public Entrenamiento(Jugador jugador, TipoEntrenamiento tipoEntrenamiento, String fecha, String duracion) {
         this.jugador = jugador;
         this.tipoEntrenamiento = tipoEntrenamiento;
@@ -75,7 +75,7 @@ public class Entrenamiento {
         }
         return true;
     }
-    
+
     public Jugador getJugador() {
         return jugador;
     }
@@ -143,20 +143,26 @@ public class Entrenamiento {
 
         return result;
     }
-    
-    public void delete() {
 
+    public boolean delete() {
+        boolean result = false;
+
+        try {
             switch (this.conector) {
                 case db4oConector:
-                    DB4OInteface.deleteEntrenamiento(this);
+                    result = DB4OInteface.deleteEntrenamiento(this);
                     break;
                 case mysqlConector:
-//                    SQLInterface.deleteEntrenamiento(this);
+                    result = SQLInterface.deleteEntrenamiento(this.getJugador().getId(), this.getTipoEntrenamiento().getId(), this.fecha, this.conector);
                     break;
                 case sqlServerConector:
-//                    SQLInterface.deleteEntrenamiento(this);
+                    result = SQLInterface.deleteEntrenamiento(this.getJugador().getId(), this.getTipoEntrenamiento().getId(), this.fecha, this.conector);
                     break;
             }
-
+        } catch (SQLException ex) {
+            Logger.getLogger(Entrenamiento.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return result;
     }
 }

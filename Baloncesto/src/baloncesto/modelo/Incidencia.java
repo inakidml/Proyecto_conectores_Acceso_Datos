@@ -133,20 +133,26 @@ public class Incidencia {
         return result;
     }
 
-    public void delete() {
-
-        switch (this.conector) {
-            case db4oConector:
-                DB4OInteface.deleteIncidencia(this);
-                break;
-            case mysqlConector:
-//                    SQLInterface.deleteIncidencia(this);
-                break;
-            case sqlServerConector:
-//                    SQLInterface.deleteIncidencia(this);
-                break;
+    public boolean delete() {
+        boolean result = false;
+        
+        try {
+            switch (this.conector) {
+                case db4oConector:
+                    result = DB4OInteface.deleteIncidencia(this);
+                    break;
+                case mysqlConector:
+                    result = SQLInterface.deleteIncidencia(this.getTipoIncidencia().getId(), this.getJugador().getId(), this.Fecha, this.conector);
+                    break;
+                case sqlServerConector:
+                    result = SQLInterface.deleteIncidencia(this.getTipoIncidencia().getId(), this.getJugador().getId(), this.Fecha, this.conector);
+                    break;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Incidencia.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        return result;
     }
 
 }

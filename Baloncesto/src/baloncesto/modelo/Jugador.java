@@ -322,5 +322,28 @@ public class Jugador {
 
         return result;
     }
+    
+    public boolean delete(){
+        boolean result = false;
+        
+        try {
+            switch (this.conector) {
+                case db4oConector:
+                    result = DB4OInteface.deleteJugador(this);
+                    break;
+                case mysqlConector:
+                    result = SQLInterface.deleteJugador(this.id, this.conector);
+                    break;
+                case sqlServerConector:
+                    result = SQLInterface.deleteJugador(this.id, conector);
+                    break;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jugador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
+    }
 
 }
