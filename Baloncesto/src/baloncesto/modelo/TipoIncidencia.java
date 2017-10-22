@@ -5,6 +5,12 @@
  */
 package baloncesto.modelo;
 
+import baloncesto.modelo.Conector.DB4OInteface;
+import baloncesto.modelo.Conector.SQLInterface;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author 9fdam02
@@ -125,4 +131,17 @@ public class TipoIncidencia {
         this.conector = conector;
     }
     
+    public void save(){
+        switch (this.conector) {
+            case db4oConector:
+                DB4OInteface.insertTipoIncidencia(this);
+                break;
+            case mysqlConector:
+//                    SQLInterface.insertTipoIncidencia(this);
+                break;
+            case sqlServerConector:
+//                    SQLInterface.insertTipoIncidencia(this);
+                break;
+        }
+    }
 }
