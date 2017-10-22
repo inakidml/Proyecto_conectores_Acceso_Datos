@@ -66,7 +66,7 @@ public class DB4OInteface extends Conector {
 
         //cerramos el equipo
         db.close();
-        
+
         //Indicamos el conector con el que se ha insertado
         e.setConector("db4o");
     }
@@ -97,7 +97,7 @@ public class DB4OInteface extends Conector {
             e.setPatrocinador(data.getPatrocinador() != null ? data.getPatrocinador() : e.getPatrocinador());
 
             db.store(e);
-            
+
             //Indicamos el conector con el que se ha actualizado
             e.setConector("db4o");
         }
@@ -146,7 +146,7 @@ public class DB4OInteface extends Conector {
 
         //Cerramos la conexion
         db.close();
-        
+
         if (j != null) {
             j.setConector("db4o");
         }
@@ -176,12 +176,12 @@ public class DB4OInteface extends Conector {
         while (result.hasNext()) {
             //Obtenemos el jugador
             Jugador j = (Jugador) result.next();
-            
+
             if (j != null) {
                 j.setConector("db4o");
                 //Añadimos el jugador al arraylist
                 jList.add(j);
-            }            
+            }
         }
 
         //Cerramos la conexion
@@ -191,26 +191,26 @@ public class DB4OInteface extends Conector {
         return jList;
     }
 
-    public static Boolean insertJugador(Jugador j) {
-        Boolean result = false;
-        
+    public static boolean insertJugador(Jugador j) {
+        boolean result = false;
+
         //Abrimos la conexion
         ObjectContainer db = getDb_4o();
 
         //Guardamos el jugador
         db.store(j);
-        
+
         //cerramos la conexion
         db.close();
-        
+
         //Comprbamos si el jugador se ha añadido
-        if(getJugador(j) != null){
+        if (getJugador(j) != null) {
             result = true;
         }
-        
+
         //Indicamos el conector con el que se ha insertado
         j.setConector("db4o");
-        
+
         //Devolvemos el resultado
         return result;
     }
@@ -229,7 +229,7 @@ public class DB4OInteface extends Conector {
             //Obtenemos el jugador
             Jugador j = (Jugador) result.next();
 
-            if(j.getId() == data.getId()){
+            if (j.getId() == data.getId()) {
                 //Indicamos los nuevos datos del jugador
                 j.setNombre(data.getNombre() != null ? data.getNombre() : j.getNombre());
                 j.setApellido(data.getApellido() != null ? data.getApellido() : j.getApellido());
@@ -241,21 +241,23 @@ public class DB4OInteface extends Conector {
                 j.setEquipo(data.getEquipo() != null ? data.getEquipo() : j.getEquipo());
                 encontrado = true;
             }
-            
+
             db.store(j);
-            
+
             //Indicamos el conector con el que se ha actualizado
             j.setConector("db4o");
         }
 
         //Cerramos la conexion
         db.close();
-        
+
         return encontrado;
-        
+
     }
 
-    public static void deleteJugador(Jugador query) {
+    public static boolean deleteJugador(Jugador query) {
+        boolean bResult = false;
+
         //Abrimos los conexion
         ObjectContainer db = getDb_4o();
 
@@ -269,10 +271,17 @@ public class DB4OInteface extends Conector {
 
             //Borramos el jugador
             db.delete(j);
+
+            //Comprobamos si se ha borrado
+            if (getJugador(j) == null) {
+                bResult = true;
+            }
         }
 
         //Cerramos la bd
         db.close();
+
+        return bResult;
     }
 
     public static Incidencia getIncidencia(Incidencia query) {
@@ -290,7 +299,7 @@ public class DB4OInteface extends Conector {
 
         //Cerramos la conexion
         db.close();
-        
+
         if (i != null) {
             i.setConector("db4o");
         }
@@ -320,12 +329,12 @@ public class DB4OInteface extends Conector {
         while (result.hasNext()) {
             //Obtenemos la incidencia
             Incidencia i = (Incidencia) result.next();
-            
+
             if (i != null) {
                 i.setConector("db4o");
                 //Añadimos la incidencia al arraylist
                 iList.add(i);
-            }            
+            }
         }
 
         //Cerramos la conexion
@@ -337,7 +346,7 @@ public class DB4OInteface extends Conector {
 
     public static Boolean insertIncidencia(Incidencia i) {
         Boolean result = false;
-        
+
         //Abrimos la conexion
         ObjectContainer db = getDb_4o();
 
@@ -346,15 +355,15 @@ public class DB4OInteface extends Conector {
 
         //cerramos la conexion
         db.close();
-        
+
         //Comprobamos si sea insertado la incidencia
-        if(getIncidencia(i) != null){
+        if (getIncidencia(i) != null) {
             result = true;
         }
-        
+
         //Indicamos el conector con el que se ha insertado
         i.setConector("db4o");
-        
+
         return result;
     }
 
@@ -374,7 +383,7 @@ public class DB4OInteface extends Conector {
             i.setFecha(data.getFecha() != null ? data.getFecha() : i.getFecha());
 
             db.store(i);
-            
+
             //Indicamos el conector con el que se ha actualizado
             i.setConector("db4o");
         }
@@ -383,7 +392,9 @@ public class DB4OInteface extends Conector {
         db.close();
     }
 
-    public static void deleteIncidencia(Incidencia query) {
+    public static boolean deleteIncidencia(Incidencia query) {
+        boolean bResult = false;
+        
         //Abrimos los conexion
         ObjectContainer db = getDb_4o();
 
@@ -397,10 +408,18 @@ public class DB4OInteface extends Conector {
 
             //Borramos la incidencia
             db.delete(i);
+            
+            //Comprobamos si ha borrado
+            if(getIncidencia(i) == null){
+                bResult = true;
+            }
         }
 
         //Cerramos la bd
         db.close();
+        
+        //Devolvemos el resultado
+        return bResult;
     }
 
     public static Entrenamiento getEntrenamiento(Entrenamiento query) {
@@ -418,9 +437,9 @@ public class DB4OInteface extends Conector {
 
         //Cerramos la conexion
         db.close();
-        
+
         if (e != null) {
-            e.setConector("db4o");           
+            e.setConector("db4o");
         }
 
         return e;
@@ -448,12 +467,12 @@ public class DB4OInteface extends Conector {
         while (result.hasNext()) {
             //Obtenemos el entranamiento
             Entrenamiento e = (Entrenamiento) result.next();
-            
+
             if (e != null) {
                 e.setConector("db4o");
                 //Añadimos el entrenamiento al arraylist
                 eList.add(e);
-            }            
+            }
         }
 
         //Cerramos la conexion
@@ -465,7 +484,7 @@ public class DB4OInteface extends Conector {
 
     public static Boolean insertEntrenamiento(Entrenamiento e) {
         Boolean result = false;
-        
+
         //Abrimos la conexion
         ObjectContainer db = getDb_4o();
 
@@ -474,15 +493,15 @@ public class DB4OInteface extends Conector {
 
         //cerramos la conexion
         db.close();
-        
+
         //Comprobamos si el entrenamiento se ha añadido correctamente
-        if(getEntrenamiento(e)!= null){
+        if (getEntrenamiento(e) != null) {
             result = true;
         }
-        
+
         //Indicamos el conector con el que se ha insertado
         e.setConector("db4o");
-        
+
         return result;
     }
 
@@ -503,7 +522,7 @@ public class DB4OInteface extends Conector {
             e.setDuracion(data.getDuracion() != null ? data.getDuracion() : e.getDuracion());
 
             db.store(e);
-            
+
             //Indicamos el conector con el que se ha actualizado
             e.setConector("db4o");
         }
@@ -512,7 +531,9 @@ public class DB4OInteface extends Conector {
         db.close();
     }
 
-    public static void deleteEntrenamiento(Entrenamiento query) {
+    public static boolean deleteEntrenamiento(Entrenamiento query) {
+        boolean bResult = false;
+        
         //Abrimos los conexion
         ObjectContainer db = getDb_4o();
 
@@ -526,10 +547,18 @@ public class DB4OInteface extends Conector {
 
             //Borramos el entrenamiento
             db.delete(e);
+            
+            //Comprobamos si sea borrado
+            if(getEntrenamiento(e) == null){
+                bResult = true;
+            }
         }
 
         //Cerramos la bd
         db.close();
+        
+        //Devolvemos el resultado
+        return bResult;
     }
 
     public static TipoIncidencia getTipoIncidencia(TipoIncidencia query) {
@@ -547,10 +576,10 @@ public class DB4OInteface extends Conector {
 
         //Cerramos la conexion
         db.close();
-        
+
         if (ti != null) {
-            ti.setConector("db4o");            
-        }  
+            ti.setConector("db4o");
+        }
 
         return ti;
     }
@@ -579,10 +608,10 @@ public class DB4OInteface extends Conector {
             TipoIncidencia ti = (TipoIncidencia) result.next();
 
             if (ti != null) {
-                ti.setConector("db4o");            
+                ti.setConector("db4o");
                 //Añadimos el tipo incidencia al arraylist
                 tiList.add(ti);
-            }            
+            }
         }
 
         //Cerramos la conexion
@@ -601,7 +630,7 @@ public class DB4OInteface extends Conector {
 
         //cerramos la conexion
         db.close();
-        
+
         //Indicamos el conector con el que se ha insertado
         ti.setConector("db4o");
     }
@@ -624,7 +653,7 @@ public class DB4OInteface extends Conector {
             ti.setDescripcion(data.getDescripcion() != null ? data.getDescripcion() : ti.getDescripcion());
 
             db.store(ti);
-            
+
             //Indicamos el conector con el que se ha actualizado
             ti.setConector("db4o");
         }
@@ -668,9 +697,9 @@ public class DB4OInteface extends Conector {
 
         //Cerramos la conexion
         db.close();
-        
+
         if (te != null) {
-            te.setConector("db4o");            
+            te.setConector("db4o");
         }
 
         return te;
@@ -699,10 +728,10 @@ public class DB4OInteface extends Conector {
             //Obtenemos el tipo de entrenamiento
             TipoEntrenamiento te = (TipoEntrenamiento) result.next();
             if (te != null) {
-                te.setConector("db4o");            
+                te.setConector("db4o");
                 //Añadimos el tipo de entrenamiento al arraylist
                 teList.add(te);
-            }            
+            }
         }
 
         //Cerramos la conexion
@@ -721,7 +750,7 @@ public class DB4OInteface extends Conector {
 
         //cerramos la conexion
         db.close();
-        
+
         //Indicamos el conector con el que se ha insertado
         te.setConector("db4o");
     }
@@ -743,7 +772,7 @@ public class DB4OInteface extends Conector {
             te.setDescripcion(data.getDescripcion() != null ? data.getDescripcion() : te.getDescripcion());
 
             db.store(te);
-            
+
             //Indicamos el conector con el que se ha actualizado
             te.setConector("db4o");
         }
@@ -784,18 +813,14 @@ public class DB4OInteface extends Conector {
             //Añadimos el equipo
             insertEquipo(e);
         }
-        
-        if(e != null && 
-                (e.getJugadores() == null 
-                            || (e.getJugadores() != null 
-                                    && e.getJugadores().size()<=0))
-                ){           
+
+        if (e != null && (e.getJugadores() == null || (e.getJugadores() != null && e.getJugadores().size() <= 0))) {
             Jugador jugador = new Jugador(1, "Jon", "López", "Garrido", 1.70f, 74.0f, "central", "es un jugador de la ostia");
-            DB4OInteface.insertJugador(jugador);                
+            DB4OInteface.insertJugador(jugador);
             Jugador jugador_2 = new Jugador(2, "Mikel", "Ereño", "Ereño", 1.70f, 72.0f, "campista", "es un jugador de la ostia 2");
-            DB4OInteface.insertJugador(jugador_2);                
+            DB4OInteface.insertJugador(jugador_2);
             Jugador jugador_3 = new Jugador(3, "Iñaki", "Iñaki", "Iñaki", 1.70f, 68.0f, "delantero", "es un jugador de la ostia 3");
-            DB4OInteface.insertJugador(jugador_3);                
+            DB4OInteface.insertJugador(jugador_3);
         }
 
         //Obtenemos los tipos de entrenamiento
@@ -836,7 +861,7 @@ public class DB4OInteface extends Conector {
         }
         //Si el equipo no existe es porque no exitía el aricho .yap 
         //y ahora si podremos llenar con los datos el archivo
-        if(e == null){
+        if (e == null) {
             setDBData();
         }
 
