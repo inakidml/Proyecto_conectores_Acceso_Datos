@@ -200,6 +200,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
@@ -271,6 +272,9 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
         jLabel5.setText("Duración (min)");
         jLabel5.setToolTipText("");
 
+        jLabel12.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(232, 10, 10));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -278,23 +282,26 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -313,7 +320,9 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel12))
                 .addContainerGap())
         );
 
@@ -515,19 +524,77 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        boolean ok = false;
+        jLabel12.setText("");
         String fecha = jTextField1.getText();
         String duracion = jTextField2.getText();
-        TipoEntrenamiento tE = new TipoEntrenamiento();
-        String elegido = (String) jComboBox1.getSelectedItem();
-        String[] id = elegido.split("_");
-        tE.setId(Integer.parseInt(id[0]));//conseguimos el id y se lo asignamos al tipo de entrenamiento
+        String[] fechaDiv = fecha.split("-");
+        int ano, mes, dia;
+        ano = 0;
+        mes = 0;
+        dia = 0;
+        if (fechaDiv.length != 3) {
+            jLabel12.setText("Formato de fecha invalido");
+        } else {
+            try {
+                ano = Integer.parseInt(fechaDiv[0]);
+                mes = Integer.parseInt(fechaDiv[1]);
+                dia = Integer.parseInt(fechaDiv[2]);
+            } catch (NumberFormatException ex) {
+                jLabel12.setText("Formato de fecha invalido");
+            }
+            if (mes < 1 || mes > 12) {
+                jLabel12.setText("Formato de fecha invalido");
+            } else if (dia < 1 || dia > 31) {
+                jLabel12.setText("Formato de fecha invalido");
+            } else if (ano < 1950 || ano > 2050) {
+                jLabel12.setText("Formato de fecha invalido");
+            } else {
+                String[] durDiv = duracion.split(":");
+                int horas, min, seg;
 
-        tE = tiposEntrenamientos.get(tiposEntrenamientos.indexOf(tE)); //conseguimos el objeto
+                horas = 0;
+                min = 0;
+                seg = 0;
+                if (durDiv.length != 3) {
+                    jLabel12.setText("Formato de duración invalido");
+                } else {
+                    try {
+                        horas = Integer.parseInt(durDiv[0]);
+                        min = Integer.parseInt(durDiv[1]);
+                        seg = Integer.parseInt(durDiv[2]);
+                    } catch (NumberFormatException ex) {
+                        jLabel12.setText("Formato de duración invalido");
+                    }
+                    if (horas < 0 || horas > 12) {
+                        jLabel12.setText("Formato de duración invalido");
+                    } else if (min < 0 || min > 59) {
+                        jLabel12.setText("Formato de duración invalido");
+                    } else if (seg < 00 || seg > 59) {
+                        jLabel12.setText("Formato de duración invalido");
+                    } else {
+                        ok = true;
+                    }
+                }
+            }
 
-        Entrenamiento e = new Entrenamiento(j, tE, fecha, duracion);
-        e.setConector(j.getConector());
-        e.save();
-        refrescarJTable();
+            if (ok) {
+                TipoEntrenamiento tE = new TipoEntrenamiento();
+                String elegido = (String) jComboBox1.getSelectedItem();
+                String[] id = elegido.split("_");
+                tE.setId(Integer.parseInt(id[0]));//conseguimos el id y se lo asignamos al tipo de entrenamiento
+
+                tE = tiposEntrenamientos.get(tiposEntrenamientos.indexOf(tE)); //conseguimos el objeto
+
+                Entrenamiento e = new Entrenamiento(j, tE, fecha, duracion);
+                e.setConector(j.getConector());
+                e.save();
+                refrescarJTable();
+                jLabel12.setText("");
+                jTextField1.setText("");
+                jTextField2.setText("");
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -594,6 +661,7 @@ public class VistaEntrenamientos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
