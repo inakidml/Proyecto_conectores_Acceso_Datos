@@ -8,6 +8,7 @@ package baloncesto.modelo;
 import baloncesto.modelo.Conector.DB4OInteface;
 import baloncesto.modelo.Conector.SQLInterface;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +30,7 @@ public class Entrenamiento {
 
     public Entrenamiento() {
     }
-
+    
     public Entrenamiento(Jugador jugador, TipoEntrenamiento tipoEntrenamiento, String fecha, String duracion) {
         this.jugador = jugador;
         this.tipoEntrenamiento = tipoEntrenamiento;
@@ -42,6 +43,39 @@ public class Entrenamiento {
         this.duracion = duracion;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.jugador);
+        hash = 53 * hash + Objects.hashCode(this.tipoEntrenamiento);
+        hash = 53 * hash + Objects.hashCode(this.fecha);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Entrenamiento other = (Entrenamiento) obj;
+        if (!Objects.equals(this.fecha, other.fecha)) {
+            return false;
+        }
+        if (!Objects.equals(this.jugador, other.jugador)) {
+            return false;
+        }
+        if (!Objects.equals(this.tipoEntrenamiento, other.tipoEntrenamiento)) {
+            return false;
+        }
+        return true;
+    }
+    
     public Jugador getJugador() {
         return jugador;
     }
@@ -108,5 +142,21 @@ public class Entrenamiento {
         }
 
         return result;
+    }
+    
+    public void delete() {
+
+            switch (this.conector) {
+                case db4oConector:
+                    DB4OInteface.deleteEntrenamiento(this);
+                    break;
+                case mysqlConector:
+//                    SQLInterface.deleteEntrenamiento(this);
+                    break;
+                case sqlServerConector:
+//                    SQLInterface.deleteEntrenamiento(this);
+                    break;
+            }
+
     }
 }

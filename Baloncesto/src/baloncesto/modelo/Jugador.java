@@ -73,6 +73,31 @@ public class Jugador {
         return "Jugador{" + "id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", apellido2=" + apellido2 + ", altura=" + altura + ", peso=" + peso + ", posicion=" + posicion + ", descripcion=" + descripcion + ", equipo=" + equipo + ", entrenamientos=" + entrenamientos + ", incidencias=" + incidencias + '}';
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Jugador other = (Jugador) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * @return the id
      */
