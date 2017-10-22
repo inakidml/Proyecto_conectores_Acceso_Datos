@@ -5,6 +5,8 @@
  */
 package baloncesto.modelo;
 
+import baloncesto.modelo.Conector.DB4OInteface;
+
 /**
  *
  * @author 9fdam02
@@ -15,7 +17,7 @@ public class TipoEntrenamiento {
     private static final String sqlServerConector = "sqlServer";
     private static final String db4oConector = "db4o";
     private String conector;
-    
+
     private int id;
     private String tipo;
     private String descripcion;
@@ -107,6 +109,20 @@ public class TipoEntrenamiento {
 
     public void setConector(String conector) {
         this.conector = conector;
+    }
+
+    public void save() {
+        switch (this.conector) {
+            case db4oConector:
+                DB4OInteface.insertTipoEntrenamiento(this);
+                break;
+            case mysqlConector:
+//                    SQLInterface.insertTipoEntrenamiento(this);
+                break;
+            case sqlServerConector:
+//                    SQLInterface.insertTipoEntrenamiento(this);
+                break;
+        }
     }
 
 }
