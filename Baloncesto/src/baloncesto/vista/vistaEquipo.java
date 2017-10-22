@@ -8,6 +8,7 @@ package baloncesto.vista;
 import baloncesto.modelo.Conector.DB4OInteface;
 import baloncesto.modelo.Equipo;
 import baloncesto.modelo.Jugador;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
@@ -23,12 +24,19 @@ public class vistaEquipo extends javax.swing.JFrame {
      * Creates new form vistaEquipo
      */
     private Equipo equipo;
+    private Jugador jugador;
+    private int select_id;
     
     public vistaEquipo() {
         initComponents();
         // this.setExtendedState(MAXIMIZED_BOTH);
     }
-    
+
+    public int getSelect_id() {
+        this.select_id = (Integer) Integer.parseInt(jComboBox1.getSelectedItem().toString().split("_")[0]);
+        return select_id;
+    }
+        
     private vistaPrincipal vP;
     
      public vistaEquipo(vistaPrincipal vP, Equipo equipo) {
@@ -38,7 +46,8 @@ public class vistaEquipo extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         descripciónEquipo();
         llenarComboJugadores();
-        detalleJugador(findJugadorSelecionado());
+        this.jugador = findJugadorSelecionado();
+        detalleJugador();
     }
      
      private void descripciónEquipo(){
@@ -46,19 +55,23 @@ public class vistaEquipo extends javax.swing.JFrame {
      }
      
      private void llenarComboJugadores(){
-        jComboBox1.removeAllItems();
-        if(equipo.getJugadores() != null && equipo.getJugadores().size() > 0){
-            for (Jugador curJ : equipo.getJugadores()){
-                jComboBox1.addItem(curJ.getId() + "_" + curJ.getNombre());                
+        jComboBox1.removeAllItems();        
+        if(equipo.getJugadores() != null && equipo.getJugadores().size() > 0){            
+            for (Jugador curJ : equipo.getJugadores()){            
+                jComboBox1.addItem(curJ.getId() + "_" + curJ.getNombre());                            
             }     
         }else{
-                jComboBox1.addItem("Sin jugadores");
+            jComboBox1.addItem("No existen jugadores");            
         } 
+        
+        jComboBox1.addItem("0_Nuevo jugador");            
+        
      }
      
-     private void detalleJugador(Jugador jug){
-         detalleReadJugador(jug);
-         detalleWritteJugador(jug);
+     private void detalleJugador(){
+         //Si es nuevo enviar un jugador new()
+         detalleReadJugador(this.jugador);
+         detalleWritteJugador(this.jugador);
      }
      
      private void detalleReadJugador(Jugador jug){
@@ -86,19 +99,46 @@ public class vistaEquipo extends javax.swing.JFrame {
      }
      
      private Jugador findJugadorSelecionado(){         
-         Jugador jugador = null;        
-         if(equipo.getJugadores() != null && equipo.getJugadores().size() > 0){
-            for (Jugador curJ : equipo.getJugadores()){                
-                Integer select_id = (Integer) Integer.parseInt(jComboBox1.getSelectedItem().toString().split("_")[0]);                
-                if(curJ.getId() == select_id){
-                   // System.out.println(select_id + " -> " + curJ.getNombre());                
-                    jugador = curJ;
-                    break;
-                }                
-            }     
-        }         
+         Jugador jugador = null;                 
+         if(getSelect_id() != 0){
+            if(equipo.getJugadores() != null && equipo.getJugadores().size() > 0){
+               for (Jugador curJ : equipo.getJugadores()){                
+                   if(curJ.getId() == getSelect_id()){
+                      // System.out.println(getSelect_id() + " -> " + curJ.getNombre());                
+                       jugador = curJ;
+                       break;
+                   }                
+               }     
+           }    
+         }else{
+             jugador = new Jugador();
+             //Cogemos el Id del ultimo jugador y lo incrementamos
+             jugador.setId(equipo.getJugadores().get(equipo.getJugadores().size() -1).getId() + 1);
+             jugador.setConector(this.equipo.getConector());
+             //System.out.println("Id ultimo jugador -> " + equipo.getJugadores().get(equipo.getJugadores().size() -1).getId());
+             //System.out.println("Id juhador nuevo -> " + jugador.getId());
+         }
+                  
          return jugador;         
      }
+     
+     /**
+     * Modificar los datos del objeto jugador con los nuevos
+    */
+    private Jugador modificarJugador(){
+        Jugador jug = findJugadorSelecionado();
+         if(jug != null){
+            jug.setNombre(jTFieldNombre.getText());
+            jug.setApellido(jTFieldApellido1.getText());
+            jug.setApellido2(jTFieldApellido2.getText());
+            jug.setPeso(Float.parseFloat(jTFieldPeso.getText()));
+            jug.setAltura(Float.parseFloat(jTFieldAltura.getText()));            
+            jug.setPosicion(jTFieldPosicion.getText());
+            jug.setDescripcion(jTAreaDescripcion.getText());
+         }  
+        
+        return jug;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -191,8 +231,18 @@ public class vistaEquipo extends javax.swing.JFrame {
         });
 
         jButton3.setText("+");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         jButton5.setText("-");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -238,7 +288,7 @@ public class vistaEquipo extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelPosicionRead, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -285,7 +335,7 @@ public class vistaEquipo extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
                 .addComponent(labelApellido2Read, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jLabel8.setText("DESCRIPCIÓN");
@@ -296,31 +346,32 @@ public class vistaEquipo extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(labelDescripcionRead, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(21, 21, 21))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 3, Short.MAX_VALUE)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelDescripcionRead, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelDescripcionRead, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Detalle", jPanel1);
@@ -430,7 +481,7 @@ public class vistaEquipo extends javax.swing.JFrame {
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
-        jLabel16.setText("Descripción");
+        jLabel16.setText("DESCRIPCIÓN");
 
         jTAreaDescripcion.setColumns(20);
         jTAreaDescripcion.setRows(5);
@@ -443,14 +494,14 @@ public class vistaEquipo extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(13, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel16)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                             .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -487,21 +538,21 @@ public class vistaEquipo extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(18, 18, 18)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton3)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2)
-                        .addGap(49, 49, 49))))
+                        .addGap(49, 49, 49))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -510,9 +561,10 @@ public class vistaEquipo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4))
-                .addGap(29, 29, 29)
+                .addGap(9, 9, 9)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
@@ -526,11 +578,17 @@ public class vistaEquipo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Botón para ir a la ventana  anterior    
+    */
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
         vP.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton4MouseClicked
 
+    /**
+     * Botón para ir a la ventana de incidencias del jugador    
+    */
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         Jugador jugador = findJugadorSelecionado();
         if(jugador != null){
@@ -540,6 +598,9 @@ public class vistaEquipo extends javax.swing.JFrame {
         }        
     }//GEN-LAST:event_jButton1MouseClicked
 
+    /**
+     * Botón para ir a la ventana de entrenamientos del jugador
+    */
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         Jugador jugador = findJugadorSelecionado();
         if(jugador != null){
@@ -549,42 +610,129 @@ public class vistaEquipo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2MouseClicked
 
+    /**
+     * Evento change del combo de jugadores para rellenar los formularios
+     * de datos del jugador
+    */
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-        // TODO add your handling code here:
-        
-        if(jComboBox1 != null && jComboBox1.getItemCount() > 0)
-            detalleJugador(findJugadorSelecionado());
+        // TODO add your handling code here:        
+        if(jComboBox1 != null && jComboBox1.getItemCount() > 0){                             
+           // System.out.println("Id_select -> " + this.getSelect_id());
+            if(this.getSelect_id() != 0){    
+                jTabbedPane2.setSelectedIndex(0);   
+                this.jugador = findJugadorSelecionado();                             
+            }else{                
+                jTabbedPane2.setSelectedIndex(1);                
+            }
+            this.jugador = findJugadorSelecionado();
+            detalleJugador();
+        }          
         
         //System.out.print("Cambiando item");
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
+    /**
+     * Botón para modificar los datos de un jugador   
+     * o para insertar un nuevo jugador
+    */
     private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
         // TODO add your handling code here:
         
-        Jugador jMod = modificarJugador();
-        if(jMod != null){
-            if(DB4OInteface.updateJugador(new Jugador(), jMod)){
-                detalleReadJugador(jMod);
-                llenarComboJugadores();
-            }
-        }
-        
+        String mensaje = "";        
+        if(getSelect_id() != 0){
+            mensaje += "¿Estas seguro de modificar los datos del jugador " + this.jugador.getNombre() + "?";
+        }else{
+            mensaje += "Vas a insertar un nuevo jugador ¿Estas seguro?";
+        }        
+        Integer confirm = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de modificar los datos del jugador " + this.jugador.getNombre() + "?");
+        //System.out.println("Estado CONFIRM = " + confirm);            
+        switch(confirm){
+            case 0:
+                //System.out.println("SI modificar");
+                Jugador jMod = modificarJugador();
+                if(jMod != null){
+                    if(getSelect_id() != 0){
+                        if(jMod.update()){
+                            detalleReadJugador(jMod);
+                            int select_id_aux = getSelect_id();
+                            llenarComboJugadores();
+                            //System.out.println("Id aux -> " + select_id_aux);
+                            jComboBox1.setSelectedIndex(select_id_aux -1);
+                        }    
+                    }else{
+                        if(jMod.save()){
+                            equipo.getJugadores().add(jMod);
+                            detalleReadJugador(jMod);
+                            llenarComboJugadores();
+                        }
+                    }
+                }
+                break;
+            case 1:
+                //System.out.println("NO modificar");
+                break;
+            case 2:
+                //System.out.println("ABORTEN modificar");
+                detalleWritteJugador(this.jugador);
+                break;
+        }             
     }//GEN-LAST:event_jButton6MouseClicked
 
-    private Jugador modificarJugador(){
-        Jugador jug = findJugadorSelecionado();
-         if(jug != null){
-            jug.setNombre(jTFieldNombre.getText());
-            jug.setApellido(jTFieldApellido1.getText());
-            jug.setApellido2(jTFieldApellido2.getText());
-            jug.setPeso(Float.parseFloat(jTFieldPeso.getText()));
-            jug.setAltura(Float.parseFloat(jTFieldAltura.getText()));            
-            jug.setPosicion(jTFieldPosicion.getText());
-            jug.setDescripcion(jTAreaDescripcion.getText());
-         }  
+    /**
+     * Botón para insertar un nuevo jugador   
+    */
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        // TODO add your handling code here:
         
-        return jug;
-    }
+        //System.out.println("Vamos a insertar un nuevo jugador");
+        
+        Integer confirm = JOptionPane.showConfirmDialog(rootPane, "¿Deseas añadir un nuevo jugador al equipo?");
+        
+        //System.out.println("Estado CONFIRM = " + confirm);
+        
+        switch(confirm){
+            case 0:
+                //System.out.println("SI añadir");
+                jComboBox1.setSelectedIndex(jComboBox1.getItemCount() -1); 
+                break;
+            case 1:
+                //System.out.println("NO añadir");
+                break;
+            case 2:
+                //System.out.println("ABORTEN añadir");
+                break;
+        }
+    }//GEN-LAST:event_jButton3MouseClicked
+
+    /**
+     * Botón para eliminar un jugador     
+    */
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        // TODO add your handling code here:
+        //System.out.println("Vamos a eliminar el jugador seleccionado -> " + this.jugador.getNombre());
+        
+        Integer confirm = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar al jugador " + this.jugador.getNombre() + "?");
+        
+        //System.out.println("Estado CONFIRM = " + confirm);
+        
+        switch(confirm){
+            case 0:
+                //System.out.println("SI eliminar");
+                if(findJugadorSelecionado().delete()){
+                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado correctamente");
+                     jComboBox1.setSelectedIndex(0); 
+                }
+                
+                break;
+            case 1:
+                //System.out.println("NO eliminar");
+                break;
+            case 2:
+                //System.out.println("ABORTEN eliminar");
+                break;
+        }
+    }//GEN-LAST:event_jButton5MouseClicked
+
     /**
      * @param args the command line arguments
      */
