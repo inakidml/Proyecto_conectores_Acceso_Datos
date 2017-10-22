@@ -187,8 +187,8 @@ public class SQLInterface extends Conector {
 
     public static boolean insertJugador(Jugador obj, String conector) throws SQLException {
         Connection conn = null;
-        Boolean result = false;
-
+        boolean result = false;
+        
         try {
             //Establecemos conexion
             conn = getConnection(conector);
@@ -233,8 +233,8 @@ public class SQLInterface extends Conector {
         return result;
     }
     
-    public static Boolean updateJugador(Jugador obj, String conector) throws SQLException{
-        Boolean result = false;
+    public static boolean updateJugador(Jugador obj, String conector) throws SQLException{
+        boolean result = false;
         Connection conn = null;
         
         try {
@@ -265,6 +265,46 @@ public class SQLInterface extends Conector {
             }
             
             //Cerramos conexion
+            conn.close();
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        
+        //Devolvemos el resultado
+        return result;
+    }
+    
+    public static boolean deleteJugador(int id, String conector) throws SQLException{
+        boolean result = false;
+        Connection conn = null;
+        
+        try {
+            //Establecemos conexion
+            conn = getConnection(conector);
+            
+            //Query
+            String query = "DELETE FROM JUGADOR WHERE idJUGADOR = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            //Indicamos el id del jugador
+            ps.setInt(1, id);
+            
+            //Ejecutar la delete
+            int action = ps.executeUpdate();
+            
+            //Comprobamos si ha funcionado
+            if(action > 0){
+                result = true;
+            }
+            
+            //Cerramos la conexion
             conn.close();
             
         } catch (ClassNotFoundException ex) {
@@ -410,8 +450,8 @@ public class SQLInterface extends Conector {
         return list;
     }
 
-    public static Boolean insertEntrenamiento(Entrenamiento obj, String conector) throws SQLException {
-        Boolean result = false;
+    public static boolean insertEntrenamiento(Entrenamiento obj, String conector) throws SQLException {
+        boolean result = false;
         Connection conn = null;
         try {
             //Establecemos la conexion
@@ -487,6 +527,37 @@ public class SQLInterface extends Conector {
         }
 
         //Devolvemos el resultado
+        return result;
+    }
+    
+    public static boolean deleteEntrenamiento(int idJugador, int idTipoEntrenamiento,String fecha,  String conector) throws SQLException{
+        boolean result = false;
+        Connection conn = null;
+        
+        try {
+            //Establecemos la conexion
+            conn = getConnection(conector);
+            
+            //Query
+            String query = "DELETE FROM JUGADOR_has_ENTRENAMIENTO WHERE JUGADOR_idJUGADOR = ? AND ENTRENAMIENTO_idENTRENAMIENTO = ? AND Fecha = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            //Indicamos los ids
+            ps.setInt(1, idJugador);
+            ps.setInt(2, idTipoEntrenamiento);
+            
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        
+        //Devolvemos el resultados
         return result;
     }
 

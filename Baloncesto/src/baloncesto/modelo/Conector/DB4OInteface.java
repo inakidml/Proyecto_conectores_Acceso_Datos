@@ -191,8 +191,8 @@ public class DB4OInteface extends Conector {
         return jList;
     }
 
-    public static Boolean insertJugador(Jugador j) {
-        Boolean result = false;
+    public static boolean insertJugador(Jugador j) {
+        boolean result = false;
         
         //Abrimos la conexion
         ObjectContainer db = getDb_4o();

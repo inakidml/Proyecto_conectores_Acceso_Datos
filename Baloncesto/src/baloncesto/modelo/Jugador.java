@@ -249,7 +249,7 @@ public class Jugador {
     }
 
     public boolean save() {
-        Boolean result = false;
+        boolean result = false;
 
         try {
             switch (this.conector) {
@@ -272,7 +272,7 @@ public class Jugador {
     }
 
     public boolean update() {
-        Boolean result = false;
+        boolean result = false;
 
         try {
             switch (this.conector) {
