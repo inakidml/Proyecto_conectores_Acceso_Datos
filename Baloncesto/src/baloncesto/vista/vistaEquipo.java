@@ -720,9 +720,15 @@ public class vistaEquipo extends javax.swing.JFrame {
         switch(confirm){
             case 0:
                 //System.out.println("SI eliminar");
-                if(findJugadorSelecionado().delete()){
-                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado correctamente");
-                     jComboBox1.setSelectedIndex(0); 
+                Jugador jug_del = findJugadorSelecionado();
+                if(jug_del.delete()){
+                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado correctamente");                    
+                    for (int i = 0; i < 10; i++) {
+                        if(jug_del.getId() == equipo.getJugadores().get(i).getId())
+                            equipo.getJugadores().remove(i);
+                    }
+                    llenarComboJugadores();
+                    jComboBox1.setSelectedIndex(0); 
                 }
                 
                 break;
