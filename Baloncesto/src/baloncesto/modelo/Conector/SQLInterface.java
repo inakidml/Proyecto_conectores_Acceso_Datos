@@ -232,6 +232,54 @@ public class SQLInterface extends Conector {
         //Devolvemos el resultado
         return result;
     }
+    
+    public static Boolean updateJugador(Jugador obj, String conector) throws SQLException{
+        Boolean result = false;
+        Connection conn = null;
+        
+        try {
+            //Establecemos la conexion
+            conn = getConnection(conector);
+            
+            //Query
+            String query = "UPDATE JUGADOR SET Nombre = ?, Apellido1 = ?, Apellido2 = ?, Altura = ?, Peso = ?, Posicion = ?, Descripcion = ?, EQUIPO_idEquipo = ? WHERE idJUGADOR = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            //Indicamos los datos
+            ps.setString(1, obj.getNombre());
+            ps.setString(2, obj.getApellido());
+            ps.setString(3, obj.getApellido2());
+            ps.setFloat(4, obj.getAltura());
+            ps.setFloat(5, obj.getPeso());
+            ps.setString(6, obj.getPosicion());
+            ps.setString(7, obj.getDescripcion());
+            ps.setInt(8, obj.getEquipo().getId());
+            ps.setInt(9, obj.getId());
+            
+            //Ejecutamos la update
+            int action = ps.executeUpdate();
+            
+            //Comprobamos si funcionado correctamente
+            if(action > 0){
+                result = true;
+            }
+            
+            //Cerramos conexion
+            conn.close();
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        
+        //Devolvemos el resultado
+        return result;
+    }
 
     public static Entrenamiento getEntrenamientoById(int idJugador, int idTipoEntrenamiento, String fecha, String conector) throws SQLException {
         //Objeto entrenamiento  
