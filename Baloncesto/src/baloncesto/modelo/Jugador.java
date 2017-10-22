@@ -275,7 +275,7 @@ public class Jugador {
 
     public boolean save() {
         Boolean result = false;
-        
+
         try {
             switch (this.conector) {
                 case db4oConector:
@@ -292,7 +292,34 @@ public class Jugador {
         } catch (SQLException ex) {
             Logger.getLogger(Jugador.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+        return result;
+    }
+
+    public boolean update() {
+        Boolean result = false;
+
+        try {
+            switch (this.conector) {
+                case db4oConector:
+                    //Jugador por id
+                    Jugador query = new Jugador();
+                    query.setId(this.id);
+                    
+                    result = DB4OInteface.updateJugador(query, this);
+                    break;
+                case mysqlConector:
+                    result = SQLInterface.updateJugador(this, conector);
+                    break;
+                case sqlServerConector:
+                    result = SQLInterface.updateJugador(this, conector);
+                    break;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Jugador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return result;
     }
 
