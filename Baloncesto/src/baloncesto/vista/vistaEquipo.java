@@ -69,7 +69,7 @@ public class vistaEquipo extends javax.swing.JFrame {
         jComboBox1.removeAllItems();
         if (equipo.getJugadores() != null && equipo.getJugadores().size() > 0) {
             for (Jugador curJ : equipo.getJugadores()) {
-                jComboBox1.addItem(curJ.getId() + "_" + curJ.getNombre());
+                jComboBox1.addItem(curJ.getId() + "_" + curJ.getNombre() + " " + curJ.getApellido());
             }
         } else {
             jComboBox1.addItem("No existen jugadores");
@@ -122,20 +122,20 @@ public class vistaEquipo extends javax.swing.JFrame {
                 }
             }
         } else {
-            if(equipo.getJugadores().size()>0){
-            jugador = new Jugador();
-            //Cogemos el Id del ultimo jugador y lo incrementamos
-            jugador.setId(equipo.getJugadores().get(equipo.getJugadores().size() - 1).getId() + 1);
-            jugador.setConector(this.equipo.getConector());
-            jugador.setEquipo(equipo);
-            //System.out.println("Id ultimo jugador -> " + equipo.getJugadores().get(equipo.getJugadores().size() -1).getId());
-            //System.out.println("Id juhador nuevo -> " + jugador.getId());
-            }else{
+            if (equipo.getJugadores().size() > 0) {
                 jugador = new Jugador();
-            //Cogemos el Id del ultimo jugador y lo incrementamos
-            jugador.setId(1);
-            jugador.setConector(this.equipo.getConector());
-            jugador.setEquipo(equipo);
+                //Cogemos el Id del ultimo jugador y lo incrementamos
+                jugador.setId(equipo.getJugadores().get(equipo.getJugadores().size() - 1).getId() + 1);
+                jugador.setConector(this.equipo.getConector());
+                jugador.setEquipo(equipo);
+                //System.out.println("Id ultimo jugador -> " + equipo.getJugadores().get(equipo.getJugadores().size() -1).getId());
+                //System.out.println("Id juhador nuevo -> " + jugador.getId());
+            } else {
+                jugador = new Jugador();
+                //Cogemos el Id del ultimo jugador y lo incrementamos
+                jugador.setId(1);
+                jugador.setConector(this.equipo.getConector());
+                jugador.setEquipo(equipo);
             }
         }
 
@@ -216,6 +216,7 @@ public class vistaEquipo extends javax.swing.JFrame {
         jTAreaDescripcion = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Titulo Equipo");
@@ -611,10 +612,12 @@ public class vistaEquipo extends javax.swing.JFrame {
      */
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         Jugador jugador = findJugadorSelecionado();
-        if (jugador != null) {
+        if (jugador != null && jugador.getNombre() != null) {
             VistaIncidencias vIn = new VistaIncidencias(jugador, this);
             this.setVisible(false);
             vIn.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "El jugador todavía no existe");
         }
     }//GEN-LAST:event_jButton1MouseClicked
 
@@ -623,10 +626,12 @@ public class vistaEquipo extends javax.swing.JFrame {
      */
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         Jugador jugador = findJugadorSelecionado();
-        if (jugador != null) {
+        if (jugador != null && jugador.getNombre() != null) {
             VistaEntrenamientos vIn = new VistaEntrenamientos(jugador, this);
             this.setVisible(false);
             vIn.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "El jugador todavía no existe");
         }
     }//GEN-LAST:event_jButton2MouseClicked
 
@@ -728,29 +733,34 @@ public class vistaEquipo extends javax.swing.JFrame {
     private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
         // TODO add your handling code here:
         //System.out.println("Vamos a eliminar el jugador seleccionado -> " + this.jugador.getNombre());
+        Jugador jug_del = findJugadorSelecionado();
+        if (jug_del != null && jug_del.getNombre() != null) {
+            Integer confirm = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar al jugador " + jug_del.getNombre() + "?");
 
-        Integer confirm = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar al jugador " + this.jugador.getNombre() + "?");
+            //System.out.println("Estado CONFIRM = " + confirm);
+            switch (confirm) {
+                case 0:
+                    //System.out.println("SI eliminar");
 
-        //System.out.println("Estado CONFIRM = " + confirm);
-        switch (confirm) {
-            case 0:
-                //System.out.println("SI eliminar");
-                Jugador jug_del = findJugadorSelecionado();
-                if (jug_del.delete()) {
-                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado correctamente");
+                    if (jug_del.delete()) {
+                        JOptionPane.showMessageDialog(rootPane, "Se ha eliminado correctamente");
 
-                    llenarComboJugadores();
-                    jComboBox1.setSelectedIndex(0);
-                }
+                        llenarComboJugadores();
+                        jComboBox1.setSelectedIndex(0);
+                    }
 
-                break;
-            case 1:
-                //System.out.println("NO eliminar");
-                break;
-            case 2:
-                //System.out.println("ABORTEN eliminar");
-                break;
+                    break;
+                case 1:
+                    //System.out.println("NO eliminar");
+                    break;
+                case 2:
+                    //System.out.println("ABORTEN eliminar");
+                    break;
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "El jugador todavía no existe");
         }
+
     }//GEN-LAST:event_jButton5MouseClicked
 
     /**
