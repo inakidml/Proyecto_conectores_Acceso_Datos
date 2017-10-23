@@ -263,23 +263,24 @@ public class DB4OInteface extends Conector {
 
         //Obtenemos el resultado
         ObjectSet result = db.queryByExample(query);
-
+        Jugador j = null;
         //Recorremos el resultado
         while (result.hasNext()) {
             //Obtenemos el jugador
-            Jugador j = (Jugador) result.next();
+            j = (Jugador) result.next();
 
             //Borramos el jugador
             db.delete(j);
 
-            //Comprobamos si se ha borrado
-            if (getJugador(j) == null) {
-                bResult = true;
-            }
         }
 
         //Cerramos la bd
         db.close();
+
+        //Comprobamos si se ha borrado
+        if (getJugador(j) == null) {
+            bResult = true;
+        }
 
         return bResult;
     }
@@ -394,7 +395,7 @@ public class DB4OInteface extends Conector {
 
     public static boolean deleteIncidencia(Incidencia query) {
         boolean bResult = false;
-        
+
         //Abrimos los conexion
         ObjectContainer db = getDb_4o();
 
@@ -408,16 +409,16 @@ public class DB4OInteface extends Conector {
 
             //Borramos la incidencia
             db.delete(i);
-            
+
             //Comprobamos si ha borrado
-            if(getIncidencia(i) == null){
+            if (getIncidencia(i) == null) {
                 bResult = true;
             }
         }
 
         //Cerramos la bd
         db.close();
-        
+
         //Devolvemos el resultado
         return bResult;
     }
@@ -533,7 +534,7 @@ public class DB4OInteface extends Conector {
 
     public static boolean deleteEntrenamiento(Entrenamiento query) {
         boolean bResult = false;
-        
+
         //Abrimos los conexion
         ObjectContainer db = getDb_4o();
 
@@ -547,16 +548,16 @@ public class DB4OInteface extends Conector {
 
             //Borramos el entrenamiento
             db.delete(e);
-            
+
             //Comprobamos si sea borrado
-            if(getEntrenamiento(e) == null){
+            if (getEntrenamiento(e) == null) {
                 bResult = true;
             }
         }
 
         //Cerramos la bd
         db.close();
-        
+
         //Devolvemos el resultado
         return bResult;
     }
