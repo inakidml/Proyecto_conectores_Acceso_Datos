@@ -21,6 +21,8 @@ import java.util.ArrayList;
  */
 public class DB4OInteface extends Conector {
 
+    private static final String db4oConector = "db4o";
+
     /**
      * Obtener el equipo
      *
@@ -169,7 +171,7 @@ public class DB4OInteface extends Conector {
             //Cerramos la conexion
             db.close();
 
-            return null;
+            return jList;
         }
 
         //Recorremos el resultado
@@ -323,7 +325,7 @@ public class DB4OInteface extends Conector {
             //Cerramos la conexion
             db.close();
 
-            return null;
+            return iList;
         }
 
         //Recorremos el resultado
@@ -461,7 +463,7 @@ public class DB4OInteface extends Conector {
             //Cerramos la conexion
             db.close();
 
-            return null;
+            return eList;
         }
 
         //Recorremos el resultado
@@ -600,7 +602,7 @@ public class DB4OInteface extends Conector {
             //Cerramos la conexion
             db.close();
 
-            return null;
+            return tiList;
         }
 
         //Recorremos el resultado
@@ -721,7 +723,7 @@ public class DB4OInteface extends Conector {
             //Cerramos la conexion
             db.close();
 
-            return null;
+            return teList;
         }
 
         //Recorremos el resultado
@@ -810,18 +812,31 @@ public class DB4OInteface extends Conector {
         if (e == null) {
             //Creamos el equipo
             e = new Equipo(1, "Gran Canaria", 1963, "Enrique Moreno", "	Gran Canaria Arena", "Herbalife");
+            e.setConector(db4oConector);
 
             //Añadimos el equipo
             insertEquipo(e);
-            Jugador jugador = new Jugador(1, "Jon", "López", "Garrido", 1.70f, 74.0f, "central", "es un jugador de la ostia");
-            jugador.setEquipo(e);
-            DB4OInteface.insertJugador(jugador);
-            Jugador jugador_2 = new Jugador(2, "Mikel", "Ereño", "Ereño", 1.70f, 72.0f, "campista", "es un jugador de la ostia 2");
-            jugador_2.setEquipo(e);
-            DB4OInteface.insertJugador(jugador_2);
-            Jugador jugador_3 = new Jugador(3, "Iñaki", "Iñaki", "Iñaki", 1.70f, 68.0f, "delantero", "es un jugador de la ostia 3");
-            jugador_3.setEquipo(e);
-            DB4OInteface.insertJugador(jugador_3);
+
+            //Comprobamos si hay juagadores
+            if (e.getJugadores().size() <= 0) {
+                //Añadimos los jugadores
+                Jugador jugador = new Jugador(1, "Albert", "Oliver", "Campos", 1.87f, 84.0f, "Base", "Albert es un Base de la hostia");
+                jugador.setEquipo(e);
+                jugador.setConector(db4oConector);
+                DB4OInteface.insertJugador(jugador);
+
+                //Añadimos los jugadores
+                Jugador jugador_2 = new Jugador(2, "Marcus", "Per", "Eriksson", 2.01f, 94.0f, "Alero", "Eriksson es un Alero de la ostia");
+                jugador_2.setEquipo(e);
+                jugador_2.setConector(db4oConector);
+                DB4OInteface.insertJugador(jugador_2);
+                
+                     //Añadimos los jugadores
+                Jugador jugador_3 = new Jugador(3, "Dennis ", "Jerome", "Seeley", 1.93f, 88.0f, "Escolta", "Dennis es un Escolta de la ostia");
+                jugador_3.setEquipo(e);
+                jugador_3.setConector(db4oConector);
+                DB4OInteface.insertJugador(jugador_3);
+            }
         }
 //
 //        if (e != null && (e.getJugadores() == null || (e.getJugadores() != null && e.getJugadores().size() <= 0))) {
@@ -837,7 +852,7 @@ public class DB4OInteface extends Conector {
         ArrayList<TipoEntrenamiento> arrL_tipoEntre = getTiposEntrenamientos(new TipoEntrenamiento());
 
         //Comprabos si hay tipos de entrenamiento
-        if (arrL_tipoEntre == null) {
+        if (arrL_tipoEntre.size() <= 0) {
             //Creamos los tipos de entrenamiento
             arrL_tipoEntre = new ArrayList<>();
             arrL_tipoEntre.add(new TipoEntrenamiento(1, "Defensivo", "Se practica la defensa"));
@@ -846,6 +861,9 @@ public class DB4OInteface extends Conector {
 
             //Recorremos los tipos de entrenamiento
             for (int i = 0; i < arrL_tipoEntre.size(); i++) {
+                //Añadimos el conetor
+                arrL_tipoEntre.get(i).setConector(db4oConector);
+
                 //Guardamos el tipo de entrenamiento
                 insertTipoEntrenamiento(arrL_tipoEntre.get(i));
             }
@@ -855,7 +873,7 @@ public class DB4OInteface extends Conector {
         ArrayList<TipoIncidencia> arrL_tipoInci = getTiposIncidencias(new TipoIncidencia());
 
         //Comprabos si hay tipos de incidencias
-        if (arrL_tipoInci == null) {
+        if (arrL_tipoInci.size() <= 0) {
             //Creamos los tipos de incidencias
             arrL_tipoInci = new ArrayList<>();
             arrL_tipoInci.add(new TipoIncidencia(1, "Retraso", "1000", "Llegar tarde"));
@@ -864,7 +882,8 @@ public class DB4OInteface extends Conector {
 
             //Recorremos los tipos de incidencias
             for (int i = 0; i < arrL_tipoInci.size(); i++) {
-
+                //Añadimos el conector
+                arrL_tipoInci.get(i).setConector(db4oConector);
                 //Guardamos el tipo de incidencias
                 insertTipoIncidencia(arrL_tipoInci.get(i));
             }
