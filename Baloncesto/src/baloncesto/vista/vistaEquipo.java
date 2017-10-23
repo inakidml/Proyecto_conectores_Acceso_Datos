@@ -27,25 +27,30 @@ public class vistaEquipo extends javax.swing.JFrame {
     private Jugador jugador;
     private int select_id;
     private int select_index;
-    
+
     public vistaEquipo() {
         initComponents();
         // this.setExtendedState(MAXIMIZED_BOTH);
     }
 
     public int getSelect_id() {
-        this.select_id = (Integer) Integer.parseInt(jComboBox1.getSelectedItem().toString().split("_")[0]);
-        return select_id;
+        String[] id = jComboBox1.getSelectedItem().toString().split("_");
+        if (id.length == 2) {
+            this.select_id = Integer.parseInt(jComboBox1.getSelectedItem().toString().split("_")[0]);
+            return select_id;
+        } else {
+            return 0;
+        }
     }
-    
-     public int getSelect_index() {
+
+    public int getSelect_index() {
         this.select_index = (Integer) jComboBox1.getSelectedIndex();
         return select_index;
     }
-        
+
     private vistaPrincipal vP;
-    
-     public vistaEquipo(vistaPrincipal vP, Equipo equipo) {
+
+    public vistaEquipo(vistaPrincipal vP, Equipo equipo) {
         initComponents();
         this.equipo = equipo;
         this.vP = vP;
@@ -55,33 +60,33 @@ public class vistaEquipo extends javax.swing.JFrame {
         this.jugador = findJugadorSelecionado();
         detalleJugador();
     }
-     
-     private void descripciónEquipo(){
-         this.jLabel1.setText(equipo.getNombre());         
-     }
-     
-     private void llenarComboJugadores(){
-        jComboBox1.removeAllItems();        
-        if(equipo.getJugadores() != null && equipo.getJugadores().size() > 0){            
-            for (Jugador curJ : equipo.getJugadores()){            
-                jComboBox1.addItem(curJ.getId() + "_" + curJ.getNombre());                            
-            }     
-        }else{
-            jComboBox1.addItem("No existen jugadores");            
-        } 
-        
-        jComboBox1.addItem("0_Nuevo jugador");            
-        
-     }
-     
-     private void detalleJugador(){
-         //Si es nuevo enviar un jugador new()
-         detalleReadJugador(this.jugador);
-         detalleWritteJugador(this.jugador);
-     }
-     
-     private void detalleReadJugador(Jugador jug){
-         if(jug != null){
+
+    private void descripciónEquipo() {
+        this.jLabel1.setText(equipo.getNombre());
+    }
+
+    private void llenarComboJugadores() {
+        jComboBox1.removeAllItems();
+        if (equipo.getJugadores() != null && equipo.getJugadores().size() > 0) {
+            for (Jugador curJ : equipo.getJugadores()) {
+                jComboBox1.addItem(curJ.getId() + "_" + curJ.getNombre());
+            }
+        } else {
+            jComboBox1.addItem("No existen jugadores");
+        }
+
+        jComboBox1.addItem("0_Nuevo jugador");
+
+    }
+
+    private void detalleJugador() {
+        //Si es nuevo enviar un jugador new()
+        detalleReadJugador(this.jugador);
+        detalleWritteJugador(this.jugador);
+    }
+
+    private void detalleReadJugador(Jugador jug) {
+        if (jug != null) {
             labelNombreRead.setText(jug.getNombre());
             labelApellido1Read.setText(jug.getApellido());
             labelApellido2Read.setText(jug.getApellido2());
@@ -89,11 +94,11 @@ public class vistaEquipo extends javax.swing.JFrame {
             labelAlturaRead.setText(Float.toString(jug.getAltura()));
             labelPosicionRead.setText(jug.getPosicion());
             labelDescripcionRead.setText(jug.getDescripcion());
-         }         
-     }
-     
-     private void detalleWritteJugador(Jugador jug){
-         if(jug != null){
+        }
+    }
+
+    private void detalleWritteJugador(Jugador jug) {
+        if (jug != null) {
             jTFieldNombre.setText(jug.getNombre());
             jTFieldApellido1.setText(jug.getApellido());
             jTFieldApellido2.setText(jug.getApellido2());
@@ -101,49 +106,57 @@ public class vistaEquipo extends javax.swing.JFrame {
             jTFieldAltura.setText(Float.toString(jug.getAltura()));
             jTFieldPosicion.setText(jug.getPosicion());
             jTAreaDescripcion.setText(jug.getDescripcion());
-         }         
-     }
-     
-     private Jugador findJugadorSelecionado(){         
-         Jugador jugador = null;                 
-         if(getSelect_id() != 0){
-            if(equipo.getJugadores() != null && equipo.getJugadores().size() > 0){
-               for (Jugador curJ : equipo.getJugadores()){                
-                   if(curJ.getId() == getSelect_id()){
-                      // System.out.println(getSelect_id() + " -> " + curJ.getNombre());                
-                       jugador = curJ;
-                       break;
-                   }                
-               }     
-           }    
-         }else{
-             jugador = new Jugador();
-             //Cogemos el Id del ultimo jugador y lo incrementamos
-             jugador.setId(equipo.getJugadores().get(equipo.getJugadores().size() -1).getId() + 1);
-             jugador.setConector(this.equipo.getConector());
-             jugador.setEquipo(equipo);
-             //System.out.println("Id ultimo jugador -> " + equipo.getJugadores().get(equipo.getJugadores().size() -1).getId());
-             //System.out.println("Id juhador nuevo -> " + jugador.getId());
-         }
-                  
-         return jugador;         
-     }
-     
-     /**
+        }
+    }
+
+    private Jugador findJugadorSelecionado() {
+        Jugador jugador = null;
+        if (getSelect_id() != 0) {
+            if (equipo.getJugadores() != null && equipo.getJugadores().size() > 0) {
+                for (Jugador curJ : equipo.getJugadores()) {
+                    if (curJ.getId() == getSelect_id()) {
+                        // System.out.println(getSelect_id() + " -> " + curJ.getNombre());                
+                        jugador = curJ;
+                        break;
+                    }
+                }
+            }
+        } else {
+            if(equipo.getJugadores().size()>0){
+            jugador = new Jugador();
+            //Cogemos el Id del ultimo jugador y lo incrementamos
+            jugador.setId(equipo.getJugadores().get(equipo.getJugadores().size() - 1).getId() + 1);
+            jugador.setConector(this.equipo.getConector());
+            jugador.setEquipo(equipo);
+            //System.out.println("Id ultimo jugador -> " + equipo.getJugadores().get(equipo.getJugadores().size() -1).getId());
+            //System.out.println("Id juhador nuevo -> " + jugador.getId());
+            }else{
+                jugador = new Jugador();
+            //Cogemos el Id del ultimo jugador y lo incrementamos
+            jugador.setId(1);
+            jugador.setConector(this.equipo.getConector());
+            jugador.setEquipo(equipo);
+            }
+        }
+
+        return jugador;
+    }
+
+    /**
      * Modificar los datos del objeto jugador con los nuevos
-    */
-    private Jugador modificarJugador(){
+     */
+    private Jugador modificarJugador() {
         Jugador jug = findJugadorSelecionado();
-         if(jug != null){
+        if (jug != null) {
             jug.setNombre(jTFieldNombre.getText());
             jug.setApellido(jTFieldApellido1.getText());
             jug.setApellido2(jTFieldApellido2.getText());
             jug.setPeso(Float.parseFloat(jTFieldPeso.getText()));
-            jug.setAltura(Float.parseFloat(jTFieldAltura.getText()));            
+            jug.setAltura(Float.parseFloat(jTFieldAltura.getText()));
             jug.setPosicion(jTFieldPosicion.getText());
             jug.setDescripcion(jTAreaDescripcion.getText());
-         }  
-        
+        }
+
         return jug;
     }
 
@@ -586,91 +599,91 @@ public class vistaEquipo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Botón para ir a la ventana  anterior    
-    */
+     * Botón para ir a la ventana anterior
+     */
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
         vP.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton4MouseClicked
 
     /**
-     * Botón para ir a la ventana de incidencias del jugador    
-    */
+     * Botón para ir a la ventana de incidencias del jugador
+     */
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         Jugador jugador = findJugadorSelecionado();
-        if(jugador != null){
+        if (jugador != null) {
             VistaIncidencias vIn = new VistaIncidencias(jugador, this);
             this.setVisible(false);
-            vIn.setVisible(true);            
-        }        
+            vIn.setVisible(true);
+        }
     }//GEN-LAST:event_jButton1MouseClicked
 
     /**
      * Botón para ir a la ventana de entrenamientos del jugador
-    */
+     */
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         Jugador jugador = findJugadorSelecionado();
-        if(jugador != null){
+        if (jugador != null) {
             VistaEntrenamientos vIn = new VistaEntrenamientos(jugador, this);
             this.setVisible(false);
-            vIn.setVisible(true);  
+            vIn.setVisible(true);
         }
     }//GEN-LAST:event_jButton2MouseClicked
 
     /**
-     * Evento change del combo de jugadores para rellenar los formularios
-     * de datos del jugador
-    */
+     * Evento change del combo de jugadores para rellenar los formularios de
+     * datos del jugador
+     */
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
         // TODO add your handling code here:        
-        if(jComboBox1 != null && jComboBox1.getItemCount() > 0){                             
-           // System.out.println("Id_select -> " + this.getSelect_id());
-            if(this.getSelect_id() != 0){    
-                jTabbedPane2.setSelectedIndex(0);   
-                this.jugador = findJugadorSelecionado();                             
-            }else{                
-                jTabbedPane2.setSelectedIndex(1);                
+        if (jComboBox1 != null && jComboBox1.getItemCount() > 0) {
+            // System.out.println("Id_select -> " + this.getSelect_id());
+            if (this.getSelect_id() != 0) {
+                jTabbedPane2.setSelectedIndex(0);
+                this.jugador = findJugadorSelecionado();
+            } else {
+                jTabbedPane2.setSelectedIndex(1);
             }
             this.jugador = findJugadorSelecionado();
             detalleJugador();
-        }          
-        
+        }
+
         //System.out.print("Cambiando item");
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     /**
-     * Botón para modificar los datos de un jugador   
-     * o para insertar un nuevo jugador
-    */
+     * Botón para modificar los datos de un jugador o para insertar un nuevo
+     * jugador
+     */
     private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
         // TODO add your handling code here:
-        
-        String mensaje = "";        
-        if(getSelect_id() != 0){
+
+        String mensaje = "";
+        if (getSelect_id() != 0) {
             mensaje += "¿Estas seguro de modificar los datos del jugador " + this.jugador.getNombre() + "?";
-        }else{
+        } else {
             mensaje += "Vas a insertar un nuevo jugador ¿Estas seguro?";
-        }        
+        }
         Integer confirm = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro de modificar los datos del jugador " + this.jugador.getNombre() + "?");
         //System.out.println("Estado CONFIRM = " + confirm);            
-        switch(confirm){
+        switch (confirm) {
             case 0:
                 //System.out.println("SI modificar");
                 Jugador jMod = modificarJugador();
-                if(jMod != null){
-                    if(getSelect_id() != 0){
-                        if(jMod.update()){
-                            detalleReadJugador(jMod);  
+                if (jMod != null) {
+                    if (getSelect_id() != 0) {
+                        if (jMod.update()) {
+                            detalleReadJugador(jMod);
                             int index_aux = getSelect_index();
                             llenarComboJugadores();
                             jComboBox1.setSelectedIndex(index_aux);
-                        }    
-                    }else{                        
-                        if(jMod.save()){
+                        }
+                    } else {
+                        if (jMod.save()) {
                             equipo.getJugadores().add(jMod);
                             detalleReadJugador(jMod);
                             llenarComboJugadores();
-                            jComboBox1.setSelectedIndex(jComboBox1.getItemCount() -2); 
+                            jComboBox1.setSelectedIndex(jComboBox1.getItemCount() - 2);
                         }
                     }
                 }
@@ -682,25 +695,23 @@ public class vistaEquipo extends javax.swing.JFrame {
                 //System.out.println("ABORTEN modificar");
                 detalleWritteJugador(this.jugador);
                 break;
-        }             
+        }
     }//GEN-LAST:event_jButton6MouseClicked
 
     /**
-     * Botón para insertar un nuevo jugador   
-    */
+     * Botón para insertar un nuevo jugador
+     */
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
-        
+
         //System.out.println("Vamos a insertar un nuevo jugador");
-        
         Integer confirm = JOptionPane.showConfirmDialog(rootPane, "¿Deseas añadir un nuevo jugador al equipo?");
-        
+
         //System.out.println("Estado CONFIRM = " + confirm);
-        
-        switch(confirm){
+        switch (confirm) {
             case 0:
                 //System.out.println("SI añadir");
-                jComboBox1.setSelectedIndex(jComboBox1.getItemCount() -1); 
+                jComboBox1.setSelectedIndex(jComboBox1.getItemCount() - 1);
                 break;
             case 1:
                 //System.out.println("NO añadir");
@@ -712,30 +723,26 @@ public class vistaEquipo extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3MouseClicked
 
     /**
-     * Botón para eliminar un jugador     
-    */
+     * Botón para eliminar un jugador
+     */
     private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
         // TODO add your handling code here:
         //System.out.println("Vamos a eliminar el jugador seleccionado -> " + this.jugador.getNombre());
-        
+
         Integer confirm = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar al jugador " + this.jugador.getNombre() + "?");
-        
+
         //System.out.println("Estado CONFIRM = " + confirm);
-        
-        switch(confirm){
+        switch (confirm) {
             case 0:
                 //System.out.println("SI eliminar");
                 Jugador jug_del = findJugadorSelecionado();
-                if(jug_del.delete()){
-                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado correctamente");                    
-                    for (int i = 0; i < 10; i++) {
-                        if(jug_del.getId() == equipo.getJugadores().get(i).getId())
-                            equipo.getJugadores().remove(i);
-                    }
+                if (jug_del.delete()) {
+                    JOptionPane.showMessageDialog(rootPane, "Se ha eliminado correctamente");
+
                     llenarComboJugadores();
-                    jComboBox1.setSelectedIndex(0); 
+                    jComboBox1.setSelectedIndex(0);
                 }
-                
+
                 break;
             case 1:
                 //System.out.println("NO eliminar");

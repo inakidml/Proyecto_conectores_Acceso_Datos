@@ -279,7 +279,10 @@ public class Jugador {
         try {
             switch (this.conector) {
                 case db4oConector:
+                    Equipo e = this.equipo;
+                    this.equipo = null;
                     result = DB4OInteface.insertJugador(this);
+                    this.equipo = e;
                     break;
                 case mysqlConector:
                     result = SQLInterface.insertJugador(this, conector);
