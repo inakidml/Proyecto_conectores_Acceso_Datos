@@ -813,16 +813,25 @@ public class DB4OInteface extends Conector {
 
             //Añadimos el equipo
             insertEquipo(e);
-        }
-
-        if (e != null && (e.getJugadores() == null || (e.getJugadores() != null && e.getJugadores().size() <= 0))) {
             Jugador jugador = new Jugador(1, "Jon", "López", "Garrido", 1.70f, 74.0f, "central", "es un jugador de la ostia");
+            jugador.setEquipo(e);
             DB4OInteface.insertJugador(jugador);
             Jugador jugador_2 = new Jugador(2, "Mikel", "Ereño", "Ereño", 1.70f, 72.0f, "campista", "es un jugador de la ostia 2");
+            jugador_2.setEquipo(e);
             DB4OInteface.insertJugador(jugador_2);
             Jugador jugador_3 = new Jugador(3, "Iñaki", "Iñaki", "Iñaki", 1.70f, 68.0f, "delantero", "es un jugador de la ostia 3");
+            jugador_3.setEquipo(e);
             DB4OInteface.insertJugador(jugador_3);
         }
+//
+//        if (e != null && (e.getJugadores() == null || (e.getJugadores() != null && e.getJugadores().size() <= 0))) {
+//            Jugador jugador = new Jugador(1, "Jon", "López", "Garrido", 1.70f, 74.0f, "central", "es un jugador de la ostia");
+//            DB4OInteface.insertJugador(jugador);
+//            Jugador jugador_2 = new Jugador(2, "Mikel", "Ereño", "Ereño", 1.70f, 72.0f, "campista", "es un jugador de la ostia 2");
+//            DB4OInteface.insertJugador(jugador_2);
+//            Jugador jugador_3 = new Jugador(3, "Iñaki", "Iñaki", "Iñaki", 1.70f, 68.0f, "delantero", "es un jugador de la ostia 3");
+//            DB4OInteface.insertJugador(jugador_3);
+//        }
 
         //Obtenemos los tipos de entrenamiento
         ArrayList<TipoEntrenamiento> arrL_tipoEntre = getTiposEntrenamientos(new TipoEntrenamiento());
